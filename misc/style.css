@@ -1,0 +1,17 @@
+h1 {
+    color: red;
+    font-size: 5em;
+}
+
+p {
+    color: brown;
+}
+
+li {
+    font-style: italic;
+}
+
+.special {
+
+    color: aquamarine;
+}
