@@ -1,17 +1,64 @@
-h1 {
-    color: red;
-    font-size: 5em;
+/* Header */
+
+/* Resetarea marginilor și padding-ului pentru html și body */
+
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #76ABAE;
 }
 
-p {
-    color: brown;
+/* Stiluri actualizate pentru .header */
+.header {
+    overflow: hidden;
+    background-color: #222831;
+    padding: 20px 10px;
+    margin: 0;
+    width: auto;
+    /* Asigură-te că se întinde pe toată lățimea */
 }
 
-li {
-    font-style: italic;
+.header a {
+    float: left;
+    color: #76ABAE;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 4px;
 }
 
-.special {
+.header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
 
-    color: aquamarine;
+.header a:hover {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+.header a.active {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+.header-right {
+    float: right;
+}
+
+
+article {
+    padding: 10px;
+    margin: 10px;
+    background: #EEEEEE;
+    color: #222831;
+}
+
+/* Add your flexbox CSS below here */
+
+section {
+    display: flex;
 }
