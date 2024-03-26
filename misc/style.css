@@ -19,6 +19,18 @@ body {
     /* Asigură-te că se întinde pe toată lățimea */
 }
 
+p {
+    margin: auto;
+}
+
+table,
+th,
+td {
+    margin: auto;
+    border: 1px solid;
+    width: 30%;
+}
+
 .header a {
     float: left;
     color: #76ABAE;
@@ -49,6 +61,11 @@ body {
     float: right;
 }
 
+button:hover {
+    background-color: #EEEEEE;
+    color: #222831;
+}
+
 
 article {
     padding: 10px;
@@ -58,6 +75,17 @@ article {
 }
 
 /* Add your flexbox CSS below here */
+
+button {
+    background-color: #222831;
+    padding: auto;
+    margin: auto;
+    border: none;
+    color: #76ABAE;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+}
 
 section {
     display: flex;
