@@ -3,11 +3,13 @@
 /* Resetarea marginilor și padding-ului pentru html și body */
 
 
-body {
+body,
+html {
+    height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #76ABAE;
 }
+
 
 /* Stiluri actualizate pentru .header */
 .header {
@@ -62,31 +64,42 @@ td {
 }
 
 button:hover {
-    background-color: #EEEEEE;
+    background-color: #76ABAE;
     color: #222831;
 }
 
 
 article {
-    padding: 10px;
-    margin: 10px;
     background: #EEEEEE;
-    color: #222831;
+    padding: 100px;
+    margin: 10px;
+    flex: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 /* Add your flexbox CSS below here */
 
+
+
 button {
     background-color: #222831;
-    padding: auto;
-    margin: auto;
-    border: none;
     color: #76ABAE;
-    text-align: center;
-    display: inline-block;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
     font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 section {
     display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
 }
