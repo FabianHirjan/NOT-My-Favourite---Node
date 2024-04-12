@@ -70,6 +70,7 @@ button:hover {
 
 
 article {
+    background-image: none;
     background: #EEEEEE;
     padding: 100px;
     margin: 10px;
