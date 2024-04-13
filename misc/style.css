@@ -23,6 +23,7 @@ html {
     font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
+    margin-left: 10px;
 }
 
 .header a.logo {
@@ -49,12 +50,23 @@ td {
     width: 30%;
 }
 
+<<<<<<< Updated upstream
 /* Map */
 #map {
     width: 800px;
     height: auto;
     margin: 20px auto;
     display: block;
+=======
+article {
+    background-image: none;
+    background: #EEEEEE;
+    padding: 100px;
+    margin: 10px;
+    flex: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+>>>>>>> Stashed changes
 }
 
 /* Button */

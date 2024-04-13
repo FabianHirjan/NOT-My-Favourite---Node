@@ -1,0 +1,65 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    overflow: hidden;
+    background-color: #222831;
+    padding: 20px 10px;
+    margin: 0;
+    width: auto;
+    /* Asigură-te că se întinde pe toată lățimea */
+}
+
+.header a {
+    float: left;
+    color: #76ABAE;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.header a:hover {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+.header a.active {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+.header-right {
+    float: right;
+}
+
+button:hover {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+.Title{
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.login_input{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 150px auto;
+}
