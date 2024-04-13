@@ -70,6 +70,8 @@ td {
     display: block;
 }
 
+
+
 button:hover {
     background-color: #76ABAE;
     color: #222831;
@@ -79,14 +81,26 @@ button:hover {
 article {
     background-image: none;
     background: #EEEEEE;
-    padding: 100px;
+    padding: 20px;
     margin: 10px;
     flex: 1;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    max-width: calc(50% - 20px);
 }
 
-/* Add your flexbox CSS below here */
+article#apartamente {
+    background-image: url(photos/apartamente.jpeg);
+    padding: 100px;
+    color: #EEEEEE;
+}
+
+article#cartiere {
+    background-image: url(photos/cartiere.webp);
+    padding: 100px;
+    color: #EEEEEE;
+}
+
 
 
 
@@ -105,9 +119,7 @@ button {
 
 section {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: stretch;
 }
