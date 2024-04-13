@@ -3,11 +3,11 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Web Practice</title>
+    <title>Register form</title>
     <link rel="stylesheet" href="login.css">
     <script>
         function validateForm() {
-            var inputs = document.forms["login form"].getElementsByTagName("input");
+            var inputs = document.forms["registerForm"].getElementsByTagName("input");
             for (var i = 0; i < inputs.length; i++) {
                 if (inputs[i].value === '') {
                     alert("Please fill in all fields.");
@@ -31,12 +31,16 @@
 
 <body>
     <div class="Title">
-        Intra in cont
-        <form name="login form" onsubmit="return validateForm()" method="post" action="../index.html">
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username"><br>
-            <label for="password">Parola:</label><br>
-            <input type="password" id="password" name="password"><br><br>
-            <input type="submit" value="Submit">
-          </form>
+        Inregistrare
+    </div>
+    <form name="registerForm" onsubmit="return validateForm()" method="post" action="../index.html">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username"><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br>
+        <label for="password">Parola:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="Submit">
+      </form>
+      
 </body>
