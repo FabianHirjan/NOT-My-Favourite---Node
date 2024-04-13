@@ -1,8 +1,3 @@
-/* Header */
-
-/* Resetarea marginilor și padding-ului pentru html și body */
-
-
 body,
 html {
     height: 100%;
@@ -10,27 +5,13 @@ html {
     padding: 0;
 }
 
-
-/* Stiluri actualizate pentru .header */
+/* Header */
 .header {
     overflow: hidden;
     background-color: #222831;
     padding: 20px 10px;
     margin: 0;
     width: auto;
-    /* Asigură-te că se întinde pe toată lățimea */
-}
-
-p {
-    margin: auto;
-}
-
-table,
-th,
-td {
-    margin: auto;
-    border: 1px solid;
-    width: 30%;
 }
 
 .header a {
@@ -49,11 +30,7 @@ td {
     font-weight: bold;
 }
 
-.header a:hover {
-    background-color: #76ABAE;
-    color: #222831;
-}
-
+.header a:hover,
 .header a.active {
     background-color: #76ABAE;
     color: #222831;
@@ -63,6 +40,16 @@ td {
     float: right;
 }
 
+/* Table */
+table,
+th,
+td {
+    margin: auto;
+    border: 1px solid;
+    width: 30%;
+}
+
+/* Map */
 #map {
     width: 800px;
     height: auto;
@@ -70,40 +57,7 @@ td {
     display: block;
 }
 
-
-
-button:hover {
-    background-color: #76ABAE;
-    color: #222831;
-}
-
-
-article {
-    background-image: none;
-    background: #EEEEEE;
-    padding: 20px;
-    margin: 10px;
-    flex: 1;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    max-width: calc(50% - 20px);
-}
-
-article#apartamente {
-    background-image: url(photos/apartamente.jpeg);
-    padding: 100px;
-    color: #EEEEEE;
-}
-
-article#cartiere {
-    background-image: url(photos/cartiere.webp);
-    padding: 100px;
-    color: #EEEEEE;
-}
-
-
-
-
+/* Button */
 button {
     background-color: #222831;
     color: #76ABAE;
@@ -117,9 +71,78 @@ button {
     transition: background-color 0.3s, color 0.3s;
 }
 
+button:hover {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+article {
+    background: #EEEEEE;
+    padding: 20px;
+    margin: 10px;
+    flex: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    max-width: calc(50% - 20px);
+}
+
+article#apartamente,
+article#cartiere {
+    padding: 100px;
+    color: #EEEEEE;
+}
+
+article#apartamente {
+    background-image: url(photos/apartamente.jpeg);
+}
+
+article#cartiere {
+    background-image: url(photos/cartiere.webp);
+}
+
 section {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: stretch;
+}
+
+
+#addForm {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+#addForm label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+
+#addForm input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#addForm input[type="text"]#bigger {
+    width: 300px;
+    height: 100px;
+    padding: 10px;
+}
+
+.star {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.star:hover,
+.star.active {
+    color: gold;
 }
