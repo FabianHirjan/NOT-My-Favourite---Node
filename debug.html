@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obținere Coordonate Clic</title>
+    <style>
+        #map {
+            width: 800px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Obținere Coordonate Clic</h1>
+    <img id="map" src="misc/photos/iasi_map.jpeg" alt="Harta Iași">
+    <script>
+        document.getElementById('map').addEventListener('click', function(event) {
+            var x = event.offsetX;
+            var y = event.offsetY;
+            console.log('Coordonate clic:', x, y);
+        });
+    </script>
+</body>
+</html>

@@ -63,6 +63,13 @@ td {
     float: right;
 }
 
+#map {
+    width: 800px;
+    height: auto;
+    margin: 20px auto;
+    display: block;
+}
+
 button:hover {
     background-color: #76ABAE;
     color: #222831;
