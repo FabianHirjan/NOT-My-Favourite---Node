@@ -170,7 +170,6 @@ section {
 /*
 Account
 */
-/* Stiluri pentru pagină "My Account" */
 .account-container {
     padding: 20px;
     display: flex;
@@ -255,7 +254,6 @@ Account
     margin-bottom: 0;
 }
 
-/* Stiluri pentru imaginea de profil */
 .profile-picture {
     width: 150px;
     height: 150px;
