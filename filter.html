@@ -21,42 +21,13 @@
             <a href="login.html">Log in</a>
         </div>
     </div>
-
+<center>
         <div class = "article">
             <label for="cartier">Filtru Cartier:</label>
             <input type="text" id="cartier" name="cartier">
             <button onclick="filterCartier()">Aplică Filtru</button>
         </div>
-      
-
-    <img id="map" src="misc/photos/iasi_map.jpeg" alt="Harta Iași">
-
-    <script>
-        function filterCartier() {
-            var cartierInput = document.getElementById("cartier");
-            var cartierSelectat = cartierInput.value;
-            alert("Ai selectat cartierul: " + cartierSelectat);
-        }
-
-        document.getElementById('map').addEventListener('click', function(event) {
-            var x = event.offsetX;
-            var y = event.offsetY;
-
-            if (x > 154 && x < 227 && y > 55 && y < 126) {
-                document.getElementById("cartier").value = "Copou";
-            } else if (x > 285 && x < 369 && y > 230 && y < 281) {
-                document.getElementById("cartier").value = "Centru";
-            } else if (x > 397 && x < 485 && y > 104 && y < 228) {
-                document.getElementById("cartier").value = "Tătărași";
-            } else if (x > 449 && x < 485 && y > 317 && y < 339) {
-                document.getElementById("cartier").value = "Bularga";
-            } else if (x > 215 && x < 335 && y > 33 && y < 190) {
-                document.getElementById("cartier").value = "Sararie";
-            } else if (x > 375 && x < 560 && y > 395 && y < 578) {
-                document.getElementById("cartier").value = "Frumoasa";
-            }
-        });
-    </script>
+    </center>
 
 <div class="article-container">
     <div class="article">
