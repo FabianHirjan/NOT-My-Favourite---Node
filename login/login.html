@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Web Practice</title>
+    <link rel="stylesheet" href="login.css">
+    <script>
+        function validateForm() {
+            var inputs = document.forms["login form"].getElementsByTagName("input");
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].value === '') {
+                    alert("Please fill in all fields.");
+                    return false;
+                }
+            }
+            return true;
+        }
+        </script>
+</head>
+
+<div class="header">
+    <a href="../index.html" class="logo">NoF</a>
+    <div class="header-right">
+        <a class="active" href="../index.html">Home</a>
+        <a class="active" href="login.html">Login</a>
+        <a href="rules.html">Rules (for dev)</a>
+        <a href="#about">About</a>
+    </div>
+</div>
+
+<body>
+    <div class="Title">
+        Intra in cont
+        <form name="login form" onsubmit="return validateForm()" method="post" action="../index.html">
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="password">Parola:</label><br>
+            <input type="password" id="password" name="password"><br><br>
+            <input type="submit" value="Submit">
+            <a href="register.html">Nu aveti cont?</a>
+          </form>
+</body>

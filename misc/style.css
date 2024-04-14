@@ -166,3 +166,99 @@ section {
 .star.active {
     color: gold;
 }
+
+/*
+Account
+*/
+/* Stiluri pentru pagină "My Account" */
+.account-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.account-info {
+    max-width: 500px;
+    background-color: #EEEEEE;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.account-info h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.account-info label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.account-info input[type="text"],
+.account-info input[type="email"],
+.account-info input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.account-info button {
+    background-color: #222831;
+    color: #76ABAE;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.account-info button:hover {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+.reviews-container {
+    max-width: 800px;
+    background-color: #EEEEEE;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.review:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.review h3 {
+    margin-top: 0;
+}
+
+.review p {
+    margin-bottom: 0;
+}
+
+/* Stiluri pentru imaginea de profil */
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
