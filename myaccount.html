@@ -24,17 +24,25 @@
         <div class="account-info">
             <h2>My Account</h2>
             <img src="misc/photos/maimu.jpeg" alt="Profile Picture" class="profile-picture">
+            <h3>Change email</h3>
             <form id="accountForm">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username">
+                <label for="email">New email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your new email">
 
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email">
-
-                <label for="password">Password</label>
+                <label for="email">Password</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password">
 
-                <button type="submit">Update</button>
+                <button type="submit">Update email</button>
+            </form>
+            <h3>Change password</h3>
+            <form id="accountForm">
+                <label for="password">New Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter new password">
+
+                <label for="email">Current email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email">
+
+                <button type="submit">Update password</button>
             </form>
         </div>
 

@@ -10,11 +10,13 @@ html {
     background-size: calc(100% + 50px);
     margin: 0;
     padding: 0;
+    scroll-behavior: smooth;
+    overflow-y: auto;
 }
 
 /* Header */
 .header {
-    overflow: hidden;
+    overflow: auto;
     background-color: #222831;
     padding: 20px 10px;
     margin: 0;
