@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Web Practice</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="misc/style.css">
     <script>
         function validateForm() {
             var inputs = document.forms["login form"].getElementsByTagName("input");
@@ -20,23 +20,25 @@
 </head>
 
 <div class="header">
-    <a href="../index.html" class="logo">NoF</a>
+    <a href="index.html" class="logo">NoF</a>
     <div class="header-right">
-        <a class="active" href="../index.html">Home</a>
+        <a href="index.html">Home</a>
+        <a href="post.html">Post your problem</a>
         <a class="active" href="login.html">Login</a>
-        <a href="rules.html">Rules (for dev)</a>
         <a href="#about">About</a>
     </div>
 </div>
 
 <body>
-    <div class="Title">
+    <section>
         Intra in cont
-        <form name="login form" onsubmit="return validateForm()" method="post" action="../index.html">
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" name="username"><br>
-            <label for="password">Parola:</label><br>
-            <input type="password" id="password" name="password"><br><br>
-            <input type="submit" value="Submit">
+        <form id="addForm" name="login form" onsubmit="return validateForm()" method="post" action="index.html">
+            <label for="user">Username: </label>
+            <input type="text" name="user">
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id = "bigger" name="password">
+            <center><button>Login</button></center>
           </form>
+    </section>
 </body>
