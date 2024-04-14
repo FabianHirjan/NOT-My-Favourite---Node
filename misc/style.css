@@ -77,14 +77,22 @@ button:hover {
     color: #222831;
 }
 
-article {
+.article-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 20px;
+}
+
+.article {
     background: #EEEEEE;
     padding: 20px;
-    margin: 10px;
-    flex: 1;
+    margin: 10px 0;
+    flex-basis: calc(25% - 20px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    max-width: calc(50% - 20px);
+    max-width: calc(25% - 20px);
 }
 
 article#apartamente,
@@ -123,7 +131,8 @@ section {
 }
 
 
-#addForm input[type="text"] {
+#addForm input[type="text"],
+#addForm input[type="email"] {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;

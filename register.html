@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Register form</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="misc/style.css">
     <script>
         function validateForm() {
             var inputs = document.forms["registerForm"].getElementsByTagName("input");
@@ -20,27 +20,34 @@
 </head>
 
 <div class="header">
-    <a href="../index.html" class="logo">NoF</a>
+    <a href="index.html" class="logo">NoF</a>
+    <a href="index.html">Home</a>
+    <a href="filter.html">Physical Products</a>
+    <a href="N/A">About us</a>
+    <a href="nonphy.html">Non Physical Products</a>
+    <a href="post.html">Post my Issue</a>
     <div class="header-right">
-        <a class="active" href="../index.html">Home</a>
-        <a class="active" href="login.html">Login</a>
-        <a href="rules.html">Rules (for dev)</a>
-        <a href="#about">About</a>
+        <a href="#">My account</a>
+        <a href="login.html" class="active">Log in</a>
     </div>
 </div>
 
 <body>
-    <div class="Title">
-        Inregistrare
-    </div>
-    <form name="registerForm" onsubmit="return validateForm()" method="post" action="../index.html">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
-        <label for="password">Parola:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Submit">
+    <section>
+    <form id="addForm" name="registerForm" onsubmit="return validateForm()" method="post" action="../index.html">
+        <label for="user">Username: </label>
+        <input type="text" name="user">
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" name="email">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id = "bigger" name="password">
+        <p><em>already have an account? you can <a href = "login.html">login here</a></em></p>
+     
+        <center><button>Register</button></center>
       </form>
+
+    </section>
       
 </body>

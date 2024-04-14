@@ -10,20 +10,24 @@
 
 <body>
     <div class="header">
-        <a href="#default" class="logo">NoF</a>
+        <a href="index.html" class="logo">NoF</a>
+        <a href="index.html">Home</a>
+        <a href="filter.html" class="active">Physical Products</a>
+        <a href="N/A">About us</a>
+        <a href="nonphy.html">Non Physical Products</a>
+        <a href="post.html">Post my Issue</a>
         <div class="header-right">
-            <a class="active" href="index.html">Home</a>
-            <a href="post.html">Post a problem</a>
-            <a href="#about">About</a>
-            
+            <a href="#">My account</a>
+            <a href="login.html">Log in</a>
         </div>
     </div>
 
-        <article>
-                <label for="cartier">Filtru Cartier:</label>
-                <input type="text" id="cartier" name="cartier">
-                <button onclick="filterCartier()">Aplică Filtru</button>
-        </article>
+        <div class = "article">
+            <label for="cartier">Filtru Cartier:</label>
+            <input type="text" id="cartier" name="cartier">
+            <button onclick="filterCartier()">Aplică Filtru</button>
+        </div>
+      
 
     <img id="map" src="misc/photos/iasi_map.jpeg" alt="Harta Iași">
 
@@ -54,23 +58,32 @@
         });
     </script>
 
-<section>
-    <article>
-        <h2>First article</h2>
-        <p>Tacos actually microdosing, pour-over semiotics...</p>
-        <button>See more</button>
-    </article>
-    <article>
-        <h2>Second article</h2>
-        <p>Tacos actually microdosing, pour-over semiotics...</p>
-        <button>See more</button>
-    </article>
-    <article>
-        <h2>Third article</h2>
-        <p>Tacos actually microdosing, pour-over semiotics...</p>
-        <button>See more</button>
-    </article>
-</section>
+<div class="article-container">
+    <div class="article">
+        <h2>Nume Creator: Fabean</h2>
+        <h3>Mega Image Tatarasi</h3>
+        <p>Carne expirata.</p>
+        <p class="review">&#9733;</p>
+    </div>
+    <div class="article">
+        <h2>Nume Creator: Fabean</h2>
+        <h3>Mega Image Tatarasi</h3>
+        <p>Carne expirata.</p>
+        <p class="review">&#9733;</p>
+    </div>
+    <div class="article">
+        <h2>Nume Creator: Fabean</h2>
+        <h3>Mega Image Tatarasi</h3>
+        <p>Carne expirata.</p>
+        <p class="review">&#9733;</p>
+    </div>
+    <div class="article">
+        <h2>Nume Creator: Fabean</h2>
+        <h3>Mega Image Tatarasi</h3>
+        <p>Carne expirata.</p>
+        <p class="review">&#9733;</p>
+    </div>
+</div>
 
 </body>
 

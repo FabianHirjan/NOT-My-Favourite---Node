@@ -5,39 +5,31 @@
     <meta charset="utf-8" />
     <title>Web Practice</title>
     <link rel="stylesheet" href="misc/style.css">
-    <script>
-        function validateForm() {
-            var inputs = document.forms["login form"].getElementsByTagName("input");
-            for (var i = 0; i < inputs.length; i++) {
-                if (inputs[i].value === '') {
-                    alert("Please fill in all fields.");
-                    return false;
-                }
-            }
-            return true;
-        }
-        </script>
+    <script src="misc/script.js"></script>
 </head>
 
 <div class="header">
     <a href="index.html" class="logo">NoF</a>
+    <a href="index.html">Home</a>
+    <a href="filter.html">Physical Products</a>
+    <a href="N/A">About us</a>
+    <a href="nonphy.html">Non Physical Products</a>
+    <a href="post.html">Post my Issue</a>
     <div class="header-right">
-        <a href="index.html">Home</a>
-        <a href="post.html">Post your problem</a>
-        <a class="active" href="login.html">Login</a>
-        <a href="#about">About</a>
+        <a href="#">My account</a>
+        <a href="login.html" class="active">Log in</a>
     </div>
 </div>
 
 <body>
     <section>
-        Intra in cont
-        <form id="addForm" name="login form" onsubmit="return validateForm()" method="post" action="index.html">
+        <form id="addForm" name="loginform" onsubmit="return validateForm()" method="post" action="index.html">
             <label for="user">Username: </label>
             <input type="text" name="user">
             <br>
             <label for="password">Password:</label>
             <input type="password" id = "bigger" name="password">
+            <p><em>you don't have an account? you can <a href = "register.html">register here</a></em></p>
             <center><button>Login</button></center>
           </form>
     </section>

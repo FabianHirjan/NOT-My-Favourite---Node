@@ -18,4 +18,18 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    const loginForm = document.forms["addForm"];
+
+    loginForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const inputs = loginForm.getElementsByTagName("input");
+        for (let i = 0; i < inputs.length; i++) {
+            if (inputs[i].value === '') {
+                alert("Please fill in all fields.");
+                return false;
+            }
+        }
+        loginForm.submit();
+    });
 });
