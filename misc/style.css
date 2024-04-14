@@ -1,6 +1,13 @@
 body,
 html {
+
+    background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg') -25px -50px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 0;
     height: 100%;
+    background-size: calc(100% + 50px);
     margin: 0;
     padding: 0;
 }
@@ -91,22 +98,28 @@ button:hover {
     margin: 10px 0;
     flex-basis: calc(25% - 20px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 30px;
     max-width: calc(25% - 20px);
+    background-color: #76ABAE;
+    border: 2px solid #222831;
 }
 
-article#apartamente,
-article#cartiere {
-    padding: 100px;
+div#apartamente,
+div#cartiere {
+    padding: 180px;
     color: #EEEEEE;
 }
 
-article#apartamente {
-    background-image: url(photos/apartamente.jpeg);
+div#apartamente {
+    background: rgb(49, 54, 63);
+    background: linear-gradient(270deg, rgba(49, 54, 63, 1) 0%, rgba(118, 171, 174, 1) 45%);
+    width: 150px;
 }
 
-article#cartiere {
-    background-image: url(photos/cartiere.webp);
+div#cartiere {
+    background: rgb(49, 54, 63);
+    background: linear-gradient(90deg, rgba(49, 54, 63, 1) 0%, rgba(118, 171, 174, 1) 45%);
+
 }
 
 section {
