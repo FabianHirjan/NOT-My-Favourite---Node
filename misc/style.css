@@ -1,22 +1,26 @@
 body,
 html {
+
     background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg') -25px -50px;
-    background-size: calc(100% + 50px);
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 0;
     height: 100%;
+    background-size: calc(100% + 50px);
     margin: 0;
     padding: 0;
     scroll-behavior: smooth;
     overflow-y: auto;
-    z-index: 0;
 }
 
+/* Header */
 .header {
     overflow: auto;
     background-color: #222831;
     padding: 20px 10px;
+    margin: 0;
+    width: auto;
 }
 
 .header a {
@@ -37,17 +41,16 @@ html {
 }
 
 .header a:hover,
-.header a.active,
-button:hover {
+.header a.active {
     background-color: #76ABAE;
     color: #222831;
-    opacity: 0.5;
 }
 
 .header-right {
     float: right;
 }
 
+/* Table */
 table,
 th,
 td {
@@ -56,6 +59,7 @@ td {
     width: 30%;
 }
 
+/* Map */
 #map {
     width: 800px;
     height: auto;
@@ -63,6 +67,7 @@ td {
     display: block;
 }
 
+/* Button */
 button {
     background-color: #222831;
     color: #76ABAE;
@@ -76,6 +81,11 @@ button {
     transition: background-color 0.3s, color 0.3s;
 }
 
+button:hover {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
 .article-container {
     display: flex;
     flex-wrap: wrap;
@@ -85,26 +95,27 @@ button {
 }
 
 .article {
-    <<<<<<< HEAD background-color: #f0f2dc;
-    =======background: #EEEEEE;
-    >>>>>>>parent of 94e3c45 (Small "style" changes and ideas) padding: 20px;
+    background: #EEEEEE;
+    padding: 20px;
     margin: 10px 0;
     flex-basis: calc(25% - 20px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 30px;
+    max-width: calc(25% - 20px);
+    background-color: #f0f2dc;
     border: 2px solid #222831;
 }
 
 div#apartamente,
 div#cartiere {
     padding: 180px;
+    height: 150px;
     color: #EEEEEE;
     border: 1px solid #222831;
     font-weight: bold;
     text-shadow: black 1px 1px 5px;
     transition: opacity 0.5s;
     opacity: 0.5;
-    text-align: center;
 }
 
 div#apartamente:hover,
@@ -113,12 +124,21 @@ div#cartiere:hover {
 }
 
 div#apartamente {
+    background: rgba(34, 40, 49);
     background: linear-gradient(270deg, rgba(34, 40, 49, 1) 5%, rgba(118, 171, 174, 1) 90%);
 }
 
 div#cartiere {
+    background: rgba(34, 40, 49, 1);
     background: linear-gradient(90deg, rgba(34, 40, 49, 1) 5%, rgba(118, 171, 174, 1) 90%);
+
 }
+
+#apartamente,
+#cartiere {
+    text-align: center;
+}
+
 
 section {
     display: flex;
@@ -127,32 +147,23 @@ section {
     align-items: stretch;
 }
 
-#addForm,
-.account-info,
-.reviews-container {
+
+#addForm {
     background-color: #f2f2f2;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#addForm {
     width: 300px;
     margin: 0 auto;
 }
 
-#addForm label,
-.account-info label {
+#addForm label {
     display: block;
     margin-bottom: 10px;
 }
 
+
 #addForm input[type="text"],
-#addForm input[type="email"],
-#addForm input[type="password"],
-.account-info input[type="text"],
-.account-info input[type="email"],
-.account-info input[type="password"] {
+#addForm input[type="email"] {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
@@ -161,6 +172,35 @@ section {
     box-sizing: border-box;
 }
 
+#addForm input[type="text"]#bigger {
+    width: 300px;
+    height: 100px;
+    padding: 10px;
+}
+
+#addForm input[type="password"]#bigger {
+    width: 100%;
+    height: 50px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.star {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.star:hover,
+.star.active {
+    color: gold;
+}
+
+/*
+Account
+*/
 .account-container {
     padding: 20px;
     display: flex;
@@ -217,6 +257,14 @@ section {
     color: #222831;
 }
 
+.reviews-container {
+    max-width: 800px;
+    background-color: #EEEEEE;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
 .review {
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
@@ -229,12 +277,19 @@ section {
     padding-bottom: 0;
 }
 
+.review h3 {
+    margin-top: 0;
+}
+
+.review p {
+    margin-bottom: 0;
+}
+
 .profile-picture {
     width: 150px;
     height: 150px;
     border-radius: 50%;
     margin-bottom: 20px;
-    <<<<<<< HEAD
 }
 
 .expand {
@@ -243,7 +298,6 @@ section {
     text-align: right;
 }
 
-.expand:hover {
+button.expand:hover {
     background-color: rgba(0, 0, 0, 0.5);
-    =======>>>>>>>parent of 94e3c45 (Small "style" changes and ideas)
 }
