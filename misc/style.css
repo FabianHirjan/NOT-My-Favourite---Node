@@ -369,4 +369,5 @@ tr:hover:not(:first-child){
 
 textarea{
     resize: none;
+    width: 18rem;
 }
