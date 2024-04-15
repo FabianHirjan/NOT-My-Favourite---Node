@@ -85,8 +85,9 @@ button {
 }
 
 .article {
-    background-color: #f0f2dc;
-    padding: 20px;
+    <<<<<<< HEAD background-color: #f0f2dc;
+    =======background: #EEEEEE;
+    >>>>>>>parent of 94e3c45 (Small "style" changes and ideas) padding: 20px;
     margin: 10px 0;
     flex-basis: calc(25% - 20px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -97,7 +98,6 @@ button {
 div#apartamente,
 div#cartiere {
     padding: 180px;
-    height: 150px;
     color: #EEEEEE;
     border: 1px solid #222831;
     font-weight: bold;
@@ -234,6 +234,7 @@ section {
     height: 150px;
     border-radius: 50%;
     margin-bottom: 20px;
+    <<<<<<< HEAD
 }
 
 .expand {
@@ -244,4 +245,5 @@ section {
 
 .expand:hover {
     background-color: rgba(0, 0, 0, 0.5);
+    =======>>>>>>>parent of 94e3c45 (Small "style" changes and ideas)
 }
