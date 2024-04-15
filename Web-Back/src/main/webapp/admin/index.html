@@ -1,0 +1,85 @@
+<!--
+    The admin can update/delete users
+    Also he can approve, update or delete posts
+
+    By example: 
+    User X posts
+    Title: Volkswagen
+    Description: Is shitty and I hate it, kill yourself Volkswagen
+
+    The admin can edit it to exclude the swears and then he can approve it
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Web Practice</title>
+    <link rel="stylesheet" href="../misc/style.css">
+</head>
+
+<body>
+    <div class="header">
+        <a href="#default" class="logo">NoF</a>
+        <div class="header-right">
+            <a class="active" href="#home">Admin</a>
+            <a href="rules.html">Rules and Demos</a>
+        </div>
+    </div>
+
+    <section>
+        <h2>Users</h2>
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+            <tr>
+                <td>Lorem Ipsum</td>
+                <td>loremipsum@gmail.com</td>
+                <td>
+                    <button>Delete</button>
+                    <button>Update</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Lorem Ipsum</td>
+                <td>loremipsum@gmail.com</td>
+                <td>
+                    <button>Delete</button>
+                    <button>Update</button>
+                </td>
+            </tr>
+        </table>
+    </section>
+
+    <div class = "article-container">
+        <h2>Posts</h2>
+        <label for="filter">Search by word:</label><br>
+        <input type="text" id="filter" name="filter"><br>
+        <div class = "article">
+            <h2>First article</h2>
+            <p>Tacos actually microdosing, pour-over semiotics...</p>
+            <button>Approve</button>
+            <button>Delete</button>
+            <button>Update</button>
+        </div>
+        <div class = "article">
+            <h2>Second article</h2>
+            <p>Tacos actually microdosing, pour-over semiotics...</p>
+            <button>Approve</button>
+            <button>Delete</button>
+            <button>Update</button>
+        </div>
+        <div class = "article">
+            <h2>Third article</h2>
+            <p>Tacos actually microdosing, pour-over semiotics...</p>
+            <button>Approve</button>
+            <button>Delete</button>
+            <button>Update</button>
+        </div>
+    </div>
+</body>
+</html>
+    
