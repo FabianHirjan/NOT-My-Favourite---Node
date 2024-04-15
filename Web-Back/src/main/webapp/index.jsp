@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+         pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,6 +28,8 @@
 
 
 <body>
+<%= "Hello World!" %>
+
     <div class="article-container">
         <div class="article" id = "apartamente">
             <h1>Home appliances, electronics and more</h1>
