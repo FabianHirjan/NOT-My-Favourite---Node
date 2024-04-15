@@ -310,38 +310,10 @@ div#search.article{
     border-left: 0px;
 }
 
-div.custom-select{
-    position: relative;
-}
-
-.custom-select::before,
-.custom-select::after {
-  --size: 0.3rem;
-  position: absolute;
-  content: "";
-  right: 38.25rem;
-  pointer-events: none;
-}
-
-.custom-select::before {
-    border-left: var(--size) solid transparent;
-    border-right: var(--size) solid transparent;
-    border-bottom: var(--size) solid black;
-    top: 30%;
-  }
-  
-  .custom-select::after {
-    border-left: var(--size) solid transparent;
-    border-right: var(--size) solid transparent;
-    border-top: var(--size) solid black;
-    top: 70%;
-  }
-
 select, input#cheie{
     appearance: none;
-    width: 10%;
     font-size: 1rem;
-    padding: 0.3em 2em 0.3em 1em;
+    padding: 0.2rem 1rem 0.3rem 1rem;
     background-color: #fff;
     border: 1px solid #caced1;
     border-radius: 0.25rem;
@@ -350,4 +322,51 @@ select, input#cheie{
 
 select{
     cursor: pointer;
+}
+
+input#cheie{
+    width: 7rem;
+}
+
+section>h2{
+    font-size: 2rem;
+    margin-left: 10rem;
+}
+
+section>table{
+    background-color: beige;
+}
+
+section>table:nth-child()
+
+tr:hover{
+    background-color: coral;
+}
+
+tr:hover:not(:first-child){
+    background-color: coral;
+}
+
+#filter{
+    height: 2rem;
+    appearance: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem 0.3rem 1rem;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+}
+
+#mic{
+    height: 2.5rem;
+}
+
+#postari{
+    font-size: 2rem;
+    margin-left: 8.5rem;
+}
+
+textarea{
+    resize: none;
 }

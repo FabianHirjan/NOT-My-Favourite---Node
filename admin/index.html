@@ -14,19 +14,21 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Web Practice</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="../misc/style.css">
 </head>
 
 <body>
     <div class="header">
-        <a href="#default" class="logo">NoF</a>
+        <a href="index.html" class="logo">
+            <img src="../misc/photos/logo.PNG" alt="Home" height="30px">
+        </a>
         <div class="header-right">
             <a class="active" href="#home">Admin</a>
             <a href="rules.html">Rules and Demos</a>
         </div>
     </div>
-
+    <br>
     <section>
         <h2>Users</h2>
         <table>
@@ -54,10 +56,14 @@
         </table>
     </section>
 
+    <h2 id="postari">
+        Posts
+        <label for="filter"></label>
+        <input type="text" id="filter" name="filter" placeholder="Search by user">
+        <button id="mic">Search</button>
+    </h2>
     <div class = "article-container">
-        <h2>Posts</h2>
-        <label for="filter">Search by word:</label><br>
-        <input type="text" id="filter" name="filter"><br>
+        <br>
         <div class = "article">
             <h2>First article</h2>
             <p>Tacos actually microdosing, pour-over semiotics...</p>
