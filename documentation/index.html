@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEEE Software Requirements Specification</title>
+</head>
+
+<body>
+    <h1>IEEE Software Requirements Specification (SRS)</h1>
+
+    <h2>1. Introduction</h2>
+    <p>This document provides the software requirements specification (SRS) for the NoF web application. It outlines the functional and non-functional requirements, user interactions, and system behaviors.</p>
+
+    <h2>2. Overall Description</h2>
+    <p>The NoF web application is designed to manage various classes of objects and abstract/digital artifacts. Users interact with the application to provide feedback, view inventories and statistics, and access essential functionalities through a REST/GraphQL Web API.</p>
+
+    <h3>2.1 Product Perspective</h3>
+    <p>The NoF web application interacts with users and backend systems to manage data related to entities such as products, services, and user interactions.</p>
+
+    <h3>2.2 User Classes and Characteristics</h3>
+    <p>The application is intended for users who wish to browse, search, and interact with different types of objects and artifacts. Users may have varying levels of technical expertise.</p>
+
+    <h3>2.3 Operating Environment</h3>
+    <p>The application runs in a web browser environment and communicates with backend servers to fetch and update data.</p>
+
+    <h2>3. Functional Requirements</h2>
+
+    <div class="requirement">
+        <div class="requirement-heading">3.1 User Management</div>
+        <div class="requirement-description">
+            <ol>
+                <li>The system shall allow users to register for an account.</li>
+                <li>The system shall allow users to log in to their account.</li>
+                <li>The system shall allow users to update their account information.</li>
+                <li>The system shall allow users to reset their password.</li>
+                <li>The system shall allow users to post their reviews.</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="requirement">
+        <div class="requirement-heading">3.2 Object Management</div>
+        <div class="requirement-description">
+            <ol>
+                <li>The system shall allow users to browse objects by category and subcategory.</li>
+                <li>The system shall allow users to search for objects using keywords.</li>
+                <li>The system shall allow users to apply filters to refine search results.</li>
+                <li>The system shall allow users to view detailed information about an object.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Include more functional requirements as needed -->
+
+    <h2>4. Non-Functional Requirements</h2>
+
+    <div class="requirement">
+        <div class="requirement-heading">4.1 Usability</div>
+        <div class="requirement-description">
+            <p>The user interface shall be intuitive and easy to navigate.</p>
+        </div>
+        <div class="requirement-notes">
+            <p>Note: Usability testing shall be conducted with representative users to ensure ease of use.</p>
+        </div>
+    </div>
+
+    <div class="requirement">
+        <div class="requirement-heading">4.2 Performance</div>
+        <div class="requirement-description">
+            <p>The system shall respond to user interactions within 2 seconds.</p>
+        </div>
+        <div class="requirement-notes">
+            <p>Note: Performance testing shall be conducted under various load conditions to verify responsiveness.</p>
+        </div>
+    </div>
+
+    <!-- Include more non-functional requirements as needed -->
+
+    <h2>5. Conclusion</h2>
+    <p>This IEEE Software Requirements Specification (SRS) document provides a comprehensive overview of the NoF web application's requirements, including functional and non-functional aspects. It serves as a guideline for the development and testing of the application.</p>
+</body>
+
+</html>

@@ -1,18 +1,19 @@
-body,
-html {
 
-    background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg') -25px -50px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 0;
-    height: 100%;
-    background-size: calc(100% + 50px);
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
-    overflow-y: auto;
-}
+
+                                                                   body,
+                                                                   html {
+                                                                       background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg') -25px -50px;
+                                                                       position: fixed;
+                                                                       top: 0;
+                                                                       width: 100%;
+                                                                       z-index: 0;
+                                                                       height: 100%;
+                                                                       background-size: calc(100% + 50px);
+                                                                       margin: 0;
+                                                                       padding: 0;
+                                                                       scroll-behavior: smooth;
+                                                                       overflow-y: auto;
+                                                                   }
 
 /* Header */
 .header {
@@ -20,19 +21,19 @@ html {
     background-color: #222831;
     padding: 20px 10px;
     margin: 0;
-    width: auto;
+    width: 100%;
 }
 
 .header a {
-    float: left;
-    color: #76ABAE;
+    float: none;
+    display: block;
     text-align: center;
     padding: 12px;
     text-decoration: none;
     font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
-    margin-left: 10px;
+    margin: 10px auto;
 }
 
 .header a.logo {
@@ -56,19 +57,20 @@ th,
 td {
     margin: auto;
     border: 1px solid;
-    width: 30%;
+    width: 100%;
+    overflow-x: auto;
 }
 
 /* Map */
 #map {
-    width: 800px;
+    width: 100%;
     height: auto;
     margin: 20px auto;
-    display: block;
 }
 
 /* Button */
 button {
+    width: 100%;
     background-color: #222831;
     color: #76ABAE;
     border: none;
@@ -98,12 +100,26 @@ button:hover {
     background: #EEEEEE;
     padding: 20px;
     margin: 10px 0;
-    flex-basis: calc(25% - 20px);
+    flex-basis: calc(50% - 20px);
+    max-width: calc(50% - 20px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 30px;
-    max-width: calc(25% - 20px);
     background-color: #f0f2dc;
     border: 2px solid #222831;
+}
+
+@media (min-width: 768px) {
+    .article {
+        flex-basis: calc(33.33% - 20px);
+        max-width: calc(33.33% - 20px);
+    }
+}
+
+@media (min-width: 992px) {
+    .article {
+        flex-basis: calc(25% - 20px);
+        max-width: calc(25% - 20px);
+    }
 }
 
 div#apartamente,
@@ -131,7 +147,6 @@ div#apartamente {
 div#cartiere {
     background: rgba(34, 40, 49, 1);
     background: linear-gradient(90deg, rgba(34, 40, 49, 1) 5%, rgba(118, 171, 174, 1) 90%);
-
 }
 
 #apartamente,
@@ -139,14 +154,12 @@ div#cartiere {
     text-align: center;
 }
 
-
 section {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: stretch;
 }
-
 
 #addForm {
     background-color: #f2f2f2;
@@ -160,7 +173,6 @@ section {
     display: block;
     margin-bottom: 10px;
 }
-
 
 #addForm input[type="text"],
 #addForm input[type="email"] {
@@ -316,11 +328,11 @@ div.custom-select{
 
 .custom-select::before,
 .custom-select::after {
-  --size: 0.3rem;
-  position: absolute;
-  content: "";
-  right: 38.25rem;
-  pointer-events: none;
+    --size: 0.3rem;
+    position: absolute;
+    content: "";
+    right: 38.25rem;
+    pointer-events: none;
 }
 
 .custom-select::before {
@@ -328,14 +340,14 @@ div.custom-select{
     border-right: var(--size) solid transparent;
     border-bottom: var(--size) solid black;
     top: 30%;
-  }
-  
-  .custom-select::after {
+}
+
+.custom-select::after {
     border-left: var(--size) solid transparent;
     border-right: var(--size) solid transparent;
     border-top: var(--size) solid black;
     top: 70%;
-  }
+}
 
 select, input#cheie{
     appearance: none;

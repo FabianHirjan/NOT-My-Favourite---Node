@@ -302,7 +302,7 @@ button.expand:hover {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-div#search.article{
+div#search.article {
     position: relative;
     background-color: whitesmoke;
     border-radius: 0px;
@@ -310,7 +310,8 @@ div#search.article{
     border-left: 0px;
 }
 
-select, input#cheie{
+select,
+input#cheie {
     appearance: none;
     font-size: 1rem;
     padding: 0.2rem 1rem 0.3rem 1rem;
@@ -320,34 +321,32 @@ select, input#cheie{
     color: #000;
 }
 
-select{
+select {
     cursor: pointer;
 }
 
-input#cheie{
+input#cheie {
     width: 7rem;
 }
 
-section>h2{
+section>h2 {
     font-size: 2rem;
     margin-left: 10rem;
 }
 
-section>table{
+section>table {
     background-color: beige;
 }
 
-section>table:nth-child()
-
-tr:hover{
+section>table:nth-child() tr:hover {
     background-color: coral;
 }
 
-tr:hover:not(:first-child){
+tr:hover:not(:first-child) {
     background-color: coral;
 }
 
-#filter{
+#filter {
     height: 2rem;
     appearance: none;
     font-size: 1rem;
@@ -358,16 +357,16 @@ tr:hover:not(:first-child){
     color: #000;
 }
 
-#mic{
+#mic {
     height: 2.5rem;
 }
 
-#postari{
+#postari {
     font-size: 2rem;
     margin-left: 8.5rem;
 }
 
-textarea{
+textarea {
     resize: none;
     width: 18rem;
 }
