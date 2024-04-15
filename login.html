@@ -24,13 +24,15 @@
 <body>
     <section>
         <form id="addForm" name="loginform" onsubmit="return validateForm()" method="post" action="index.html">
-            <label for="user">Username: </label>
-            <input type="text" name="user">
+            <label>Username: </label>
+            <label>
+                <input type="text" name="user">
+            </label>
             <br>
-            <label for="password">Password:</label>
-            <input type="password" id = "bigger" name="password">
+            <label>Password:</label>
+            <label for="bigger"></label><input type="password" id = "bigger" name="password">
             <p><em>you don't have an account? you can <a href = "register.html">register here</a></em></p>
-            <center><button>Login</button></center>
+            <div style="text-align: center;"><button>Login</button></div>
           </form>
     </section>
 </body>
