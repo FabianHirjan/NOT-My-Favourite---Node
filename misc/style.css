@@ -301,3 +301,53 @@ Account
 button.expand:hover {
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+div#search.article{
+    position: relative;
+    background-color: whitesmoke;
+    border-radius: 0px;
+    border-right: 0px;
+    border-left: 0px;
+}
+
+div.custom-select{
+    position: relative;
+}
+
+.custom-select::before,
+.custom-select::after {
+  --size: 0.3rem;
+  position: absolute;
+  content: "";
+  right: 38.25rem;
+  pointer-events: none;
+}
+
+.custom-select::before {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-bottom: var(--size) solid black;
+    top: 30%;
+  }
+  
+  .custom-select::after {
+    border-left: var(--size) solid transparent;
+    border-right: var(--size) solid transparent;
+    border-top: var(--size) solid black;
+    top: 70%;
+  }
+
+select, input#cheie{
+    appearance: none;
+    width: 10%;
+    font-size: 1rem;
+    padding: 0.3em 2em 0.3em 1em;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+}
+
+select{
+    cursor: pointer;
+}
