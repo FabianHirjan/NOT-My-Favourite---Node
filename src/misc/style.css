@@ -106,6 +106,36 @@ button:hover {
     border: 2px solid #222831;
 }
 
+div#lupu {
+    background-image: url(photos/lupu.webp);
+    background-size: cover;
+
+}
+
+div#fabi {
+    background-image: url(photos/fabislab.jpg);
+    background-size: 375px;
+
+}
+
+div#tudor {
+    background-image: url(/Users/fabian-andreihirjan/Downloads/Unknown-3.jpg);
+    background-size: cover;
+}
+
+div#tudor,
+div#fabi,
+div#lupu {
+    padding: 60px;
+    height: 150px;
+    color: #EEEEEE;
+    border: 1px solid #222831;
+    font-weight: bold;
+    text-shadow: black 1px 1px 5px;
+    transition: opacity 0.5s;
+    opacity: 0.5;
+}
+
 div#apartamente,
 div#cartiere {
     padding: 180px;
@@ -119,7 +149,10 @@ div#cartiere {
 }
 
 div#apartamente:hover,
-div#cartiere:hover {
+div#cartiere:hover,
+div#fabi:hover,
+div#tudor:hover,
+div#lupu:hover {
     opacity: 1;
 }
 
