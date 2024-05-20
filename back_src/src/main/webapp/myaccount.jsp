@@ -1,3 +1,8 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    request.setAttribute("activePage", "myAccount");
+%>
+<jsp:include page="header.jsp" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,18 +12,6 @@
     <link rel="stylesheet" href="misc/style.css">
 </head>
 <body>
-    <div class="header">
-        <a href="index.jsp" class="logo">NoF</a>
-        <a href="index.jsp">Home</a>
-        <a href="filter.jsp">Physical Products</a>
-        <a href="N/A">About us</a>
-        <a href="nonphy.jsp">Non Physical Products</a>
-        <a href="post.jsp">Post my Issue</a>
-        <div class="header-right">
-            <a href="myaccount.jsp" class="active">My account</a>
-            <a href="login.jsp">Log in</a>
-        </div>
-    </div>
 
     <div class="account-container">
         <div class="account-info">

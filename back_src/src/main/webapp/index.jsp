@@ -1,3 +1,10 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    request.setAttribute("activePage", "home");
+%>
+<jsp:include page="header.jsp" />
+
+<!-- Rest of the page -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,18 +15,6 @@
 </head>
 
 <body>
-<div class="header">
-    <a href="index.jsp" class="logo">NoF</a>
-    <a href="index.jsp" class="active">Home</a>
-    <a href="filter.jsp">Physical Products</a>
-    <a href="nonphy.jsp">Non Physical Products</a>
-    <a href="post.jsp">Post my Issue</a>
-    <div class="header-right">
-        <a href="myaccount.jsp">My account</a>
-        <a href="login.jsp">Log in</a>
-    </div>
-</div>
-
 <div class="article-container">
     <div class="article" id="apartamente">
         <h1>Home appliances, electronics and more</h1>
