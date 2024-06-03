@@ -36,6 +36,7 @@ public class FilterServlet extends HttpServlet {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Article article = new Article();
+                    article.setId(resultSet.getInt("id"));
                     article.setTitle(resultSet.getString("title"));
                     article.setContent(resultSet.getString("content"));
                     article.setPoster(resultSet.getString("poster"));

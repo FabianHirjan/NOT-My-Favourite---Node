@@ -1,26 +1,24 @@
 body,
 html {
-
-    background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg') -25px -50px;
+    background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg') -25px -50px no-repeat;
+    background-size: cover;
     position: fixed;
     top: 0;
     width: 100%;
-    z-index: 0;
     height: 100%;
-    background-size: calc(100% + 50px);
     margin: 0;
     padding: 0;
-    scroll-behavior: smooth;
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
 /* Header */
 .header {
     overflow: auto;
     background-color: #222831;
-    padding: 5px 10px;
+    padding: 10px;
     margin: 0;
-    width: auto;
+    width: 100%;
 }
 
 .header a {
@@ -54,11 +52,31 @@ html {
 table,
 th,
 td {
-    margin: auto;
-    border: 1px solid;
-    width: 30%;
+    border: 1px solid #222831;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    text-align: left;
 }
 
+th,
+td {
+    padding: 10px;
+}
+
+th {
+    background-color: #222831;
+    color: #FFFFFF;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover:not(:first-child) {
+    background-color: #ddd;
+}
 
 /* Button */
 button {
@@ -83,22 +101,18 @@ button:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: stretch;
     padding: 20px;
 }
 
 .article {
-    background: #EEEEEE;
+    background: #f0f2dc;
     padding: 20px;
-    margin: 10px 0;
+    margin: 10px;
     flex-basis: calc(25% - 20px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 30px;
-    max-width: calc(25% - 20px);
-    background-color: #f0f2dc;
+    border-radius: 10px;
     border: 2px solid #222831;
 }
-
 
 div#apartamente,
 div#cartiere {
@@ -113,29 +127,22 @@ div#cartiere {
 }
 
 div#apartamente:hover,
-div#cartiere:hover,
-div#fabi:hover,
-div#tudor:hover,
-div#lupu:hover {
+div#cartiere:hover {
     opacity: 1;
 }
 
 div#apartamente {
-    background: rgba(34, 40, 49);
     background: linear-gradient(270deg, rgba(34, 40, 49, 1) 5%, rgba(118, 171, 174, 1) 90%);
 }
 
 div#cartiere {
-    background: rgba(34, 40, 49, 1);
     background: linear-gradient(90deg, rgba(34, 40, 49, 1) 5%, rgba(118, 171, 174, 1) 90%);
-
 }
 
 #apartamente,
 #cartiere {
     text-align: center;
 }
-
 
 section {
     display: flex;
@@ -144,20 +151,19 @@ section {
     align-items: stretch;
 }
 
-
 #addForm {
     background-color: #f2f2f2;
     padding: 20px;
     border-radius: 8px;
     width: 300px;
-    margin: 0 auto;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #addForm label {
     display: block;
     margin-bottom: 10px;
 }
-
 
 #addForm input[type="text"],
 #addForm input[type="email"] {
@@ -195,9 +201,7 @@ section {
     color: gold;
 }
 
-/*
-Account
-*/
+/* Account */
 .account-container {
     padding: 20px;
     display: flex;
@@ -260,6 +264,7 @@ Account
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
 }
 
 .review {
@@ -305,17 +310,20 @@ div#search.article {
     border-radius: 0px;
     border-right: 0px;
     border-left: 0px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 select,
 input#cheie {
     appearance: none;
     font-size: 1rem;
-    padding: 0.2rem 1rem 0.3rem 1rem;
+    padding: 0.5rem;
     background-color: #fff;
     border: 1px solid #caced1;
     border-radius: 0.25rem;
     color: #000;
+    margin-bottom: 10px;
 }
 
 select {
@@ -323,7 +331,7 @@ select {
 }
 
 input#cheie {
-    width: 7rem;
+    width: 100%;
 }
 
 section>h2 {
@@ -333,25 +341,32 @@ section>h2 {
 
 section>table {
     background-color: beige;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
 }
 
-section>table:nth-child() tr:hover {
-    background-color: coral;
+textarea {
+    resize: none;
+    width: 100%;
+    max-width: 18rem;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
-tr:hover:not(:first-child) {
-    background-color: coral;
-}
-
-#filter {
-    height: 2rem;
+#filter,
+#mic {
     appearance: none;
     font-size: 1rem;
-    padding: 0.5rem 1rem 0.3rem 1rem;
+    padding: 0.5rem;
     background-color: #fff;
     border: 1px solid #caced1;
     border-radius: 0.25rem;
     color: #000;
+    margin-bottom: 10px;
 }
 
 #mic {
@@ -363,7 +378,50 @@ tr:hover:not(:first-child) {
     margin-left: 8.5rem;
 }
 
-textarea {
-    resize: none;
-    width: 18rem;
+
+/* Article Detail */
+.article-detail {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    margin: 50px auto;
+    border-radius: 10px;
+    max-width: 800px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.article-detail h1 {
+    font-size: 2rem;
+    color: #222831;
+    margin-bottom: 20px;
+}
+
+.article-detail p {
+    font-size: 1rem;
+    color: #222831;
+    line-height: 1.5;
+}
+
+.article-detail img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+/* Comments Section */
+.comments {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.comment {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.comment:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
 }

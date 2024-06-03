@@ -2,7 +2,6 @@
 <%
     request.setAttribute("activePage", "postIssue");
 %>
-<jsp:include page="errorModal.jsp" />
 
 <%
     if (session.getAttribute("loggedIn") == null) {

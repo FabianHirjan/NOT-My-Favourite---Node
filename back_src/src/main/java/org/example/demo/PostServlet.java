@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.example.demo.database.DatabaseConnection;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -44,9 +45,26 @@ public class PostServlet extends HttpServlet {
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("A new article was inserted successfully!");
+                displaySuccessMessage(response);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void displaySuccessMessage(HttpServletResponse response) throws IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>Action Commited</title>");
+        out.println("<meta http-equiv='refresh' content='5;URL=index.jsp'>"); // Schimbă 'main-page-url' cu URL-ul paginii principale
+        out.println("<link rel='stylesheet' type='text/css' href='misc/style.css'>"); // Asigură-te că calea este corectă
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<h1>Action Commited f</h1>");
+        out.println("<p>You'll be redirected to main page in 5 seconds...</p>");
+        out.println("</body>");
+        out.println("</html>");
     }
 }

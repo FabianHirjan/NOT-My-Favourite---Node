@@ -7,9 +7,18 @@ public class Article {
     private String poster;
     private int stars;
     private String type;
+    private int id;
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setContent(String content) {

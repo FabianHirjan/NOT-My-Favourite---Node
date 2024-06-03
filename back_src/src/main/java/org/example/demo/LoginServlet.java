@@ -34,6 +34,11 @@ public class LoginServlet extends HttpServlet {
                 String name = resultSet.getString("name");
                 session.setAttribute("name", name);
 
+                String role = resultSet.getString("role");
+                if(role.equals("admin")) {
+                    session.setAttribute("admin", true);
+                }
+
                 // Redirect to index.jsp
                 response.sendRedirect("index.jsp");
             } else {

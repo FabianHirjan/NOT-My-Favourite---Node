@@ -28,9 +28,9 @@
 
 <body>
     <section>
-    <form id="addForm" name="registerForm" onsubmit="return validateForm()" method="post" action="../index.html">
-        <label for="user">Username: </label>
-        <input type="text" name="user">
+    <form id="addForm" name="registerForm" onsubmit="return validateForm()" method="post" action="${pageContext.request.contextPath}/register-servlet">
+        <label for="name">Username: </label>
+        <input type="text" name="name">
         <br>
         <label for="email">Email:</label>
         <input type="email" name="email">

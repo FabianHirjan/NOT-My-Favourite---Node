@@ -57,7 +57,8 @@
             for (Article article : nonPhysicalArticles) {
     %>
     <div class="article">
-        <h3><%= article.getTitle() %></h3>
+
+        <h3><a href="view-article-servlet?id=<%= article.getId() %>"><%= article.getTitle() %></a></h3>
         <p><%= article.getContent() %></p>
         <p>Posted by: <%= article.getPoster() %></p>
         <p>Stars: <%= article.getStars() %></p>

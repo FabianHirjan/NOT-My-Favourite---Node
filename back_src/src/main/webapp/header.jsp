@@ -8,6 +8,7 @@
     <a href="filter-servlet" <%= activePage.equals("physicalProducts") ? "class='active'" : "" %>>Physical Products</a>
     <a href="nonphysical-servlet" <%= activePage.equals("nonPhysicalProducts") ? "class='active'" : "" %>>Non-Physical Products</a>
     <a href="post.jsp" <%= activePage.equals("postIssue") ? "class='active'" : "" %>>Post my Issue</a>
+
     <div class="header-right">
         <a href="myaccount.jsp" <%= activePage.equals("myAccount") ? "class='active'" : "" %>>My account</a>
 
@@ -20,9 +21,20 @@
         } else {
         %>
         <a>Welcome, <%= name %></a>
+        <a href="logout-servlet">Logout</a>
         <%
             }
         %>
+
+        <%
+            if (session.getAttribute("admin") != null) {
+                String activeClass = activePage.equals("admin") ? "class='active'" : "";
+        %>
+        <a href="admin/index.html" <%= activeClass %>>Admin</a>
+        <%
+        }
+        %>
+
     </div>
     <%
         String errorMessage = (String) session.getAttribute("errorMessage");
