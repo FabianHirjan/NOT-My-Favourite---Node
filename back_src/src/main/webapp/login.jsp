@@ -16,7 +16,7 @@
 
 <body>
     <section>
-        <form id="addForm" name="loginform" onsubmit="return validateForm()" method="post" action="${pageContext.request.contextPath}/login-servlet">
+        <form id="addForm" name="loginform" onsubmit="return validateForm()" method="post" action="login-servlet">
             <label for="email">Email: </label>
             <input type="email" name="email">
             <br>

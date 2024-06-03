@@ -26,7 +26,6 @@ public class LoginServlet extends HttpServlet {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                // Set a session attribute to indicate the user is logged in
                 HttpSession session = request.getSession();
                 session.setAttribute("loggedIn", true);
 

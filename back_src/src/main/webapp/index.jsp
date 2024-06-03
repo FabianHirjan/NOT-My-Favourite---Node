@@ -4,7 +4,6 @@
 %>
 <jsp:include page="header.jsp" />
 
-<!-- Rest of the page -->
 <!DOCTYPE html>
 <html lang="en">
 

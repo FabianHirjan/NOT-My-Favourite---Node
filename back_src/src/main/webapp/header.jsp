@@ -10,8 +10,6 @@
     <a href="post.jsp" <%= activePage.equals("postIssue") ? "class='active'" : "" %>>Post my Issue</a>
 
     <div class="header-right">
-        <a href="myaccount.jsp" <%= activePage.equals("myAccount") ? "class='active'" : "" %>>My account</a>
-
         <%
             if (session.getAttribute("loggedIn") == null) {
                 String activeClass = activePage.equals("login") ? "class='active'" : "";
@@ -21,6 +19,7 @@
         } else {
         %>
         <a>Welcome, <%= name %></a>
+        <a href="myaccount.jsp" <%= activePage.equals("myAccount") ? "class='active'" : "" %>>My account</a>
         <a href="logout-servlet">Logout</a>
         <%
             }
