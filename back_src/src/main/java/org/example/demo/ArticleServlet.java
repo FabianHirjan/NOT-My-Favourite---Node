@@ -14,8 +14,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "NonPhysicalServlet", value = "/nonphysical-servlet")
-public class NonPhysicalServlet extends HttpServlet {
+@WebServlet(name = "ArticleServlet", value = "/article-servlet")
+public class ArticleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -27,12 +27,20 @@ public class NonPhysicalServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    private List<Article> getNonPhysicalArticles() {
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String type = request.getParameter("type");
+        if (type != null && !type.isEmpty()) {
+            List<Article> articles = getArticlesByType(type);
+            request.setAttribute("articles", articles);
+        }
+        request.getRequestDispatcher("articles.jsp").forward(request, response);
+    }
+
+    private List<Article> getArticlesByType(String type) {
         List<Article> articles = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE type = ? AND approved = ?")){
-
-            statement.setString(1, "nonphy");
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE type = ? AND approved = ?")) {
+            statement.setString(1, type);
             statement.setInt(2, 1);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
@@ -48,13 +56,7 @@ public class NonPhysicalServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Number of articles: " + articles.size()); // Add this line
         return articles;
-    }
-
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Article> nonPhysicalArticles = getNonPhysicalArticles();
-
-        request.setAttribute("nonPhysicalArticles", nonPhysicalArticles);
-        request.getRequestDispatcher("nonphy.jsp").forward(request, response);
     }
 }

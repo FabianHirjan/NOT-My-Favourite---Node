@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>FilterServlet</servlet-name>
-        <servlet-class>org.example.demo.FilterServlet</servlet-class>
+        <servlet-class>org.example.demo.PhysicalServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>FilterServlet</servlet-name>
