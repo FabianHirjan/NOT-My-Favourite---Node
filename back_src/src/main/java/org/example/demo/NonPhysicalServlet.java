@@ -30,9 +30,10 @@ public class NonPhysicalServlet extends HttpServlet {
     private List<Article> getNonPhysicalArticles() {
         List<Article> articles = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE type = ?")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE type = ? AND approved = ?")){
 
             statement.setString(1, "nonphy");
+            statement.setInt(2, 1);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Article article = new Article();

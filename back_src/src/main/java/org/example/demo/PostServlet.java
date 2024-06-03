@@ -34,13 +34,14 @@ public class PostServlet extends HttpServlet {
 
         // Save the article to the database
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("INSERT INTO posts (title, content, poster, stars, type) VALUES (?, ?, ?, ?, ?)")) {
+             PreparedStatement statement = connection.prepareStatement("INSERT INTO posts (title, content, poster, stars, type, approved) VALUES (?, ?, ?, ?, ?, ?)")) {
 
             statement.setString(1, article.getTitle());
             statement.setString(2, article.getContent());
             statement.setString(3, article.getPoster());
             statement.setInt(4, article.getStars());
             statement.setString(5, article.getType());
+            statement.setInt(6, 0);
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {

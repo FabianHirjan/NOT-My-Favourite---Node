@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,8 +30,9 @@ public class FilterServlet extends HttpServlet {
     private List<Article> getPhysicalArticles() {
         List<Article> articles = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE type = ?")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE type = ? AND approved = ?")) {
             statement.setString(1, "physical");
+            statement.setInt(2, 1);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Article article = new Article();
