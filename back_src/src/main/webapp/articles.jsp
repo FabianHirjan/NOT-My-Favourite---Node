@@ -26,7 +26,7 @@
                 </select>
             </div>
             <br>
-            <button type="submit">Apply filters</button>
+            <button type="submit">Search</button>
         </form>
     </div>
 </center>
