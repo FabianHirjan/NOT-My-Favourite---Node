@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<center>
+<section class="forsearch">
     <div class="article" id="search">
         <form action="article-servlet" method="get">
             <div>
@@ -24,12 +24,18 @@
                     <option value="physical">Physical Object</option>
                     <option value="non-physical">Non-Physical Object</option>
                 </select>
+                <br/>
+                <label for="category"><font size="+1">Select category: </font></label>
+                <select name="category">
+                    <option value="cars">Vehicle</option>
+                    <option value="restaurants">Restaurant</option>
+                </select>
             </div>
             <br>
             <button type="submit">Search</button>
         </form>
     </div>
-</center>
+</section>
 
 <div class="article-container">
     <%

@@ -307,10 +307,8 @@ button.expand:hover {
 div#search.article {
     position: relative;
     background-color: whitesmoke;
-    border-radius: 0px;
-    border-right: 0px;
-    border-left: 0px;
-    padding: 10px;
+    border-radius: 10px;
+    border: 0px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -427,4 +425,15 @@ textarea {
     background-color: #333;
     color: #fff;
     cursor: pointer;
+}
+
+.forsearch {
+    display: flex;
+    justify-content: center;
+}
+
+div.article-details{
+    background-color: whitesmoke;
+    border-radius: 10px;
+    border-color:black;
 }

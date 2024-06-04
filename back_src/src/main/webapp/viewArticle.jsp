@@ -17,7 +17,6 @@
 <jsp:include page="header.jsp" />
 
 <div class="article-container">
-    <%-- Retrieving the article object set in request by servlet --%>
     <jsp:useBean id="article" type="org.example.demo.Article" scope="request" />
 
     <div class="article-details">
