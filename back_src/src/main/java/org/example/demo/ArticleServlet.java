@@ -27,21 +27,18 @@ public class ArticleServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String type = request.getParameter("type");
-        if (type != null && !type.isEmpty()) {
-            List<Article> articles = getArticlesByType(type);
-            request.setAttribute("articles", articles);
-        }
-        request.getRequestDispatcher("articles.jsp").forward(request, response);
-    }
-
-    private List<Article> getArticlesByType(String type) {
+    private List<Article> getArticlesByType(String type, boolean isAdmin) {
         List<Article> articles = new ArrayList<>();
+        String query = "SELECT * FROM posts WHERE type = ?";
+        if (!isAdmin) {
+            query += " AND approved = ?";
+        }
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE type = ? AND approved = ?")) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, type);
-            statement.setInt(2, 1);
+            if (!isAdmin) {
+                statement.setInt(2, 1);
+            }
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Article article = new Article();
@@ -56,7 +53,16 @@ public class ArticleServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Number of articles: " + articles.size()); // Add this line
         return articles;
+    }
+
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String type = request.getParameter("type");
+        boolean isAdmin = request.getSession().getAttribute("admin") != null && (boolean) request.getSession().getAttribute("admin");
+        if (type != null && !type.isEmpty()) {
+            List<Article> articles = getArticlesByType(type, isAdmin);
+            request.setAttribute("articles", articles);
+        }
+        request.getRequestDispatcher("articles.jsp").forward(request, response);
     }
 }

@@ -8,9 +8,18 @@ public class Article {
     private int stars;
     private String type;
     private int id;
+    private int isApproved;
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setIsApproved(int isApproved) {
+        this.isApproved = isApproved;
+    }
+
+    public int getIsApproved() {
+        return isApproved;
     }
 
     public int getId() {

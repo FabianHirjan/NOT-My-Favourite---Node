@@ -31,10 +31,11 @@ public class PostServlet extends HttpServlet {
         article.setPoster(poster);
         article.setStars(stars);
         article.setType(type);
+        article.setIsApproved(0);
 
         // Save the article to the database
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("INSERT INTO posts (title, content, poster, stars, type, approved) VALUES (?, ?, ?, ?, ?, ?)")) {
+             PreparedStatement statement = connection.prepareStatement("INSERT INTO posts (title, content, poster, stars, type, approved, category_id) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 
             statement.setString(1, article.getTitle());
             statement.setString(2, article.getContent());
@@ -42,6 +43,7 @@ public class PostServlet extends HttpServlet {
             statement.setInt(4, article.getStars());
             statement.setString(5, article.getType());
             statement.setInt(6, 0);
+            statement.setInt(7, 1);
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {

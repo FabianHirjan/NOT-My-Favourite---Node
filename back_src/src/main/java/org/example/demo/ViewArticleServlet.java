@@ -50,6 +50,7 @@ public class ViewArticleServlet extends HttpServlet {
                     article.setPoster(resultSet.getString("poster"));
                     article.setStars(resultSet.getInt("stars"));
                     article.setType(resultSet.getString("type"));
+                    article.setIsApproved(resultSet.getInt("approved"));
                 }
             }
         } catch (Exception e) {

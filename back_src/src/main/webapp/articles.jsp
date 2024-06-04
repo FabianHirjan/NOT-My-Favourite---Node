@@ -41,6 +41,7 @@
 <div class="article-container">
     <%
         List<Article> articles = (List<Article>) request.getAttribute("articles");
+        boolean isAdmin = request.getSession().getAttribute("admin") != null && (boolean) request.getSession().getAttribute("admin");
         if (articles != null && !articles.isEmpty()) {
             for (Article article : articles) {
     %>
@@ -49,6 +50,18 @@
         <p><%= article.getContent() %></p>
         <p>Posted by: <%= article.getPoster() %></p>
         <p>Stars: <%= article.getStars() %></p>
+        <% if (isAdmin && article.getIsApproved() == 0) { %>
+        <form action="approve-article-servlet" method="post">
+            <input type="hidden" name="articleId" value="<%= article.getId() %>">
+            <button type="submit">Approve</button>
+        </form>
+        <% } %>
+        <% if (isAdmin) { %>
+        <form action="delete-article-servlet" method="post">
+            <input type="hidden" name="articleId" value="<%= article.getId() %>">
+            <button type="submit">Delete</button>
+        </form>
+        <% } %>
     </div>
     <%
         }
