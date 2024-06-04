@@ -30,7 +30,7 @@
         <label for="title">Title:</label>
         <input type="text" name="title" id="title">
         <br>
-        <label for="content">Problem:</label>
+        <label>Problem:</label>
         <input type="text" id="bigger" name="content">
         <input type="hidden" id="stars" name="stars">
         <div id="ratingStars">

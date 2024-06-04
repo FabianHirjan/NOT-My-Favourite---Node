@@ -25,16 +25,19 @@
         <p><strong>Stars:</strong> <%= article.getStars() %></p>
     </div>
 
-    <h2>Comments</h2>
+    <h2 class="commentspacing">Comments</h2>
     <div class="comments">
         <%
             List<String> comments = (List<String>) request.getAttribute("articleComments");
             if (comments != null && !comments.isEmpty()) {
                 for (String comment : comments) {
         %>
-        <div class="comment">
-            <p><%= comment %></p>
-        </div>
+            <div class="comment">
+                <p>
+                    <b class="usr"> <%= article.getPoster()  %></b>
+                    <%= comment %>
+                </p>
+            </div>
         <%
             }
         } else {
@@ -45,11 +48,22 @@
         %>
     </div>
 
-    <h2>Add Your Comment</h2>
+    <h2 class="commentspacing">Add Your Comment</h2>
     <div class="add-comment">
         <form action="add-comment-servlet" method="post">
-            <textarea name="comment" placeholder="Add your comment here..."></textarea>
+            <textarea class="addcomm" name="comment" placeholder="Add your comment here..."></textarea>
             <input type="hidden" name="articleId" value="<%= article.getId() %>">
+            <fieldset>
+                <legend>How do you feel about this opinion?</legend>
+                <div>
+                    <input type="radio" id="agree" name="drone" value="agree" checked />
+                    <label for="agree">Agree</label>
+                </div>
+                <div>
+                    <input type="radio" id="disagree" name="drone" value="dewey" />
+                    <label for="disagree">Disagree</label>
+                </div>
+            </fieldset>
             <button type="submit">Submit</button>
         </form>
     </div>

@@ -37,13 +37,14 @@
     </div>
 </section>
 
+<section>
 <div class="article-container">
     <%
         List<Article> articles = (List<Article>) request.getAttribute("articles");
         if (articles != null && !articles.isEmpty()) {
             for (Article article : articles) {
     %>
-    <div class="article">
+    <div class="article" id="postare">
         <h3><a href="view-article-servlet?id=<%= article.getId() %>"><%= article.getTitle() %></a></h3>
         <p><%= article.getContent() %></p>
         <p>Posted by: <%= article.getPoster() %></p>
@@ -53,12 +54,14 @@
         }
     } else {
     %>
+    <div class="article" id="search">
     <p>No articles found.</p>
+    </div>
     <%
         }
     %>
 </div>
-
+</section>
 
 </body>
 </html>
