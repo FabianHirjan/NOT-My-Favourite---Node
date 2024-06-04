@@ -21,12 +21,13 @@ import org.example.demo.database.*;
 
             try {
                 Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO users (email, name, password) VALUES (?, ?, ?)");
+                PreparedStatement statement = connection.prepareStatement("INSERT INTO users (email, name, password, role) VALUES (?, ?, ?, ?)");
                 statement.setString(1, email);
                 System.out.printf("email: %s\n", email);
                 statement.setString(2, name);
                 System.out.printf("name: %s\n", name);
                 statement.setString(3, password);
+                statement.setString(4, "user");
                 statement.executeUpdate();
 
 

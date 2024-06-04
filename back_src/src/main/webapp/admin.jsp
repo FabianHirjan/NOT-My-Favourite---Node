@@ -10,52 +10,57 @@
     The admin can edit it to exclude the swears and then he can approve it
 -->
 
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    request.setAttribute("activePage", "admin");
+%>
+<%@ page import="org.example.demo.User" %>
+<%@ page import="java.util.List" %>
+<jsp:include page="header.jsp" />
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     
     <meta charset="utf-8" />
     <title>Admin</title>
-    <link rel="stylesheet" href="../misc/style.css">
+    <link rel="stylesheet" href="misc/style.css">
 </head>
 
 <body>
-    <div class="header">
-        <a href="index.html" class="logo">
-            <img src="../misc/photos/logo.PNG" alt="Home" height="30px">
-        </a>
-        <div class="header-right">
-            <a class="active" href="#home">Admin</a>
-            <a href="rules.html">Rules and Demos</a>
-        </div>
-    </div>
     <br>
     <section>
-        <h2>Users</h2>
-        <table>
-            <tr>
-                <th>User</th>
-                <th>Email</th>
-                <th>Action</th>
-            </tr>
-            <tr>
-                <td>Lorem Ipsum</td>
-                <td>loremipsum@gmail.com</td>
-                <td>
-                    <button>Delete</button>
-                    <button>Update</button>
-                </td>
-            </tr>
-            <tr>
-                <td>Lorem Ipsum</td>
-                <td>loremipsum@gmail.com</td>
-                <td>
-                    <button>Delete</button>
-                    <button>Update</button>
-                </td>
-            </tr>
-        </table>
+
+            <form action="view-users-servlet">
+                <h2>Users</h2>
+                <button>Get users</button>
+            </form>
     </section>
+    <div class="article-container">
+        <%
+            List<User> users = (List<User>) request.getAttribute("users");
+            if (users != null) {
+                for (User user : users) {
+        %>
+        <div class="article">
+            <h2><%= user.getName() %></h2>
+            <p>Email: <%= user.getEmail() %></p>
+            <p>Role: <%= user.getRole() %></p>
+            <form action="delete-user-servlet" method="post">
+                <input type="hidden" name="userId" value="<%= user.getId() %>">
+                <button type="submit">Delete Account</button>
+            </form>
+            <form action="promote-user-servlet" method="post">
+                <input type="hidden" name="userId" value="<%= user.getId() %>">
+                <button type="submit"><%= user.getRole().equals("admin") ? "Demote from Admin" : "Promote to Admin" %></button>
+            </form>
+        </div>
+        <%
+                }
+            }
+        %>
+        </div>
+
 
     <h2 id="postari">
         Posts
