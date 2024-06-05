@@ -61,37 +61,6 @@
         %>
         </div>
 
-
-    <h2 id="postari">
-        Posts
-        <label for="filter"></label>
-        <input type="text" id="filter" name="filter" placeholder="Search by user">
-        <button id="mic">Search</button>
-    </h2>
-    <div class = "article-container">
-        <br>
-        <div class = "article">
-            <h2>First article</h2>
-            <p>Tacos actually microdosing, pour-over semiotics...</p>
-            <button>Approve</button>
-            <button>Delete</button>
-            <button>Update</button>
-        </div>
-        <div class = "article">
-            <h2>Second article</h2>
-            <p>Tacos actually microdosing, pour-over semiotics...</p>
-            <button>Approve</button>
-            <button>Delete</button>
-            <button>Update</button>
-        </div>
-        <div class = "article">
-            <h2>Third article</h2>
-            <p>Tacos actually microdosing, pour-over semiotics...</p>
-            <button>Approve</button>
-            <button>Delete</button>
-            <button>Update</button>
-        </div>
-    </div>
 </body>
 </html>
     

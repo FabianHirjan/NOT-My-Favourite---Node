@@ -47,6 +47,7 @@ public class ArticleServlet extends HttpServlet {
                     article.setContent(resultSet.getString("content"));
                     article.setPoster(resultSet.getString("poster"));
                     article.setStars(resultSet.getInt("stars"));
+                    article.setIsApproved(resultSet.getInt("approved"));
                     articles.add(article);
                 }
             }

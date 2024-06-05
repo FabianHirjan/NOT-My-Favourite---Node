@@ -1,6 +1,5 @@
-body,
-html {
-    background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg') -25px -50px no-repeat;
+body, html {
+    background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg');
     background-size: cover;
     position: fixed;
     top: 0;
@@ -9,7 +8,9 @@ html {
     margin: 0;
     padding: 0;
     overflow-y: auto;
+    overflow-x: hidden;
     scroll-behavior: smooth;
+    box-sizing: border-box;
 }
 
 /* Header */
@@ -46,6 +47,7 @@ html {
 
 .header-right {
     float: right;
+    margin-right: 20px;
 }
 
 /* Table */
@@ -58,6 +60,7 @@ td {
     margin: 20px auto;
     border-collapse: collapse;
     text-align: left;
+    box-sizing: border-box;
 }
 
 th,
@@ -99,8 +102,8 @@ button:hover {
 
 .article-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    max-width: none; /* Eliminăm limita de lățime */
+    overflow-x: auto; /* Adăugăm scrollbar horizontal pentru a gestiona articolele pe un singur rând */
     padding: 20px;
 }
 
@@ -108,11 +111,14 @@ button:hover {
     background: #edeab7;
     padding: 20px;
     margin: 10px;
-    flex-basis: calc(25% - 20px);
+    flex-basis: auto; /* Eliminăm valoarea fixă a flex-basis */
+    min-width: 500px; /* Definim o lățime minimă pentru fiecare articol */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     border: 2px solid #222831;
+    box-sizing: border-box;
 }
+
 
 div#apartamente,
 div#cartiere {
@@ -157,6 +163,7 @@ section {
     border-radius: 8px;
     width: 300px;
     margin: 20px auto;
+    box-sizing: border-box;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -176,7 +183,7 @@ section {
 }
 
 #addForm input[type="text"]#bigger {
-    width: 300px;
+    width: 100%;
     height: 100px;
     padding: 10px;
 }
@@ -214,6 +221,7 @@ section {
     background-color: #EEEEEE;
     padding: 20px;
     border-radius: 8px;
+    box-sizing: border-box;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
@@ -250,6 +258,7 @@ section {
     background-color: #EEEEEE;
     padding: 20px;
     border-radius: 8px;
+    box-sizing: border-box;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
 }
@@ -358,11 +367,11 @@ textarea.addcomm {
     height: 2.5rem;
 }
 
-#postari {
+#postari
+{
     font-size: 2rem;
     margin-left: 8.5rem;
 }
-
 
 .article-container {
     display: flex;
@@ -380,12 +389,7 @@ textarea.addcomm {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     background-color: #fff;
-}
-
-.article-details , .comments, .add-comment {
-    background-color: white;
-    font-size: 2em;
-    border: 25px solid whitesmoke;
+    box-sizing: border-box;
     padding: 10px;
     margin: 10px 0;
     text-align: center;
@@ -417,10 +421,6 @@ textarea.addcomm {
     justify-content: center;
 }
 
-div.article-details{
-
-}
-
 .commentspacing{
     padding:5px;
     text-align:center;
@@ -445,4 +445,3 @@ div.article-details{
     border-radius:5px;
     background-color: #d9d4d4;
 }
-

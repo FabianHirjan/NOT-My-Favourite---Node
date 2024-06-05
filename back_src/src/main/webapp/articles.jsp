@@ -22,7 +22,7 @@
                 <label for="type"><font size="+1">Select type: </font></label>
                 <select name="type">
                     <option value="physical">Physical Object</option>
-                    <option value="non-physical">Non-Physical Object</option>
+                    <option value="nonphy">Non-Physical Object</option>
                 </select>
                 <br/>
                 <label for="category"><font size="+1">Select category: </font></label>
