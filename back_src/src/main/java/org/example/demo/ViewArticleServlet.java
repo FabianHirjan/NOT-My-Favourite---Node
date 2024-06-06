@@ -22,7 +22,7 @@ public class ViewArticleServlet extends HttpServlet {
         String articleId = request.getParameter("id");
         if (articleId != null && !articleId.isEmpty()) {
             Article article = getArticleById(articleId);
-            List<String> comments = getCommentsByArticleId(articleId);
+            List<Comment> comments = getCommentsByArticleId(articleId);
 
             if (article != null) {
                 request.setAttribute("article", article);
@@ -59,14 +59,18 @@ public class ViewArticleServlet extends HttpServlet {
         return article;
     }
 
-    private List<String> getCommentsByArticleId(String articleId) {
-        List<String> comments = new ArrayList<>();
+    private List<Comment> getCommentsByArticleId(String articleId) {
+        List<Comment> comments = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT comment FROM comments WHERE post_id = ?")) {
+             PreparedStatement statement = connection.prepareStatement("SELECT comment, poster, agree FROM comments WHERE post_id = ?")) {
             statement.setString(1, articleId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    comments.add(resultSet.getString("comment"));
+                    Comment comment = new Comment();
+                    comment.setComment(resultSet.getString("comment"));
+                    comment.setPoster(resultSet.getString("poster"));
+                    comment.setAgree(resultSet.getString("agree"));
+                    comments.add(comment);
                 }
             }
         } catch (Exception e) {

@@ -1,16 +1,18 @@
 package org.example.demo;
 
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.example.demo.database.DatabaseConnection;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 @WebServlet(name = "AddCommentServlet", value = "/add-comment-servlet")
 public class AddCommentServlet extends HttpServlet {
@@ -19,13 +21,16 @@ public class AddCommentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String comment = request.getParameter("comment");
         String articleId = request.getParameter("articleId");
-
+        String poster = (String) request.getSession().getAttribute("name");
+        String agree = request.getParameter("drone");
         if (comment != null && !comment.isEmpty() && articleId != null && !articleId.isEmpty()) {
             try (Connection connection = DatabaseConnection.getConnection();
-                 PreparedStatement statement = connection.prepareStatement("INSERT INTO comments (comment, post_id) VALUES (?, ?)")) {
+                 PreparedStatement statement = connection.prepareStatement("INSERT INTO comments (comment, post_id, poster, agree) VALUES (?, ?, ?, ?)")) {
 
                 statement.setString(1, comment);
                 statement.setString(2, articleId);
+                statement.setString(3, poster);
+                statement.setString(4, agree);
 
                 int rowsInserted = statement.executeUpdate();
                 if (rowsInserted > 0) {
