@@ -50,7 +50,7 @@
 
     <h2 class="commentspacing">Add Your Comment</h2>
     <div class="add-comment">
-        <form action="add-comment-servlet" method="post">
+        <form action="post-comment-servlet" method="post">
             <textarea class="addcomm" name="comment" placeholder="Add your comment here.."></textarea>
             <input type="hidden" name="articleId" value="<%= article.getId() %>">
             <fieldset>
