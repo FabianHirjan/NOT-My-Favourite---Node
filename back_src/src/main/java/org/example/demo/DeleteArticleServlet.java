@@ -18,10 +18,18 @@ public class DeleteArticleServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String articleId = request.getParameter("articleId");
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("DELETE FROM posts WHERE id = ?")) {
-            statement.setInt(1, Integer.parseInt(articleId));
-            statement.executeUpdate();
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            // Ștergeți mai întâi comentariile asociate cu articolul
+            try (PreparedStatement deleteCommentsStatement = connection.prepareStatement("DELETE FROM comments WHERE post_id = ?")) {
+                deleteCommentsStatement.setInt(1, Integer.parseInt(articleId));
+                deleteCommentsStatement.executeUpdate();
+            }
+
+            // Apoi ștergeți articolul
+            try (PreparedStatement deleteArticleStatement = connection.prepareStatement("DELETE FROM posts WHERE id = ?")) {
+                deleteArticleStatement.setInt(1, Integer.parseInt(articleId));
+                deleteArticleStatement.executeUpdate();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

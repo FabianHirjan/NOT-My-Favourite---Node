@@ -10,9 +10,6 @@ import org.example.demo.database.DatabaseConnection;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(name = "ApproveArticleServlet", value = "/approve-article-servlet")
 public class ApproveArticleServlet extends HttpServlet {
