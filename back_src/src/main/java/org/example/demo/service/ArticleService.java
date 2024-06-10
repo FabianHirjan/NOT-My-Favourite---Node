@@ -200,12 +200,64 @@ public class ArticleService {
                     article.setPoster(resultSet.getString("poster"));
                     article.setStars(resultSet.getInt("stars"));
                     article.setIsApproved(resultSet.getInt("approved"));
+                    article.setType(resultSet.getString("type"));
+                    article.setCategoryName(resultSet.getString("category_id"));
                     articles.add(article);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-    return articles;
+        return articles;
+    }
+
+    public static List<CommentDTO> getAllComments() {
+        List<CommentDTO> comments = new ArrayList<>();
+        String query = "SELECT * FROM comments";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    CommentDTO comment = new CommentDTO();
+                    comment.setComment(resultSet.getString("comment"));
+                    comment.setPoster(resultSet.getString("poster"));
+                    comment.setAgree(resultSet.getString("agree"));
+                    comment.setPostId(resultSet.getInt("post_id"));
+                    comments.add(comment);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return comments;
+    }
+
+    public static List<ArticleDTO> getTopArticles() {
+        List<ArticleDTO> articles = new ArrayList<>();
+        String query = "SELECT * FROM posts ORDER BY stars DESC LIMIT 5";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    ArticleDTO article = new ArticleDTO();
+                    article.setId(resultSet.getInt("id"));
+                    article.setTitle(resultSet.getString("title"));
+                    article.setContent(resultSet.getString("content"));
+                    article.setPoster(resultSet.getString("poster"));
+                    article.setStars(resultSet.getInt("stars"));
+                    article.setIsApproved(resultSet.getInt("approved"));
+                    article.setType(resultSet.getString("type"));
+                    article.setCategoryName(resultSet.getString("category_id"));
+                    articles.add(article);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return articles;
     }
 }

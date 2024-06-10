@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.demo.dto.ArticleDTO;
+import org.example.demo.dto.CommentDTO;
 import org.example.demo.service.ArticleService;
 
 import java.io.IOException;
@@ -23,13 +24,26 @@ public class ExportCSVServlet extends HttpServlet {
         response.setHeader("Content-Disposition", "attachment; filename=\"inventar.csv\"");
 
         List<ArticleDTO> articles = articleService.getAllArticles(); // Obține articolele din serviciu
+        List<CommentDTO> comments = articleService.getAllComments(); // Obține comentariile din serviciu
 
         // Scriere date CSV
         try (PrintWriter writer = response.getWriter()) {
+            // Scriere articole
+            writer.println("Articles");
             writer.println("ID,Title,Content,Category,Type,Stars");
             for (ArticleDTO article : articles) {
                 writer.println(article.getId() + "," + article.getTitle() + "," + article.getContent() + ","
                         + article.getCategoryName() + "," + article.getType() + "," + article.getStars());
+            }
+
+            // Linii goale pentru separare
+            writer.println("\n");
+
+            // Scriere comentarii
+            writer.println("Comments");
+            writer.println("Comment,Poster,Agree,Post_id");
+            for (CommentDTO comment : comments) {
+                writer.println(comment.getComment() + "," + comment.getPoster() + "," + comment.getAgree() + "," + comment.getPostId());
             }
         }
     }
