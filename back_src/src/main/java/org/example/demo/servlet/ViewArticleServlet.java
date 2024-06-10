@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.example.demo.database.DatabaseConnection;
+import org.example.demo.dto.ArticleDTO;
+import org.example.demo.dto.CommentDTO;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -19,10 +21,10 @@ public class ViewArticleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String articleId = request.getParameter("id");
+        String articleId = request.getParameter("articleId");
         if (articleId != null && !articleId.isEmpty()) {
-            Article article = getArticleById(articleId);
-            List<Comment> comments = getCommentsByArticleId(articleId);
+            ArticleDTO article = getArticleById(articleId);
+            List<CommentDTO> comments = getCommentsByArticleId(articleId);
 
             if (article != null) {
                 request.setAttribute("article", article);
@@ -36,14 +38,14 @@ public class ViewArticleServlet extends HttpServlet {
         }
     }
 
-    private Article getArticleById(String articleId) {
-        Article article = null;
+    private ArticleDTO getArticleById(String articleId) {
+        ArticleDTO article = null;
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE id = ?")) {
             statement.setString(1, articleId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    article = new Article();
+                    article = new ArticleDTO();
                     article.setId(resultSet.getInt("id"));
                     article.setTitle(resultSet.getString("title"));
                     article.setContent(resultSet.getString("content"));
@@ -59,14 +61,14 @@ public class ViewArticleServlet extends HttpServlet {
         return article;
     }
 
-    private List<Comment> getCommentsByArticleId(String articleId) {
-        List<Comment> comments = new ArrayList<>();
+    private List<CommentDTO> getCommentsByArticleId(String articleId) {
+        List<CommentDTO> comments = new ArrayList<>();
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT comment, poster, agree FROM comments WHERE post_id = ?")) {
             statement.setString(1, articleId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    Comment comment = new Comment();
+                    CommentDTO comment = new CommentDTO();
                     comment.setComment(resultSet.getString("comment"));
                     comment.setPoster(resultSet.getString("poster"));
                     comment.setAgree(resultSet.getString("agree"));

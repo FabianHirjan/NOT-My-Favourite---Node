@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    request.setAttribute("activePage", "postIssue");
-%>
+<%@ page import="java.util.List" %>
+<%@ page import="org.example.demo.dto.CategoryDTO" %>
+<%@ include file="header.jsp" %>
 
 <%
     if (session.getAttribute("loggedIn") == null) {
@@ -10,29 +10,43 @@
         return;
     }
 %>
-<jsp:include page="header.jsp" />
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Web Practice</title>
+    <title>Post Article</title>
     <link rel="stylesheet" href="misc/style.css">
-    <script src="misc/script.js"></script>
 </head>
 <body>
-<section>
-    <h3>The user has to be logged in, //TODO login and register</h3>
-</section>
 
 <section>
     <form id="addForm" action="post-servlet" method="post">
         <label for="title">Title:</label>
         <input type="text" name="title" id="title">
         <br>
-        <label>Problem:</label>
-        <input type="text" id="bigger" name="content">
+        <label>Content:</label>
+        <textarea id="content" name="content"></textarea>
         <input type="hidden" id="stars" name="stars">
+
+        <!-- Adăugăm selectul pentru categorii -->
+        <label for="category">Category:</label>
+        <select name="category" id="category">
+            <%-- Iterăm prin categoriile disponibile și le afișăm ca opțiuni --%>
+            <%
+                List<CategoryDTO> categories = (List<CategoryDTO>) request.getAttribute("categories");
+                if (categories != null && !categories.isEmpty()) {
+                    for (CategoryDTO category : categories) {
+            %>
+            <option value="<%= category.getId() %>"><%= category.getName() %></option>
+            <%
+                    }
+                }
+            %>
+        </select>
+        <br>
+
+        <!-- Restul formularului -->
         <div id="ratingStars">
             <span class="star" data-value="1">★</span>
             <span class="star" data-value="2">★</span>
@@ -46,12 +60,10 @@
             <option value="nonphy">Non-Physical</option>
         </select>
         <br>
-        <button type="submit">Send</button>
+        <button type="submit">Post</button>
     </form>
     <h1><p id="message"></p></h1>
-
 </section>
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const stars = document.querySelectorAll('.star');
@@ -73,15 +85,14 @@
 
         const addForm = document.forms["addForm"];
         addForm.addEventListener('submit', function (event) {
-            event.preventDefault();
             const inputs = addForm.getElementsByTagName("input");
             for (let i = 0; i < inputs.length; i++) {
                 if (inputs[i].value === '' && inputs[i].type !== 'hidden') {
                     alert("Please fill in all fields.");
+                    event.preventDefault();
                     return false;
                 }
             }
-            addForm.submit(); // Consider using AJAX for form submission to avoid page reloads
         });
     });
 </script>

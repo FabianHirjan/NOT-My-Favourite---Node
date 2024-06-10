@@ -1,80 +1,88 @@
-<%@ page import="java.util.List" %>
-<%@ page import="org.example.demo.Article" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    request.setAttribute("activePage", "articles");
-%>
-<jsp:include page="header.jsp" />
+<%@ page import="org.example.demo.dto.CategoryDTO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.example.demo.dto.ArticleDTO" %>
+<%@ include file="header.jsp" %>
+
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8" />
     <title>Articles</title>
     <link rel="stylesheet" href="misc/style.css">
 </head>
 <body>
-
-<section class="forsearch">
-    <div class="article" id="search">
-        <form action="article-servlet" method="get">
-            <div>
-                <label for="type"><font size="+1">Select type: </font></label>
-                <select name="type">
-                    <option value="physical">Physical Object</option>
-                    <option value="nonphy">Non-Physical Object</option>
-                </select>
-                <br/>
-                <label for="category"><font size="+1">Select category: </font></label>
-                <select name="category">
-                    <option value="cars">Vehicle</option>
-                    <option value="restaurants">Restaurant</option>
-                </select>
-            </div>
-            <br>
-            <button type="submit">Search</button>
-        </form>
-    </div>
-</section>
-
 <section>
+    <form action="article-servlet" method="get">
+        <h2>Articles</h2>
+        <select name="category">
+            <%
+                List<CategoryDTO> categories = (List<CategoryDTO>) request.getAttribute("categories");
+                if (categories != null && !categories.isEmpty()) {
+                    for (CategoryDTO category : categories) {
+            %>
+            <option value="<%= category.getId() %>"><%= category.getName() %></option>
+            <%
+                }
+            } else {
+            %>
+            <p>No categories found.</p>
+            <%
+                }
+            %>
+        </select>
+        <select name="type">
+            <option value="physical">Physical</option>
+            <option value="nonphy">Non physical</option>
+        </select>
+        <br>
+        <br>
+        <button type="submit">Filter by category</button>
+    </form>
+</section>
 <div class="article-container">
+    <!-- Content to display articles -->
+    <%-- Here you can display the filtered articles --%>
     <%
-        List<Article> articles = (List<Article>) request.getAttribute("articles");
-        boolean isAdmin = request.getSession().getAttribute("admin") != null && (boolean) request.getSession().getAttribute("admin");
+        List<ArticleDTO> articles = (List<ArticleDTO>) request.getAttribute("articles");
+        Boolean isAdmin = (Boolean) session.getAttribute("admin");
         if (articles != null && !articles.isEmpty()) {
-            for (Article article : articles) {
+            for (ArticleDTO article : articles) {
+                if (article.getIsApproved() == 1 || (isAdmin != null && isAdmin)) {
     %>
-    <div class="article" id="postare">
-        <h3><a href="view-article-servlet?id=<%= article.getId() %>"><%= article.getTitle() %></a></h3>
+    <div class="article">
+        <h3><%= article.getTitle() %></h3>
         <p><%= article.getContent() %></p>
-        <p>Posted by: <%= article.getPoster() %></p>
-        <p>Stars: <%= article.getStars() %></p>
-        <% if (isAdmin && article.getIsApproved() == 0) { %>
+        <p>Category: <%= article.getCategoryName() %></p>
+        <p><a href="view-article-servlet?articleId=<%= article.getId() %>">View Article</a></p>
+        <%
+            if (isAdmin != null && isAdmin) {
+        %>
+        <form action="delete-article-servlet" method="post">
+            <input type="hidden" name="articleId" value="<%= article.getId() %>">
+            <button type="submit">Delete post</button>
+        </form>
+        <%
+            if (article.getIsApproved() == 0) {
+        %>
         <form action="approve-article-servlet" method="post">
             <input type="hidden" name="articleId" value="<%= article.getId() %>">
             <button type="submit">Approve</button>
         </form>
-        <% } %>
-        <% if (isAdmin) { %>
-        <form action="delete-article-servlet" method="post">
-            <input type="hidden" name="articleId" value="<%= article.getId() %>">
-            <button type="submit">Delete</button>
-        </form>
-        <% } %>
+        <%
+                }
+            }
+        %>
     </div>
     <%
+            }
         }
     } else {
     %>
-    <div class="article" id="search">
     <p>No articles found.</p>
-    </div>
     <%
         }
     %>
 </div>
-</section>
-
 </body>
 </html>

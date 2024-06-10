@@ -1,13 +1,11 @@
-package org.example.demo;
+package org.example.demo.dto;
 
-
-public class User {
+public class UserDTO {
     private int id;
     private String name;
     private String email;
     private String role;
 
-    // Getters
     public int getId() {
         return id;
     }
@@ -24,7 +22,6 @@ public class User {
         return role;
     }
 
-    // Setters
     public void setId(int id) {
         this.id = id;
     }

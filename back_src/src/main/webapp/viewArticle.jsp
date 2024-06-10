@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>   <!-- Import the List interface -->
-<%@ page import="org.example.demo.Article" %>
-<%@ page import="org.example.demo.Comment" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.example.demo.dto.ArticleDTO" %>
+<%@ page import="org.example.demo.dto.CommentDTO" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,53 +11,35 @@
     <link rel="stylesheet" href="misc/style.css">
 </head>
 <body>
-
-<%
-    request.setAttribute("activePage", "viewArticle");
-%>
-<jsp:include page="header.jsp" />
-
+<%@ include file="header.jsp" %>
 <div class="article-container">
-    <jsp:useBean id="article" type="org.example.demo.Article" scope="request" />
-
+    <jsp:useBean id="article" type="org.example.demo.dto.ArticleDTO" scope="request" />
     <div class="article-details">
         <h1><%= article.getTitle() %> - <%= article.getPoster() %></h1>
         <p><%= article.getContent() %></p>
         <p><strong>Stars:</strong>
-            <%
-                for(int i = 0; i < article.getStars(); i++) {
-            %>
-            &#9733;
-            <%
-                }
-            %>
+            <% for (int i = 0; i < article.getStars(); i++) { %>
+            &#9733;  <!-- Star symbol -->
+            <% } %>
         </p>
     </div>
-
     <h2 class="commentspacing">Comments</h2>
     <div class="comments">
-        <%
-            List<Comment> comments = (List<Comment>) request.getAttribute("articleComments");
+        <% List<CommentDTO> comments = (List<CommentDTO>) request.getAttribute("articleComments");
             if (comments != null && !comments.isEmpty()) {
-                for (Comment comment : comments) {
-        %>
+                for (CommentDTO comment : comments) { %>
         <div class="comment">
             <p>
-                <b class="usr"> <%= comment.getPoster()  %></b>
+                <b class="usr"> <%= comment.getPoster() %></b>
                 <%= comment.getComment() %>
                 <i><%= comment.getAgree() %></i>
             </p>
         </div>
-        <%
-            }
-        } else {
-        %>
+        <% }
+        } else { %>
         <p>No comments found.</p>
-        <%
-            }
-        %>
+        <% } %>
     </div>
-
     <h2 class="commentspacing">Add Your Comment</h2>
     <div class="add-comment">
         <form action="add-comment-servlet" method="post">
@@ -78,6 +60,5 @@
         </form>
     </div>
 </div>
-
 </body>
 </html>
