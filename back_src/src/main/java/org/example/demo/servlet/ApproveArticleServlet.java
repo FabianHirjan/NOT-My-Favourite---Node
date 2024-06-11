@@ -16,18 +16,13 @@ import java.sql.PreparedStatement;
 @WebServlet(name = "ApproveArticleServlet", value = "/approve-article-servlet")
 public class ApproveArticleServlet extends HttpServlet {
 
+
+    private final ArticleService articleService = new ArticleService();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String articleId = request.getParameter("articleId");
-
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("UPDATE posts SET approved = 1 WHERE id = ?")) {
-            statement.setInt(1, Integer.parseInt(articleId));
-            statement.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        response.sendRedirect("articles-servlet");
+        articleService.approveArticle(Integer.parseInt(articleId));
+        response.sendRedirect("article-servlet");
     }
 }

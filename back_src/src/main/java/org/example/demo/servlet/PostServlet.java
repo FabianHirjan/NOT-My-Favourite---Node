@@ -7,22 +7,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.example.demo.dto.CategoryDTO;
-import org.example.demo.database.DatabaseConnection;
+import org.example.demo.service.ArticleService;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "PostServlet", value = "/post-servlet")
 public class PostServlet extends HttpServlet {
+    private final ArticleService articleService = new ArticleService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obțineți categoriile din baza de date și setați-le în request
-        List<CategoryDTO> categories = getCategoryListFromDatabase();
+        // Obțineți categoriile folosind ArticleService și setați-le în request
+        List<CategoryDTO> categories = articleService.getAllCategories();
         request.setAttribute("categories", categories);
 
         // Redirecționați către pagina post.jsp
@@ -48,18 +45,13 @@ public class PostServlet extends HttpServlet {
             return;
         }
 
-        // Salvează articolul în baza de date
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO posts (title, content, poster, stars, type, category_id, approved) VALUES (?, ?, ?, ?, ?, ?, 0)")) {
-            statement.setString(1, title);
-            statement.setString(2, content);
-            statement.setString(3, poster); // Numele utilizatorului
-            statement.setInt(4, Integer.parseInt(stars));
-            statement.setString(5, type);
-            statement.setInt(6, Integer.parseInt(category));
-            statement.executeUpdate();
-        } catch (SQLException e) {
+        // Salvează articolul folosind ArticleService
+        try {
+            boolean success = articleService.saveArticle(title, content, poster, Integer.parseInt(stars), type, Integer.parseInt(category));
+            if (!success) {
+                throw new Exception("Failed to save article");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMessage", "A apărut o eroare la salvarea articolului.");
             request.getRequestDispatcher("post.jsp").forward(request, response);
@@ -68,23 +60,5 @@ public class PostServlet extends HttpServlet {
 
         // Redirecționați utilizatorul la o pagină de succes sau la lista de articole
         response.sendRedirect("article-servlet?type=" + type + "&category=" + category);
-    }
-
-    private List<CategoryDTO> getCategoryListFromDatabase() {
-        List<CategoryDTO> categories = new ArrayList<>();
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT id, name FROM categories")) {
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                CategoryDTO category = new CategoryDTO();
-                category.setId(resultSet.getInt("id"));
-                category.setName(resultSet.getString("name"));
-                categories.add(category);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return categories;
     }
 }

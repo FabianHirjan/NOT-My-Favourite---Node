@@ -8,6 +8,7 @@ import org.example.demo.dto.CommentDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,13 +130,14 @@ public class ArticleService {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, articleId);
-            statement.executeUpdate();
-            return true;
-        } catch (Exception e) {
+            int rowsUpdated = statement.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 
     public boolean updateArticle(int articleId, ArticleDTO articleDTO) {
         String query = "UPDATE posts SET title = ?, content = ?, poster = ?, stars = ?, type = ?, approved = ? WHERE id = ?";
@@ -260,4 +262,24 @@ public class ArticleService {
         }
         return articles;
     }
+
+    public boolean saveArticle(String title, String content, String poster, int stars, String type, int categoryId) {
+        String query = "INSERT INTO posts (title, content, poster, stars, type, category_id, approved) VALUES (?, ?, ?, ?, ?, ?, 0)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, title);
+            statement.setString(2, content);
+            statement.setString(3, poster);
+            statement.setInt(4, stars);
+            statement.setString(5, type);
+            statement.setInt(6, categoryId);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 }
