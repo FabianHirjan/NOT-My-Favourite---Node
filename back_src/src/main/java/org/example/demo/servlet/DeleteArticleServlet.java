@@ -18,6 +18,6 @@ public class DeleteArticleServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String articleId = request.getParameter("articleId");
         articleService.deleteArticle(Integer.parseInt(articleId));
-        response.sendRedirect("account-servlet");
+        response.sendRedirect("view-profile-servlet");
     }
 }
