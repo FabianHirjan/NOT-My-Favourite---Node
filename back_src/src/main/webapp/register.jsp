@@ -22,7 +22,7 @@
 </head>
 <body>
 <section>
-    <form id="addForm" name="registerForm" onsubmit="return validateForm()" method="post" action="${pageContext.request.contextPath}/register-servlet">
+    <form id="addForm" name="registerForm" onsubmit="return validateForm()" method="post" action="registerServlet">
         <label for="name">Username: </label>
         <input type="text" name="name">
         <br>
