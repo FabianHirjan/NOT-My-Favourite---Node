@@ -19,10 +19,11 @@
         <a href="login.jsp" <%= activeClass %>>Login</a>
         <%
         } else {
+
         %>
         <a>Welcome, <%= name %></a>
         <a href="view-user-profile-servlet" <%= "myAccount".equals(activePage) ? "class='active'" : "" %>>My account</a>
-        <a href="/api/logout">Logout</a>
+        <a href="api/logout">Logout</a>
         <%
             }
         %>
