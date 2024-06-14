@@ -22,7 +22,7 @@
         %>
         <a>Welcome, <%= name %></a>
         <a href="view-user-profile-servlet" <%= "myAccount".equals(activePage) ? "class='active'" : "" %>>My account</a>
-        <a href="logout-servlet">Logout</a>
+        <a href="/api/logout">Logout</a>
         <%
             }
         %>
