@@ -7,7 +7,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.example.demo.database.DatabaseConnection;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -20,17 +22,26 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        Gson gson = new Gson();
+        BufferedReader reader = request.getReader();
+        PrintWriter out = response.getWriter();
+        LoginRequest loginRequest;
 
-        Gson gson = null;
+        try {
+            loginRequest = gson.fromJson(reader, LoginRequest.class);
+        } catch (JsonSyntaxException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            ErrorResponse errorResponse = new ErrorResponse("Invalid JSON format");
+            String jsonResponse = gson.toJson(errorResponse);
+            out.print(jsonResponse);
+            return;
+        }
+
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE email = ? AND password = ?")) {
-            statement.setString(1, email);
-            statement.setString(2, password);
+            statement.setString(1, loginRequest.getEmail());
+            statement.setString(2, loginRequest.getPassword());
             ResultSet resultSet = statement.executeQuery();
-            PrintWriter out = response.getWriter();
-            gson = new Gson();
 
             if (resultSet.next()) {
                 HttpSession session = request.getSession();
@@ -38,15 +49,11 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("name", resultSet.getString("name"));
                 session.setAttribute("userId", resultSet.getInt("id"));
                 String role = resultSet.getString("role");
-                if ("admin".equals(role)) {
-                    session.setAttribute("admin", true);
-                } else {
-                    session.setAttribute("admin", false);
-                }
+                session.setAttribute("admin", "admin".equals(role));
 
-                // Create a response object
                 UserResponse userResponse = new UserResponse(resultSet.getString("name"), resultSet.getInt("id"), role);
                 String jsonResponse = gson.toJson(userResponse);
+                response.setStatus(HttpServletResponse.SC_OK);
                 out.print(jsonResponse);
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -59,8 +66,20 @@ public class LoginServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             ErrorResponse errorResponse = new ErrorResponse("Internal server error");
             String jsonResponse = gson.toJson(errorResponse);
-            PrintWriter out = response.getWriter();
             out.print(jsonResponse);
+        }
+    }
+
+    class LoginRequest {
+        private String email;
+        private String password;
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPassword() {
+            return password;
         }
     }
 
