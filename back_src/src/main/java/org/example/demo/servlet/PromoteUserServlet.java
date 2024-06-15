@@ -14,6 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import org.example.demo.database.*;
 
+import com.google.gson.Gson;
+
 @WebServlet(name = "PromoteUserServlet", value = "/promote-user-servlet")
 public class PromoteUserServlet extends HttpServlet {
     @Override
@@ -36,15 +38,16 @@ public class PromoteUserServlet extends HttpServlet {
                     statement.setString(1, "user");
                     statement.setInt(2, userId);
                     System.out.printf("User %d demoted to user\n", userId);
+                    displaySuccessMessage(response, userId, "user");
                 } else {
                     statement = connection.prepareStatement("UPDATE users SET role = ? WHERE id = ?");
                     statement.setString(1, "admin");
                     statement.setInt(2, userId);
                     System.out.printf("User %d promoted to admin\n", userId);
+                    displaySuccessMessage(response, userId, "admin");
                 }
                 statement.executeUpdate();
                 connection.commit();
-                displaySuccessMessage(response);
             }
         } catch (Exception e) {
             try {
@@ -63,19 +66,24 @@ public class PromoteUserServlet extends HttpServlet {
         }
     }
 
-    private void displaySuccessMessage(HttpServletResponse response) throws IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<title>Action Commited</title>");
-        out.println("<meta http-equiv='refresh' content='5;URL=index.jsp'>");
-        out.println("<link rel='stylesheet' type='text/css' href='misc/style.css'>");
-        out.println("</head>");
-        out.println("<body>");
-        out.println("<h1>Action Commited</h1>");
-        out.println("<p>You'll be redirected to main page in 5 seconds...</p>");
-        out.println("</body>");
-        out.println("</html>");
+    class SuccessResponse {
+        private int userId;
+        private String newRole;
+
+        public SuccessResponse(int userId, String newRole) {
+            this.userId = userId;
+            this.newRole = newRole;
+        }
     }
+
+    private void displaySuccessMessage(HttpServletResponse response, int userId, String newRole) throws IOException {
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        Gson gson = new Gson();
+
+        SuccessResponse successResponse = new SuccessResponse(userId, newRole);
+        String jsonResponse = gson.toJson(successResponse);
+        out.print(jsonResponse);
+    }
+
 }
