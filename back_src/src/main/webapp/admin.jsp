@@ -1,7 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="org.example.demo.dto.UserDTO" %>
-<%@ page import="java.util.List" %>
 <%@ include file="header.jsp" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.net.HttpURLConnection" %>
+<%@ page import="java.net.URL" %>
+<%@ page import="java.io.BufferedReader" %>
+<%@ page import="java.io.InputStreamReader" %>
+<%@ page import="com.google.gson.Gson" %>
+<%@ page import="org.example.demo.dto.UserDTO" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,12 +16,35 @@
     <link rel="stylesheet" href="misc/style.css">
 </head>
 <body>
-<div class="article" id = "topBar">
+<div class="article" id="topBar">
     <h1>Users</h1>
 </div>
-<div class="article-container">
+<div class="article-container" id="usersContainer">
     <%
-        List<UserDTO> users = (List<UserDTO>) request.getAttribute("users");
+        // URL-ul API-ului
+        String apiUrl = "http://localhost:8080/demo/api/users";
+        URL url = new URL(apiUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("Accept", "application/json");
+
+        if (conn.getResponseCode() != 200) {
+            throw new RuntimeException("HTTP error code : " + conn.getResponseCode());
+        }
+
+        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+        StringBuilder jsonString = new StringBuilder();
+        String output;
+        while ((output = br.readLine()) != null) {
+            jsonString.append(output);
+        }
+        conn.disconnect();
+
+        // Parsează JSON-ul primit de la API
+        Gson gson = new Gson();
+        UserDTO[] usersArray = gson.fromJson(jsonString.toString(), UserDTO[].class);
+        List<UserDTO> users = java.util.Arrays.asList(usersArray);
+
         if (users != null) {
             for (UserDTO user : users) {
     %>
@@ -34,7 +62,11 @@
         </form>
     </div>
     <%
-            }
+        }
+    } else {
+    %>
+    <p>No users found.</p>
+    <%
         }
     %>
 </div>

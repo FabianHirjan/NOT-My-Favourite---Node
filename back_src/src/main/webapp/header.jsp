@@ -31,7 +31,7 @@
             if (session.getAttribute("admin") != null) {
                 String activeClass = "admin".equals(activePage) ? "class='active'" : "";
         %>
-        <a href="view-users-servlet" <%= activeClass %>>Admin</a>
+        <a href="admin.jsp" <%= activeClass %>>Admin</a>
         <%
             }
         %>
