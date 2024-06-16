@@ -1,83 +1,71 @@
-package org.example.demo;
+package org.example.demo.servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.demo.database.DatabaseConnection;
-import org.example.demo.dto.ArticleDTO;
-import org.example.demo.dto.CommentDTO;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
+import org.example.demo.database.*;
+
 import java.util.List;
+import java.util.ArrayList;
+
+import com.google.gson.Gson;
 
 @WebServlet(name = "ViewArticleServlet", value = "/view-article-servlet")
 public class ViewArticleServlet extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String articleId = request.getParameter("articleId");
-        if (articleId != null && !articleId.isEmpty()) {
-            ArticleDTO article = getArticleById(articleId);
-            List<CommentDTO> comments = getCommentsByArticleId(articleId);
+        int articleId = Integer.parseInt(request.getParameter("articleId"));
+        displayArticle(articleId, response);
+    }
 
-            if (article != null) {
-                request.setAttribute("article", article);
-                request.setAttribute("articleComments", comments);
-                request.getRequestDispatcher("/viewArticle.jsp").forward(request, response);
-            } else {
-                response.sendRedirect("/error.jsp");  // Redirect to error page if no article found
+    private void displayArticle(int postId, HttpServletResponse response) throws IOException {
+        Connection connection = DatabaseConnection.getConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM comments WHERE post_id = ?");
+            statement.setInt(1, postId);
+            ResultSet resultSet = statement.executeQuery();
+            List<CommentResponse> comments = new ArrayList<>();
+            while (resultSet.next()) {
+                CommentResponse commentResponse = new CommentResponse(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("post_id"),
+                        resultSet.getString("comment")
+                );
+                comments.add(commentResponse);
             }
-        } else {
-            response.sendRedirect("/error.jsp");  // Redirect to error page if ID is not provided
+            response.setContentType("application/json");
+            PrintWriter out = response.getWriter();
+            Gson gson = new Gson();
+            String jsonResponse = gson.toJson(comments);
+            out.print(jsonResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private ArticleDTO getArticleById(String articleId) {
-        ArticleDTO article = null;
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM posts WHERE id = ?")) {
-            statement.setString(1, articleId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    article = new ArticleDTO();
-                    article.setId(resultSet.getInt("id"));
-                    article.setTitle(resultSet.getString("title"));
-                    article.setContent(resultSet.getString("content"));
-                    article.setPoster(resultSet.getString("poster"));
-                    article.setStars(resultSet.getInt("stars"));
-                    article.setType(resultSet.getString("type"));
-                    article.setIsApproved(resultSet.getInt("approved"));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return article;
-    }
+    class CommentResponse {
+        private int id;
+        private int postId;
+        private String comment;
 
-    private List<CommentDTO> getCommentsByArticleId(String articleId) {
-        List<CommentDTO> comments = new ArrayList<>();
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT comment, poster, agree FROM comments WHERE post_id = ?")) {
-            statement.setString(1, articleId);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    CommentDTO comment = new CommentDTO();
-                    comment.setComment(resultSet.getString("comment"));
-                    comment.setPoster(resultSet.getString("poster"));
-                    comment.setAgree(resultSet.getString("agree"));
-                    comments.add(comment);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        public CommentResponse(int id, int postId, String comment) {
+            this.id = id;
+            this.postId = postId;
+            this.comment = comment;
         }
-        return comments;
     }
 }
