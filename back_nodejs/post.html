@@ -1,89 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
+
+
 <head>
-    <meta charset="UTF-8">
-    <title>Add Article</title>
-    <script>
-        function loadCategories() {
-            console.log('Loading categories...');
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', '/categories', true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        console.log('Categories loaded:', xhr.responseText);
-                        const categories = JSON.parse(xhr.responseText);
-                        const select = document.getElementById('cat');
-                        categories.forEach(category => {
-                            const option = document.createElement('option');
-                            option.value = category.id;
-                            option.textContent = category.name;
-                            select.appendChild(option);
-                        });
-                    } else {
-                        console.error('Failed to load categories:', xhr.status, xhr.statusText);
-                    }
-                }
-            };
-            xhr.send();
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            loadCategories(); // Încărcăm categoriile la încărcarea paginii
-
-            document.querySelector('form').addEventListener('submit', function(e) {
-                e.preventDefault(); // Previne comportamentul default al formularului
-
-                // Colectează datele din formular
-                const formData = new FormData(this);
-
-                // Trimite datele la server folosind fetch
-                fetch('/add-article', {
-                    method: 'POST',
-                    body: new URLSearchParams(formData)
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Ceva nu a funcționat corect');
-                })
-                .then(data => {
-                    console.log(data); // Procesează răspunsul serverului
-                    // Aici poți actualiza interfața utilizatorului pentru a reflecta succesul operațiunii
-                })
-                .catch(error => {
-                    console.error('Eroare:', error);
-                    // Aici poți actualiza interfața utilizatorului pentru a reflecta eșecul operațiunii
-                });
-            });
-        });
-    </script>
+    <meta charset="utf-8" />
+    <title>Post a review</title>
+    <link rel="stylesheet" href="misc/style.css">
+    <script src="misc/script.js"></script>
 </head>
+
+<div class="header">
+    <a href="index.html" class="logo">NoF</a>
+    <a href="index.html">Home</a>
+    <a href="filter.html">Physical Products</a>
+    <a href="aboutus.html">About us</a>
+    <a href="nonphy.html">Non Physical Products</a>
+    <a href="post.html" class="active">Post my Issue</a>
+    <div class="header-right">
+        <a href="myaccount.html">My account</a>
+        <a href="login.html">Log in</a>
+    </div>
+</div>
+
+
 <body>
-    <h1>Add New Article</h1>
-    <form method="POST">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required><br>
+<section>
+    <h3>The user has to be logged in, //TODO login and register</h3>
+</section>
 
-        <label for="content">Content:</label>
-        <textarea id="content" name="content" required></textarea><br>
-
-        <label for="stars">Stars:</label>
-        <input type="number" id="stars" name="stars" required min="1" max="5"><br>
-
-        <label for="type">Type:</label>
-        <select id="type" name="type" required>
-            <option value="physical">Physical</option>
-            <option value="non-physical">Non-Physical</option>
-        </select><br>
-
-        <label for="cat">Category:</label>
-        <select name="cat" id="cat" required>
-            <!-- Categoriile vor fi încărcate dinamic aici -->
-        </select><br>
-
-        <button type="submit">Add Article</button>
+<section>
+    <form id="addForm">
+        <label>Titlu:</label>
+        <label>
+            <input type="text" name="titlu">
+        </label>
+        <br>
+        <label for="multilineInput">Problema :</label><br>
+            <textarea id="multilineInput" name="multilineInput" rows="4" cols="50"></textarea>
+        <div id="ratingStars">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <button>Send</button>
     </form>
+    
+</section>
+    
 </body>
+
 </html>

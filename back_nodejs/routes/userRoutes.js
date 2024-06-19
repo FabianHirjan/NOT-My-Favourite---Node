@@ -13,8 +13,6 @@ function handleUserRoutes(req, res, sessions, username) {
         userController.logout(req, res, sessions);
     } else if (req.method === 'POST' && url.pathname === '/filter') {
         articleController.filter(req, res);
-    } else if (req.method === 'POST' && url.pathname === '/add-article') {
-        articleController.addArticle(req, res);
     } else if (req.method === 'GET' && url.pathname === '/categories') {
         categoryController.getAll(req, res);
     } else {

@@ -16,12 +16,11 @@ const server = http.createServer((req, res) => {
     const isAuthenticated = cookies.session && sessions[cookies.session];
     const username = isAuthenticated ? sessions[cookies.session] : null;
 
-    // Gestionăm rutele de utilizator
+    // Injectăm starea de autentificare în răspunsurile HTML
     if (handleUserRoutes(req, res, sessions, username)) {
         return;
     }
 
-    // Gestionăm cererile pentru fișiere statice
     let filePath = path.join(__dirname, pathname.startsWith('/public') ? pathname : `views${pathname}`);
     const extname = path.extname(filePath).toLowerCase();
     const mimeTypes = {
