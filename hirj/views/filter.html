@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postări</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+</head>
+<body>
+<div class="header">
+    <a href="index.html" class="logo">NoF</a>
+    <a href="index.html">Home</a>
+    <a href="filter.html" class="active">Physical Products</a>
+    <a href="aboutus.html">About us</a>
+    <a href="nonphy.html">Non-Physical Products</a>
+    <a href="post.html">Post my Issue</a>
+    <div class="header-right">
+        <a href="myaccount.html">My account</a>
+        <a href="login.html">Log in</a>
+    </div>
+</div>
+
+<center>
+    <div class="article" id="search">
+        <div>
+            <label for="cheie"><span style="font-size: larger;">Search keywords: </span></label>
+            <input type="text" id="cheie" name="cheie">
+        </div>
+        <br>
+        <div class="custom-select">
+            <label for="cat"><span style="font-size: larger;">Select category: </span></label>
+            <select name="cat" id="cat">
+                <option value="">All</option>
+                <option value="masina">Masina</option>
+                <!-- Adaugă mai multe categorii după nevoie -->
+            </select>
+        </div>
+        <br>
+        <label for="ordine"><span style="font-size: larger;">Order by: </span></label>
+        <select name="ordine" id="ordine">
+            <option value="stars-asc">Stars Ascending</option>
+            <option value="stars-desc">Stars Descending</option>
+            <option value="most">Most Reviews</option>
+        </select>
+        <br>
+        <button onclick="applyFilters()">Apply filters</button>
+    </div>
+</center>
+
+<div class="article-container" id="post-container">
+    <!-- Postările vor fi adăugate aici din JavaScript -->
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        loadPosts();
+    });
+
+    function loadPosts(filters = {}) {
+        let url = new URL('http://localhost:3000/api/posts');
+
+        // Adaugă parametrii de filtrare la URL
+        Object.keys(filters).forEach(key => url.searchParams.append(key, filters[key]));
+
+        fetch(url)
+            .then(response => response.json())
+            .then(posts => {
+                const postContainer = document.getElementById('post-container');
+                postContainer.innerHTML = '';
+                posts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'article';
+                    postElement.innerHTML = `
+                            <h2>Nickname: ${post.user_id}</h2>
+                            <h3>${post.title}</h3>
+                            <p>${post.content}</p>
+                            <p class="review">${'&#9733;'.repeat(post.stars)}</p>
+                            <button onclick="viewArticle(${post.id})">View More</button>
+                        `;
+                    postContainer.appendChild(postElement);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function applyFilters() {
+        const search = document.getElementById('cheie').value;
+        const category = document.getElementById('cat').value;
+        const order = document.getElementById('ordine').value;
+
+        let filters = {};
+
+        if (search) {
+            filters.search = search;
+        }
+
+        if (category) {
+            filters.category = category;
+        }
+
+        if (order) {
+            const [sort, ord] = order.split('-');
+            filters.sort = sort;
+            filters.order = ord;
+        }
+
+        loadPosts(filters);
+    }
+
+    function viewArticle(id) {
+        window.location.href = `viewArticle.html?id=${id}`;
+    }
+</script>
+</body>
+</html>

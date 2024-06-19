@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Article</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+</head>
+<body>
+<h1>Add New Article</h1>
+<form id="addForm" name="addForm">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required><br>
+
+    <label for="content">Content:</label>
+    <textarea id="content" name="content" required></textarea><br>
+
+    <label for="stars">Stars:</label>
+    <input type="number" id="stars" name="stars" required min="1" max="5"><br>
+
+    <label for="type">Type:</label>
+    <select id="type" name="type" required>
+        <option value="physical">Physical</option>
+        <option value="digital">Digital</option>
+    </select><br>
+
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category" required><br>
+
+    <button type="submit">Add Article</button>
+</form>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        document
+            .getElementById("addForm")
+            .addEventListener("submit", async function(e) {
+                e.preventDefault();
+
+                // Extrage user_id din token
+                const token = localStorage.getItem("token");
+                let user_id = null;
+                if (token) {
+                    const base64Url = token.split('.')[1];
+                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+
+                    const decodedToken = JSON.parse(jsonPayload);
+                    user_id = decodedToken.id; // Sau cheia corespunzătoare user_id în token-ul tău
+                }
+
+                // Colectează datele formularului
+                const title = document.getElementById("title").value;
+                const content = document.getElementById("content").value;
+                const stars = document.getElementById("stars").value;
+                const type = document.getElementById("type").value;
+                const category = document.getElementById("category").value;
+
+                // Trimite datele către API
+                try {
+                    const response = await fetch("/api/posts/create", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ title, content, stars, type, category, user_id }),
+                    });
+                    if (response.ok) {
+                        alert("Post added successfully");
+                        window.location.href = "index.html";
+                    } else {
+                        const errorData = await response.json();
+                        alert(errorData.error || "Post failed");
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            });
+    });
+</script>
+</body>
+</html>

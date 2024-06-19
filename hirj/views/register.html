@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Register form</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document
+                .getElementById("registerForm")
+                .addEventListener("submit", async function(e) {
+                    e.preventDefault();
+                    const username = document.getElementById("username").value;
+                    const email = document.getElementById("email").value;
+                    const password = document.getElementById("password").value;
+                    const errorMessageDiv = document.getElementById("errorMessage");
+
+                    const response = await fetch("/api/register", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ username, email, password }),
+                    });
+
+                    if (response.ok) {
+                        alert("Registration successful");
+                        window.location.href = "login.html";
+                    } else {
+                        const errorData = await response.json();
+                        errorMessageDiv.textContent =
+                            errorData.error || "Registration failed";
+                    }
+                });
+        });
+    </script>
+</head>
+
+<body>
+<div class="header">
+    <a href="index.html" class="logo">NoF</a>
+    <a href="index.html">Home</a>
+    <a href="filter.html">Physical Products</a>
+    <a href="aboutus.html">About us</a>
+    <a href="nonphy.html">Non Physical Products</a>
+    <a href="post.html">Post my Issue</a>
+    <div class="header-right">
+        <a href="myaccount.html">My account</a>
+        <a href="login.html" class="active">Log in</a>
+    </div>
+</div>
+
+<br>
+<section>
+    <form id="registerForm" name="registerForm">
+        <label for="username">Username: </label>
+        <input type="text" id="username" name="username">
+        <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <br>
+        <div id="errorMessage" style="color: red;"></div>
+        <p><em>Already have an account? You can <a href="login.html">login here.</a></em></p>
+        <center><button type="submit">Register</button></center>
+    </form>
+</section>
+</body>
+
+</html>
