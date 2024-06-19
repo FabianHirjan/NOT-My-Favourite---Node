@@ -1,0 +1,398 @@
+body,
+html {
+
+    background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg') -25px -50px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+    height: 100%;
+    background-size: calc(100% + 50px);
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    overflow-y: auto;
+}
+
+/* Header */
+.header {
+    overflow: auto;
+    background-color: #222831;
+    padding: 20px 10px;
+    margin: 0;
+    width: auto;
+}
+
+.header a {
+    float: left;
+    color: #76ABAE;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 25px;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.header a:hover,
+.header a.active {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+.header-right {
+    float: right;
+}
+
+/* Table */
+table,
+th,
+td {
+    margin: auto;
+    border: 1px solid;
+    width: 30%;
+}
+
+
+/* Button */
+button {
+    background-color: #222831;
+    color: #76ABAE;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+.article-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 20px;
+}
+
+.article {
+    background: #EEEEEE;
+    padding: 20px;
+    margin: 10px 0;
+    flex-basis: calc(25% - 20px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 30px;
+    max-width: calc(25% - 20px);
+    background-color: #f0f2dc;
+    border: 2px solid #222831;
+}
+
+div#lupu {
+    background-image: url(photos/lupu.webp);
+    background-size: cover;
+
+}
+
+div#fabi {
+    background-image: url(photos/fabislab.jpg);
+    background-size: 375px;
+
+}
+
+div#tudor {
+    background-image: url(/Users/fabian-andreihirjan/Downloads/Unknown-3.jpg);
+    background-size: cover;
+}
+
+div#tudor,
+div#fabi,
+div#lupu {
+    padding: 60px;
+    height: 150px;
+    color: #EEEEEE;
+    border: 1px solid #222831;
+    font-weight: bold;
+    text-shadow: black 1px 1px 5px;
+    transition: opacity 0.5s;
+    opacity: 0.5;
+}
+
+div#apartamente,
+div#cartiere {
+    padding: 180px;
+    height: 150px;
+    color: #EEEEEE;
+    border: 1px solid #222831;
+    font-weight: bold;
+    text-shadow: black 1px 1px 5px;
+    transition: opacity 0.5s;
+    opacity: 0.5;
+}
+
+div#apartamente:hover,
+div#cartiere:hover,
+div#fabi:hover,
+div#tudor:hover,
+div#lupu:hover {
+    opacity: 1;
+}
+
+div#apartamente {
+    background: rgba(34, 40, 49);
+    background: linear-gradient(270deg, rgba(34, 40, 49, 1) 5%, rgba(118, 171, 174, 1) 90%);
+}
+
+div#cartiere {
+    background: rgba(34, 40, 49, 1);
+    background: linear-gradient(90deg, rgba(34, 40, 49, 1) 5%, rgba(118, 171, 174, 1) 90%);
+
+}
+
+#apartamente,
+#cartiere {
+    text-align: center;
+}
+
+
+section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: stretch;
+}
+
+
+#addForm {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    margin: 0 auto;
+}
+
+#addForm label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+
+#addForm input[type="text"],
+#addForm input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#addForm input[type="text"]#bigger {
+    width: 300px;
+    height: 100px;
+    padding: 10px;
+}
+
+#addForm input[type="password"]#bigger {
+    width: 100%;
+    height: 50px;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.star {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.star:hover,
+.star.active {
+    color: gold;
+}
+
+/*
+Account
+*/
+.account-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.account-info {
+    max-width: 500px;
+    background-color: #EEEEEE;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.account-info h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.account-info label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.account-info input[type="text"],
+.account-info input[type="email"],
+.account-info input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.account-info button {
+    background-color: #222831;
+    color: #76ABAE;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.account-info button:hover {
+    background-color: #76ABAE;
+    color: #222831;
+}
+
+.reviews-container {
+    max-width: 800px;
+    background-color: #EEEEEE;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.review:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.review h3 {
+    margin-top: 0;
+}
+
+.review p {
+    margin-bottom: 0;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.expand {
+    background-color: transparent;
+    border-radius: 100px;
+    text-align: right;
+}
+
+button.expand:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+div#search.article {
+    position: relative;
+    background-color: whitesmoke;
+    border-radius: 0px;
+    border-right: 0px;
+    border-left: 0px;
+}
+
+select,
+input#cheie {
+    appearance: none;
+    font-size: 1rem;
+    padding: 0.2rem 1rem 0.3rem 1rem;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+}
+
+select {
+    cursor: pointer;
+}
+
+input#cheie {
+    width: 7rem;
+}
+
+section>h2 {
+    font-size: 2rem;
+    margin-left: 10rem;
+}
+
+section>table {
+    background-color: beige;
+}
+
+section>table:nth-child() tr:hover {
+    background-color: coral;
+}
+
+tr:hover:not(:first-child) {
+    background-color: coral;
+}
+
+#filter {
+    height: 2rem;
+    appearance: none;
+    font-size: 1rem;
+    padding: 0.5rem 1rem 0.3rem 1rem;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+}
+
+#mic {
+    height: 2.5rem;
+}
+
+#postari {
+    font-size: 2rem;
+    margin-left: 8.5rem;
+}
+
+textarea {
+    resize: none;
+    width: 18rem;
+}

@@ -20,5 +20,4 @@ public class CategoryDTO {
         this.id = id;
     }
 
-    // getter and setter methods
 }

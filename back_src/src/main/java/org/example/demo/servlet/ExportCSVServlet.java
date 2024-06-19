@@ -19,16 +19,13 @@ public class ExportCSVServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Setare tip de conținut pentru CSV
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; filename=\"inventar.csv\"");
 
         List<ArticleDTO> articles = articleService.getAllArticles(); // Obține articolele din serviciu
         List<CommentDTO> comments = articleService.getAllComments(); // Obține comentariile din serviciu
 
-        // Scriere date CSV
         try (PrintWriter writer = response.getWriter()) {
-            // Scriere articole
             writer.println("Articles");
             writer.println("ID,Title,Content,Category,Type,Stars");
             for (ArticleDTO article : articles) {
@@ -36,10 +33,7 @@ public class ExportCSVServlet extends HttpServlet {
                         + article.getCategoryName() + "," + article.getType() + "," + article.getStars());
             }
 
-            // Linii goale pentru separare
             writer.println("\n");
-
-            // Scriere comentarii
             writer.println("Comments");
             writer.println("Comment,Poster,Agree,Post_id");
             for (CommentDTO comment : comments) {
