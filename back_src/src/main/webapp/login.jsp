@@ -1,29 +1,25 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="header.jsp" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login Page</title>
+    <meta charset="utf-8" />
+    <title>Web Practice</title>
     <link rel="stylesheet" href="misc/style.css">
+    <script src="misc/script.js"></script>
 </head>
 <body>
-<form id="addForm" action="LoginServler" method="post">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    <br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    <br><br>
-    <button type="submit">Login</button>
-</form>
-<div>
-    <%
-        String errorMessage = (String) request.getAttribute("errorMessage");
-        if (errorMessage != null) {
-            out.println("<p style='color:red;'>" + errorMessage + "</p>");
-        }
-    %>
-</div>
+<section>
+    <form id="addForm" name="loginform" onsubmit="return validateForm()" method="post" action="login-servlet">
+        <label for="email">Email: </label>
+        <input type="email" name="email">
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" id = "bigger" name="password">
+        <p><em>you don't have an account? you can <a href = "register.jsp">register here</a></em></p>
+        <center><button>Login</button></center>
+    </form>
+</section>
 </body>
 </html>
