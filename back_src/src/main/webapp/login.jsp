@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="misc/style.css">
 </head>
 <body>
-<form id="addForm" action="api/login" method="post">
+<form id="addForm" action="LoginServler" method="post">
     <label for="email">Email:</label>
     <input type="email" id="email" name="email" required>
     <br><br>

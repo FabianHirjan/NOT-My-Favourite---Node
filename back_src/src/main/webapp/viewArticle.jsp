@@ -42,8 +42,8 @@
     </div>
     <h2 class="commentspacing">Add Your Comment</h2>
     <div class="add-comment">
-        <form action="add-comment-servlet" method="post">
-            <textarea class="addcomm" name="comment" placeholder="Add your comment here.."></textarea>
+        <form action="http://localhost:8000/add-comment" method="post">
+        <textarea class="addcomm" name="comment" placeholder="Add your comment here.."></textarea>
             <input type="hidden" name="articleId" value="<%= article.getId() %>">
             <fieldset>
                 <legend>How do you feel about this opinion?</legend>
