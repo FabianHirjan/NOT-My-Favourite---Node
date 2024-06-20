@@ -1,4 +1,4 @@
-const { getAllPosts, getPostById, createPost, updatePost, deletePost } = require("../controllers/postController");
+const { getAllPosts, getPostById, createPost, updatePost, deletePost, filterPosts } = require("../controllers/postController");
 
 const postRoutes = (req, res) => {
     const urlParts = req.url.split('/');
@@ -8,6 +8,8 @@ const postRoutes = (req, res) => {
         getAllPosts(req, res);
     } else if (req.method === "POST" && req.url === "/api/posts/create") {
         createPost(req, res);
+    } else if (req.method === "POST" && req.url === "/api/posts/filter") {
+        filterPosts(req, res);
     } else if (req.method === "GET" && urlParts[2] === "posts" && id) {
         getPostById(req, res, id);
     } else if (req.method === "PUT" && urlParts[2] === "posts" && id) {

@@ -38,8 +38,8 @@
         <br>
         <label for="ordine"><span style="font-size: larger;">Order by: </span></label>
         <select name="ordine" id="ordine">
-            <option value="stars-asc">Stars Ascending</option>
-            <option value="stars-desc">Stars Descending</option>
+            <option value="ascending">Title Ascending</option>
+            <option value="descending">Title Descending</option>
             <option value="most">Most Reviews</option>
         </select>
         <br>
@@ -84,27 +84,42 @@
     }
 
     function applyFilters() {
-        const search = document.getElementById('cheie').value;
-        const category = document.getElementById('cat').value;
-        const order = document.getElementById('ordine').value;
+        const cheie = document.getElementById('cheie').value;
+        const cat = document.getElementById('cat').value;
+        const ordine = document.getElementById('ordine').value;
 
-        let filters = {};
+        const filters = {
+            cheie: cheie,
+            cat: cat,
+            ordine: ordine
+        };
 
-        if (search) {
-            filters.search = search;
-        }
-
-        if (category) {
-            filters.category = category;
-        }
-
-        if (order) {
-            const [sort, ord] = order.split('-');
-            filters.sort = sort;
-            filters.order = ord;
-        }
-
-        loadPosts(filters);
+        // Trimite cererea de filtrare la server
+        fetch('http://localhost:3000/api/posts/filter', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(filters)
+        })
+            .then(response => response.json())
+            .then(posts => {
+                const postContainer = document.getElementById('post-container');
+                postContainer.innerHTML = '';
+                posts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'article';
+                    postElement.innerHTML = `
+                        <h2>Nickname: ${post.user_id}</h2>
+                        <h3>${post.title}</h3>
+                        <p>${post.content}</p>
+                        <p class="review">${'&#9733;'.repeat(post.stars)}</p>
+                        <button onclick="viewArticle(${post.id})">View More</button>
+                    `;
+                    postContainer.appendChild(postElement);
+                });
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     function viewArticle(id) {
