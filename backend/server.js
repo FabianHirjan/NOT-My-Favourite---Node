@@ -6,6 +6,7 @@ const { sequelize } = require("./models");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
+const categoryRoutes = require("./routes/category");  // Adăugat import pentru rutele categoriei
 
 const hostname = "localhost";
 const port = 3000;
@@ -68,11 +69,11 @@ const server = http.createServer(async (req, res) => {
   } else {
     if (parsedUrl.pathname.startsWith("/api/user")) {
       userRoutes(req, res);
-    }
-    else if (parsedUrl.pathname.startsWith("/api/posts")) {
-        postRoutes(req, res);
-    }
-    else {
+    } else if (parsedUrl.pathname.startsWith("/api/posts")) {
+      postRoutes(req, res);
+    } else if (parsedUrl.pathname.startsWith("/api/categories")) {  // Adăugat verificare pentru rutele categoriei
+      categoryRoutes(req, res);
+    } else {
       authRoutes(req, res);
     }
   }
