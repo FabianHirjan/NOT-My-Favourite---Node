@@ -6,10 +6,10 @@ const PostModel = require("./post");
 const CommentModel = require("./comment");
 const CategoryModel = require("./category");
 
-const User = UserModel(sequelize);
-const Post = PostModel(sequelize);
-const Comment = CommentModel(sequelize);
-const Category = CategoryModel(sequelize);
+const User = UserModel(sequelize, Sequelize.DataTypes);
+const Post = PostModel(sequelize, Sequelize.DataTypes);
+const Comment = CommentModel(sequelize, Sequelize.DataTypes);
+const Category = CategoryModel(sequelize, Sequelize.DataTypes);
 
 User.hasMany(Post, { foreignKey: 'user_id' });
 Post.belongsTo(User, { foreignKey: 'user_id' });

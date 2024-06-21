@@ -55,4 +55,5 @@ module.exports = (sequelize) => {
             tableName: 'posts',
         }
     );
+
 };

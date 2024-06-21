@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalii Articol</title>
     <link rel="stylesheet" href="../public/css/style.css">
-    <script src = "../public/javascript/header.js"></script>
+    <script src="../public/javascript/header.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 </head>
 <body>
@@ -18,7 +18,7 @@
         <div id="user-nav">
             <a href="myaccount.html">My account</a>
             <a href="#" id="logout">Logout</a>
-            <a href="admin.html" id="admin-link" style="display:none;">Admin</a> <!-- Link-ul admin -->
+            <a href="admin.html" id="admin-link" style="display:none;">Admin</a>
         </div>
         <div id="auth-buttons">
             <a href="login.html" class="active">Log in</a>
@@ -31,11 +31,28 @@
     <!-- Detaliile articolului vor fi adăugate aici din JavaScript -->
 </div>
 
+<div class="comments-section" id="comments-section">
+    <h3>Comments</h3>
+    <div id="comments-list">
+        <!-- Comentariile vor fi adăugate aici din JavaScript -->
+    </div>
+    <form id="comment-form">
+        <textarea id="comment-content" rows="4" placeholder="Add a comment"></textarea>
+        <button type="submit">Post Comment</button>
+    </form>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const urlParams = new URLSearchParams(window.location.search);
         const articleId = urlParams.get('id');
         loadArticle(articleId);
+        loadComments(articleId);
+
+        document.getElementById('comment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            submitComment();
+        });
     });
 
     function loadArticle(id) {
@@ -44,14 +61,98 @@
             .then(article => {
                 const articleContainer = document.getElementById('article-container');
                 articleContainer.innerHTML = `
-                        <h2>Nickname: ${article.user_id}</h2>
-                        <h3>${article.title}</h3>
-                        <p>${article.content}</p>
-                        <p class="review">${'&#9733;'.repeat(article.stars)}</p>
-                    `;
+                <h2>Nickname: ${article.User.username}</h2>
+                <h3>${article.title}</h3>
+                <p>${article.content}</p>
+                <p class="review">${'&#9733;'.repeat(article.stars)}</p>
+            `;
+            })
+            .catch(error => console.error('Error loading article:', error));
+    }
+
+
+    function loadComments(postId) {
+        fetch(`http://localhost:3000/api/comments?post_id=${postId}`)
+            .then(response => response.json())
+            .then(comments => {
+                const userId = getUserIdFromToken();
+                const isAdmin = isAdminUser();
+                const commentsList = document.getElementById('comments-list');
+                commentsList.innerHTML = '';
+                comments.forEach(comment => {
+                    const canDelete = comment.user_id === userId || isAdmin;
+                    commentsList.innerHTML += `
+                <div class="comment" data-comment-id="${comment.id}">
+                    <p>${comment.content}</p>
+                    <small>Posted by ${comment.User.username} on ${new Date(comment.created_at).toLocaleString()}</small>
+                    ${canDelete ? `<button onclick="deleteComment(${comment.id})">Delete</button>` : ''}
+                </div>
+            `;
+                });
             })
             .catch(error => console.error('Error:', error));
     }
+
+
+    function submitComment() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+        const content = document.getElementById('comment-content').value;
+        const userId = getUserIdFromToken();
+
+        fetch('http://localhost:3000/api/comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content, post_id: postId, user_id: userId })
+        })
+            .then(response => response.json())
+            .then(comment => {
+                loadComments(postId);
+                document.getElementById('comment-content').value = '';
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function deleteComment(commentId) {
+        fetch(`http://localhost:3000/api/comments/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const postId = urlParams.get('id');
+                    loadComments(postId);
+                } else {
+                    console.error('Failed to delete comment');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function getUserIdFromToken() {
+        const token = localStorage.getItem('token'); // Sau unde este stocat token-ul
+        if (token) {
+            const decoded = jwt_decode(token);
+            return decoded.id; // Sau cum este stocat userId-ul în token
+        }
+        return null;
+    }
+
+
+    function isAdminUser() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decoded = jwt_decode(token);
+            return decoded.is_admin; // Sau cum este stocat rolul de admin în token
+        }
+        return false;
+    }
 </script>
+
 </body>
 </html>

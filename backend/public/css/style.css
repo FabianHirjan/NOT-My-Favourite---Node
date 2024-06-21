@@ -425,3 +425,76 @@ textarea.addcomm {
     border-radius:5px;
     background-color: #d9d4d4;
 }
+
+
+
+/* Secțiunea de comentarii */
+.comments-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.comments-section h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Lista de comentarii */
+#comments-list {
+    margin-bottom: 20px;
+}
+
+#comments-list .comment {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+#comments-list .comment p {
+    margin: 0 0 10px;
+    color: #333;
+}
+
+#comments-list .comment small {
+    color: #666;
+}
+
+/* Formularul de comentarii */
+#comment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#comment-form textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#comment-form button {
+    background-color: #222831;
+    color: #76ABAE;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#comment-form button:hover {
+    background-color: #76ABAE;
+    color: #222831;
+}

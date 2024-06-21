@@ -8,6 +8,7 @@ const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
 const categoryRoutes = require("./routes/category");
 const adminRoutes = require("./routes/admin");
+const commentRoutes = require("./routes/comment");
 
 const hostname = "localhost";
 const port = 3000;
@@ -65,6 +66,8 @@ const server = http.createServer(async (req, res) => {
       categoryRoutes(req, res);
     } else if (parsedUrl.pathname.startsWith("/api/admin")) {
       adminRoutes(req, res);
+    } else if (parsedUrl.pathname.startsWith("/api/comments")) {  // Adăugat comentarii
+      commentRoutes(req, res);
     } else {
       authRoutes(req, res);
     }

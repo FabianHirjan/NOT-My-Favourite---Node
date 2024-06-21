@@ -93,7 +93,7 @@
                     const postElement = document.createElement('div');
                     postElement.className = 'article';
                     postElement.innerHTML = `
-                            <h2>Nickname: ${post.user_id}</h2>
+                            <h2>Nickname: ${post.User.username}</h2>
                             <h3>${post.title}</h3>
                             <p>${post.content}</p>
                             <p class="review">${'&#9733;'.repeat(post.stars)}</p>
@@ -132,7 +132,7 @@
                     const postElement = document.createElement('div');
                     postElement.className = 'article';
                     postElement.innerHTML = `
-                        <h2>Nickname: ${post.user_id}</h2>
+                        <h2>Nickname: ${post.User.username}</h2>
                         <h3>${post.title}</h3>
                         <p>${post.content}</p>
                         <p class="review">${'&#9733;'.repeat(post.stars)}</p>

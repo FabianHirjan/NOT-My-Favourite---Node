@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Post, Category } = require("../models");
+const { Post, Category, User } = require("../models");
 
 const postController = {
   getAllPosts: async (req, res) => {
@@ -10,7 +10,11 @@ const postController = {
 
     let options = {
       where: {},
-      order: []
+      order: [],
+      include: [
+        { model: User, attributes: ['username'] },  // Include User model
+        { model: Category, attributes: ['name'] }
+      ]
     };
 
     if (sort && order) {
@@ -18,10 +22,10 @@ const postController = {
     }
 
     if (category) {
-      options.include = [{
+      options.include.push({
         model: Category,
         where: { name: category }
-      }];
+      });
     }
 
     if (search) {
@@ -51,14 +55,18 @@ const postController = {
 
       let options = {
         where: {},
-        order: []
+        order: [],
+        include: [
+          { model: User, attributes: ['username'] },  // Include User model
+          { model: Category, attributes: ['name'] }
+        ]
       };
 
       if (cat) {
-        options.include = [{
+        options.include.push({
           model: Category,
           where: { name: cat }
-        }];
+        });
       }
 
       if (cheie) {
@@ -97,7 +105,10 @@ const postController = {
   getPostById: async (req, res, id) => {
     try {
       const post = await Post.findByPk(id, {
-        include: [Category]
+        include: [
+          { model: User, attributes: ['username'] },  // Include User model
+          { model: Category, attributes: ['name'] }
+        ]
       });
       if (post) {
         res.statusCode = 200;

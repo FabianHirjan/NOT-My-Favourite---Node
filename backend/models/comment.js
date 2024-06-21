@@ -1,7 +1,7 @@
-const { DataTypes} = require("sequelize");
+const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    return sequelize.define(
+    const Comment = sequelize.define(
         "Comment",
         {
             id: {
@@ -15,6 +15,7 @@ module.exports = (sequelize) => {
             },
             post_id: {
                 type: DataTypes.INTEGER,
+                allowNull: false,
                 references: {
                     model: 'posts',
                     key: 'id',
@@ -22,6 +23,7 @@ module.exports = (sequelize) => {
             },
             user_id: {
                 type: DataTypes.INTEGER,
+                allowNull: false,
                 references: {
                     model: 'users',
                     key: 'id',
@@ -37,4 +39,10 @@ module.exports = (sequelize) => {
             tableName: 'comments',
         }
     );
-}
+
+    Comment.associate = (models) => {
+        Comment.belongsTo(models.User, { foreignKey: 'user_id' });
+    };
+
+    return Comment;
+};
