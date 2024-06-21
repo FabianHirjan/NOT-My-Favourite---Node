@@ -56,7 +56,7 @@ body, html {
 
 .header-right {
     float: right;
-    margin-right: 20px;
+    margin-right: 10px;
 }
 
 /* Table */
@@ -129,35 +129,6 @@ button:hover {
 }
 
 
-div#apartamente,
-div#cartiere {
-    padding: 180px;
-    height: 150px;
-    color: #EEEEEE;
-    border: 1px solid #222831;
-    font-weight: bold;
-    text-shadow: black 1px 1px 5px;
-    transition: opacity 0.5s;
-    opacity: 0.5;
-}
-
-div#apartamente:hover,
-div#cartiere:hover {
-    opacity: 1;
-}
-
-div#apartamente {
-    background: linear-gradient(270deg, rgba(34, 40, 49, 1) 5%, rgba(118, 171, 174, 1) 90%);
-}
-
-div#cartiere {
-    background: linear-gradient(90deg, rgba(34, 40, 49, 1) 5%, rgba(118, 171, 174, 1) 90%);
-}
-
-#apartamente,
-#cartiere {
-    text-align: center;
-}
 
 section {
     display: flex;

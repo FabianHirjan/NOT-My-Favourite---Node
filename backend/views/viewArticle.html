@@ -5,18 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalii Articol</title>
     <link rel="stylesheet" href="../public/css/style.css">
+    <script src = "../public/javascript/header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 </head>
 <body>
 <div class="header">
     <a href="index.html" class="logo">NoF</a>
-    <a href="index.html">Home</a>
+    <a href="index.html" class="active">Home</a>
     <a href="filter.html">Physical Products</a>
-    <a href="aboutus.html">About us</a>
-    <a href="nonphy.html">Non-Physical Products</a>
     <a href="post.html">Post my Issue</a>
     <div class="header-right">
-        <a href="myaccount.html">My account</a>
-        <a href="login.html">Log in</a>
+        <div id="user-nav">
+            <a href="myaccount.html">My account</a>
+            <a href="#" id="logout">Logout</a>
+            <a href="admin.html" id="admin-link" style="display:none;">Admin</a> <!-- Link-ul admin -->
+        </div>
+        <div id="auth-buttons">
+            <a href="login.html" class="active">Log in</a>
+            <a href="register.html">Register</a>
+        </div>
     </div>
 </div>
 
