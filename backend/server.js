@@ -6,7 +6,8 @@ const { sequelize } = require("./models");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
-const categoryRoutes = require("./routes/category");  // Adăugat import pentru rutele categoriei
+const categoryRoutes = require("./routes/category");
+const adminRoutes = require("./routes/admin");
 
 const hostname = "localhost";
 const port = 3000;
@@ -19,12 +20,6 @@ const mimeTypes = {
   ".jpg": "image/jpeg",
 };
 
-/**
- * Serves a static file as a response to the client.
- *
- * @param {Object} res - The response object.
- * @param {string} filePath - The path to the file to be served.
- */
 const serveStaticFile = (res, filePath) => {
   const ext = path.extname(filePath).toLowerCase();
   const mimeType = mimeTypes[ext] || "application/octet-stream";
@@ -41,11 +36,6 @@ const serveStaticFile = (res, filePath) => {
   });
 };
 
-/**
- * The HTTP server instance.
- *
- * @type {http.Server}
- */
 const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
   console.log("Request:", parsedUrl.pathname);
@@ -71,8 +61,10 @@ const server = http.createServer(async (req, res) => {
       userRoutes(req, res);
     } else if (parsedUrl.pathname.startsWith("/api/posts")) {
       postRoutes(req, res);
-    } else if (parsedUrl.pathname.startsWith("/api/categories")) {  // Adăugat verificare pentru rutele categoriei
+    } else if (parsedUrl.pathname.startsWith("/api/categories")) {
       categoryRoutes(req, res);
+    } else if (parsedUrl.pathname.startsWith("/api/admin")) {
+      adminRoutes(req, res);
     } else {
       authRoutes(req, res);
     }

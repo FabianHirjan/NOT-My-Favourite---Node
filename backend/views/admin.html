@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Admin</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="../public/javascript/header.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchUsers();
+            fetchPosts();
+
+            document.getElementById('mic').addEventListener('click', function() {
+                const filter = document.getElementById('filter').value;
+                fetchPosts(filter);
+            });
+        });
+
+        function fetchUsers() {
+            fetch('/api/admin/users')
+                .then(response => response.json())
+                .then(users => {
+                    const usersTable = document.getElementById('users-table-body');
+                    usersTable.innerHTML = '';
+                    users.forEach(user => {
+                        usersTable.innerHTML += `
+                            <tr>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>
+                                    <button onclick="deleteUser(${user.id})">Delete</button>
+                                    <button onclick="showUpdateUser(${user.id}, '${user.username}', '${user.email}', ${user.is_admin})">Update</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                });
+        }
+
+        function fetchPosts(filter = '') {
+            fetch('/api/admin/posts')
+                .then(response => response.json())
+                .then(posts => {
+                    const postsContainer = document.querySelector('.article-container');
+                    postsContainer.innerHTML = '';
+                    posts.filter(post => post.title.includes(filter) || post.content.includes(filter)).forEach(post => {
+                        postsContainer.innerHTML += `
+                            <div class="article">
+                                <h2>${post.title}</h2>
+                                <p>${post.content}</p>
+                                <button onclick="deletePost(${post.id})">Delete</button>
+                                <button onclick="showUpdatePost(${post.id}, '${post.title}', '${post.content}')">Update</button>
+                            </div>
+                        `;
+                    });
+                });
+        }
+
+        function deleteUser(id) {
+            fetch(`/api/admin/users/${id}`, { method: 'DELETE' })
+                .then(() => fetchUsers());
+        }
+
+        function deletePost(id) {
+            fetch(`/api/admin/posts/${id}`, { method: 'DELETE' })
+                .then(() => fetchPosts());
+        }
+
+        function showUpdateUser(id, username, email, is_admin) {
+            const newUsername = prompt("New Username:", username);
+            const newEmail = prompt("New Email:", email);
+            const newIsAdmin = confirm("Is Admin?") ? true : false;
+            if (newUsername && newEmail) {
+                updateUser(id, newUsername, newEmail, newIsAdmin);
+            }
+        }
+
+        function updateUser(id, username, email, is_admin) {
+            fetch(`/api/admin/users/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, email, is_admin })
+            }).then(() => fetchUsers());
+        }
+
+        function showUpdatePost(id, title, content) {
+            const newTitle = prompt("New Title:", title);
+            const newContent = prompt("New Description:", content);
+            if (newTitle && newContent) {
+                updatePost(id, newTitle, newContent);
+            }
+        }
+
+        function updatePost(id, title, content) {
+            fetch(`/api/admin/posts/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, content })
+            }).then(() => fetchPosts());
+        }
+    </script>
+</head>
+
+<body>
+<div class="header">
+    <a href="index.html" class="logo">NoF</a>
+    <a href="index.html" class="active">Home</a>
+    <a href="filter.html">Physical Products</a>
+    <a href="post.html">Post my Issue</a>
+    <div class="header-right">
+        <div id="user-nav">
+            <a href="myaccount.html">My account</a>
+            <a href="#" id="logout">Logout</a>
+            <a href="admin.html" id="admin-link" style="display:none;">Admin</a>
+        </div>
+        <div id="auth-buttons">
+            <a href="login.html" class="active">Log in</a>
+            <a href="register.html">Register</a>
+        </div>
+    </div>
+</div>
+<br>
+<section>
+    <table>
+        <thead>
+        <tr>
+            <th>User</th>
+            <th>Email</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody id="users-table-body">
+        </tbody>
+    </table>
+</section>
+
+<div class="article-container">
+</div>
+</body>
+</html>
