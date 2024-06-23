@@ -59,6 +59,44 @@ body, html {
     margin-right: 10px;
 }
 
+.description-box {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    padding: 30px;
+    margin: 30px auto;
+    max-width: 700px;
+    text-align: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    color: #222831;
+    border: 1px solid #ddd;
+    position: relative;
+}
+
+.description-box::before {
+    content: "✦";
+    font-size: 50px;
+    color: #76ABAE;
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.description-box h2 {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-size: 2.5rem;
+    color: #333;
+    font-family: 'Georgia', serif;
+}
+.description-box p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #555;
+    margin-bottom: 0;
+    font-family: 'Arial', sans-serif;
+}
+
 /* Table */
 table,
 th,
