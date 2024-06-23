@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const { Post, Category, User, UserLike } = require("../models");
 const jwt = require('jsonwebtoken');
+const { Parser } = require('json2csv');
 
 const secretKey = "abc1234";
 
@@ -37,12 +38,11 @@ const postController = {
 
     try {
       const posts = await Post.findAll(options);
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
+      res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(posts));
     } catch (error) {
       console.error('Error fetching posts:', error);
-      res.statusCode = 500;
+      res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Something went wrong' }));
     }
   },
@@ -93,13 +93,11 @@ const postController = {
 
       try {
         const posts = await Post.findAll(options);
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(posts));
       } catch (error) {
         console.error('Database error:', error);
-        res.statusCode = 500;
-        res.setHeader('Content-Type', 'application/json');
+        res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Database error' }));
       }
     });
@@ -133,16 +131,15 @@ const postController = {
           likedByUser: likedByUser
         };
 
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(response));
       } else {
-        res.statusCode = 404;
-        res.end("Not found");
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Not found' }));
       }
     } catch (error) {
       console.error('Error fetching post by ID:', error);
-      res.statusCode = 500;
+      res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Something went wrong' }));
     }
   },
@@ -156,12 +153,11 @@ const postController = {
       try {
         const { title, content, stars, type, category, user_id } = JSON.parse(body);
         const post = await Post.create({ title, content, stars, type, category, user_id });
-        res.statusCode = 201;
-        res.setHeader("Content-Type", "application/json");
+        res.writeHead(201, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(post));
       } catch (error) {
         console.error('Error creating post:', error);
-        res.statusCode = 500;
+        res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Something went wrong' }));
       }
     });
@@ -184,16 +180,15 @@ const postController = {
           post.category = category;
           post.user_id = user_id;
           await post.save();
-          res.statusCode = 200;
-          res.setHeader("Content-Type", "application/json");
+          res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify(post));
         } else {
-          res.statusCode = 404;
-          res.end("Not found");
+          res.writeHead(404, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Not found' }));
         }
       } catch (error) {
         console.error('Error updating post:', error);
-        res.statusCode = 500;
+        res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Something went wrong' }));
       }
     });
@@ -204,15 +199,15 @@ const postController = {
       const post = await Post.findByPk(id);
       if (post) {
         await post.destroy();
-        res.statusCode = 204;
+        res.writeHead(204);
         res.end();
       } else {
-        res.statusCode = 404;
-        res.end("Not found");
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Not found' }));
       }
     } catch (error) {
       console.error('Error deleting post:', error);
-      res.statusCode = 500;
+      res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Something went wrong' }));
     }
   },
@@ -225,8 +220,8 @@ const postController = {
 
       const post = await Post.findByPk(id);
       if (!post) {
-        res.statusCode = 404;
-        res.end("Not found");
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Not found' }));
         return;
       }
 
@@ -238,8 +233,7 @@ const postController = {
         post.likes -= 1;
         await post.save();
 
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ likes: post.likes, liked: false }));
       } else {
         // Dacă utilizatorul nu a dat like, adaugă like-ul
@@ -247,17 +241,42 @@ const postController = {
         post.likes += 1;
         await post.save();
 
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
+        res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ likes: post.likes, liked: true }));
       }
     } catch (error) {
       console.error('Error liking post:', error);
-      res.statusCode = 500;
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Something went wrong' }));
+    }
+  },
+
+  exportPostsCsv: async (req, res) => {
+    try {
+      const posts = await Post.findAll({
+        include: [
+          { model: User, attributes: ['username'] },
+          { model: Category, attributes: ['name'] }
+        ],
+        order: [['likes', 'DESC']]
+      });
+
+      const fields = ['id', 'title', 'content', 'stars', 'likes', 'Username', 'Category Name'];
+      const opts = { fields };
+      const parser = new Parser(opts);
+      const csv = parser.parse(posts.map(post => post.toJSON())); // Transformă instanțele Sequelize în obiecte simple
+
+      res.writeHead(200, {
+        'Content-Type': 'text/csv',
+        'Content-Disposition': 'attachment; filename="posts.csv"'
+      });
+      res.end(csv);
+    } catch (error) {
+      console.error('Error exporting posts to CSV:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Something went wrong' }));
     }
   }
 };
 
 module.exports = postController;
-// deci imi place

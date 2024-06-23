@@ -3,6 +3,8 @@ const url = require("url");
 const fs = require("fs");
 const path = require("path");
 const { sequelize } = require("./models");
+
+
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
