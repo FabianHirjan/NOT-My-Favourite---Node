@@ -1,5 +1,8 @@
 const { Op } = require("sequelize");
-const { Post, Category, User } = require("../models");
+const { Post, Category, User, UserLike } = require("../models");
+const jwt = require('jsonwebtoken');
+
+const secretKey = "abc1234";
 
 const postController = {
   getAllPosts: async (req, res) => {
@@ -12,7 +15,7 @@ const postController = {
       where: {},
       order: [],
       include: [
-        { model: User, attributes: ['username'] },  // Include User model
+        { model: User, attributes: ['username'] },
         { model: Category, attributes: ['name'] }
       ]
     };
@@ -57,7 +60,7 @@ const postController = {
         where: {},
         order: [],
         include: [
-          { model: User, attributes: ['username'] },  // Include User model
+          { model: User, attributes: ['username'] },
           { model: Category, attributes: ['name'] }
         ]
       };
@@ -106,7 +109,7 @@ const postController = {
     try {
       const post = await Post.findByPk(id, {
         include: [
-          { model: User, attributes: ['username'] },  // Include User model
+          { model: User, attributes: ['username'] },
           { model: Category, attributes: ['name'] }
         ]
       });
@@ -190,6 +193,43 @@ const postController = {
       }
     } catch (error) {
       console.error('Error deleting post:', error);
+      res.statusCode = 500;
+      res.end(JSON.stringify({ error: 'Something went wrong' }));
+    }
+  },
+
+  likePost: async (req, res, id) => {
+    try {
+      const token = req.headers['authorization'].split(' ')[1];
+      const decoded = jwt.verify(token, secretKey); // Folosește aceeași cheie secretă
+      const userId = decoded.id;
+
+      const post = await Post.findByPk(id);
+      if (!post) {
+        res.statusCode = 404;
+        res.end("Not found");
+        return;
+      }
+
+      const existingLike = await UserLike.findOne({ where: { user_id: userId, post_id: id } });
+
+      if (existingLike) {
+        res.statusCode = 400;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ error: 'User has already liked this post' }));
+        return;
+      }
+
+      await UserLike.create({ user_id: userId, post_id: id });
+
+      post.likes += 1;
+      await post.save();
+
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ likes: post.likes }));
+    } catch (error) {
+      console.error('Error liking post:', error);
       res.statusCode = 500;
       res.end(JSON.stringify({ error: 'Something went wrong' }));
     }

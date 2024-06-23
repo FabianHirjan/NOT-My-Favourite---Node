@@ -45,6 +45,10 @@ module.exports = (sequelize) => {
                     key: 'id',
                 },
             },
+            likes: {
+                type: DataTypes.INTEGER,
+                defaultValue: 0,
+            },
             created_at: {
                 type: DataTypes.DATE,
                 defaultValue: DataTypes.NOW,
@@ -55,5 +59,4 @@ module.exports = (sequelize) => {
             tableName: 'posts',
         }
     );
-
 };

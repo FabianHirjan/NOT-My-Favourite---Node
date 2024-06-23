@@ -31,6 +31,11 @@
     <!-- Detaliile articolului vor fi adăugate aici din JavaScript -->
 </div>
 
+<div>
+    <button id="like-button">Like</button>
+    <span id="like-count"></span>
+</div>
+
 <div class="comments-section" id="comments-section">
     <h3>Comments</h3>
     <div id="comments-list">
@@ -53,6 +58,12 @@
             event.preventDefault();
             submitComment();
         });
+
+        document.getElementById('like-button').addEventListener('click', function() {
+            likePost(articleId);
+        });
+
+        checkUserStatus();
     });
 
     function loadArticle(id) {
@@ -61,15 +72,15 @@
             .then(article => {
                 const articleContainer = document.getElementById('article-container');
                 articleContainer.innerHTML = `
-                <h2>Nickname: ${article.User.username}</h2>
-                <h3>${article.title}</h3>
-                <p>${article.content}</p>
-                <p class="review">${'&#9733;'.repeat(article.stars)}</p>
-            `;
+                    <h2>Nickname: ${article.User.username}</h2>
+                    <h3>${article.title}</h3>
+                    <p>${article.content}</p>
+                    <p class="review">${'&#9733;'.repeat(article.stars)}</p>
+                    <span id="like-count">${article.likes}</span>
+                `;
             })
             .catch(error => console.error('Error loading article:', error));
     }
-
 
     function loadComments(postId) {
         fetch(`http://localhost:3000/api/comments?post_id=${postId}`)
@@ -82,17 +93,16 @@
                 comments.forEach(comment => {
                     const canDelete = comment.user_id === userId || isAdmin;
                     commentsList.innerHTML += `
-                <div class="comment" data-comment-id="${comment.id}">
-                    <p>${comment.content}</p>
-                    <small>Posted by ${comment.User.username} on ${new Date(comment.created_at).toLocaleString()}</small>
-                    ${canDelete ? `<button onclick="deleteComment(${comment.id})">Delete</button>` : ''}
-                </div>
-            `;
+                        <div class="comment" data-comment-id="${comment.id}">
+                            <p>${comment.content}</p>
+                            <small>Posted by ${comment.User.username} on ${new Date(comment.created_at).toLocaleString()}</small>
+                            ${canDelete ? `<button onclick="deleteComment(${comment.id})">Delete</button>` : ''}
+                        </div>
+                    `;
                 });
             })
             .catch(error => console.error('Error:', error));
     }
-
 
     function submitComment() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -134,23 +144,56 @@
             .catch(error => console.error('Error:', error));
     }
 
+    function likePost(id) {
+        fetch(`http://localhost:3000/api/posts/${id}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(error => { throw new Error(error.error); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('like-count').innerText = data.likes;
+            })
+            .catch(error => alert(error.message));
+    }
+
     function getUserIdFromToken() {
-        const token = localStorage.getItem('token'); // Sau unde este stocat token-ul
+        const token = localStorage.getItem('token');
         if (token) {
             const decoded = jwt_decode(token);
-            return decoded.id; // Sau cum este stocat userId-ul în token
+            return decoded.id;
         }
         return null;
     }
-
 
     function isAdminUser() {
         const token = localStorage.getItem('token');
         if (token) {
             const decoded = jwt_decode(token);
-            return decoded.is_admin; // Sau cum este stocat rolul de admin în token
+            return decoded.is_admin;
         }
         return false;
+    }
+
+    function checkUserStatus() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            document.getElementById('auth-buttons').style.display = 'none';
+            document.getElementById('user-nav').style.display = 'block';
+            if (isAdminUser()) {
+                document.getElementById('admin-link').style.display = 'block';
+            }
+        } else {
+            document.getElementById('auth-buttons').style.display = 'block';
+            document.getElementById('user-nav').style.display = 'none';
+        }
     }
 </script>
 

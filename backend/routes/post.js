@@ -1,4 +1,12 @@
-const { getAllPosts, getPostById, createPost, updatePost, deletePost, filterPosts } = require("../controllers/postController");
+const {
+    getAllPosts,
+    getPostById,
+    createPost,
+    updatePost,
+    deletePost,
+    filterPosts,
+    likePost
+} = require("../controllers/postController");
 
 const postRoutes = (req, res) => {
     const urlParts = req.url.split('/');
@@ -16,6 +24,8 @@ const postRoutes = (req, res) => {
         updatePost(req, res, id);
     } else if (req.method === "DELETE" && urlParts[2] === "posts" && id) {
         deletePost(req, res, id);
+    } else if (req.method === "POST" && urlParts[2] === "posts" && urlParts[3] === id && urlParts[4] === 'like') {
+        likePost(req, res, id);
     } else {
         res.statusCode = 404;
         res.end("Not found");
