@@ -67,17 +67,25 @@
     });
 
     function loadArticle(id) {
-        fetch(`http://localhost:3000/api/posts/${id}`)
+        fetch(`http://localhost:3000/api/posts/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
             .then(response => response.json())
             .then(article => {
                 const articleContainer = document.getElementById('article-container');
                 articleContainer.innerHTML = `
-                    <h2>Nickname: ${article.User.username}</h2>
-                    <h3>${article.title}</h3>
-                    <p>${article.content}</p>
-                    <p class="review">${'&#9733;'.repeat(article.stars)}</p>
-                    <span id="like-count">${article.likes}</span>
-                `;
+                <h2>Nickname: ${article.User.username}</h2>
+                <h3>${article.title}</h3>
+                <p>${article.content}</p>
+                <p class="review">${'&#9733;'.repeat(article.stars)}</p>
+                <span id="like-count">${article.likes}</span>
+            `;
+
+                // Setează textul butonului de like în funcție de statusul like-ului
+                const likeButton = document.getElementById('like-button');
+                likeButton.innerText = article.likedByUser ? 'Unlike' : 'Like';
             })
             .catch(error => console.error('Error loading article:', error));
     }
@@ -160,6 +168,8 @@
             })
             .then(data => {
                 document.getElementById('like-count').innerText = data.likes;
+                const likeButton = document.getElementById('like-button');
+                likeButton.innerText = data.liked ? 'Unlike' : 'Like';
             })
             .catch(error => alert(error.message));
     }

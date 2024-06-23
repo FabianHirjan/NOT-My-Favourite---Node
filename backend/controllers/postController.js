@@ -107,16 +107,35 @@ const postController = {
 
   getPostById: async (req, res, id) => {
     try {
+      const token = req.headers['authorization'] ? req.headers['authorization'].split(' ')[1] : null;
+      let userId = null;
+      if (token) {
+        const decoded = jwt.verify(token, secretKey);
+        userId = decoded.id;
+      }
+
       const post = await Post.findByPk(id, {
         include: [
           { model: User, attributes: ['username'] },
           { model: Category, attributes: ['name'] }
         ]
       });
+
       if (post) {
+        let likedByUser = false;
+        if (userId) {
+          const userLike = await UserLike.findOne({ where: { user_id: userId, post_id: id } });
+          likedByUser = !!userLike;
+        }
+
+        const response = {
+          ...post.toJSON(),
+          likedByUser: likedByUser
+        };
+
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify(post));
+        res.end(JSON.stringify(response));
       } else {
         res.statusCode = 404;
         res.end("Not found");
@@ -214,20 +233,24 @@ const postController = {
       const existingLike = await UserLike.findOne({ where: { user_id: userId, post_id: id } });
 
       if (existingLike) {
-        res.statusCode = 400;
+        // Dacă utilizatorul a dat deja like, elimină like-ul
+        await existingLike.destroy();
+        post.likes -= 1;
+        await post.save();
+
+        res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify({ error: 'User has already liked this post' }));
-        return;
+        res.end(JSON.stringify({ likes: post.likes, liked: false }));
+      } else {
+        // Dacă utilizatorul nu a dat like, adaugă like-ul
+        await UserLike.create({ user_id: userId, post_id: id });
+        post.likes += 1;
+        await post.save();
+
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ likes: post.likes, liked: true }));
       }
-
-      await UserLike.create({ user_id: userId, post_id: id });
-
-      post.likes += 1;
-      await post.save();
-
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify({ likes: post.likes }));
     } catch (error) {
       console.error('Error liking post:', error);
       res.statusCode = 500;
