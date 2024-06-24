@@ -6,7 +6,7 @@ const {
     deleteUser,
     updateUserEmail,
     updateUserPassword,
-    getUserPosts
+    getCurrentUser // Adăugăm această funcție
 } = require('../controllers/userController');
 
 const userRoutes = (req, res) => {
@@ -15,8 +15,8 @@ const userRoutes = (req, res) => {
 
     if (req.method === "GET" && req.url === "/api/user") {
         getAllUsers(req, res);
-    } else if (req.method === "GET" && urlParts[2] === "user" && id && urlParts[4] === "posts") {
-        getUserPosts(req, res, id);
+    } else if (req.method === "GET" && req.url === "/api/user/me") {
+        getCurrentUser(req, res);
     } else if (req.method === "GET" && urlParts[2] === "user" && id) {
         getUserById(req, res, id);
     } else if (req.method === "POST" && req.url === "/api/user") {

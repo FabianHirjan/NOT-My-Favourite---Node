@@ -60,8 +60,17 @@
 
     <div class="reviews-container">
         <h2>My Reviews</h2>
-        <div id="user-reviews">
-            <!-- User reviews will be dynamically loaded here -->
+        <div class="review">
+            <h3>Review Title 1</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
+            <button>Update</button>
+            <button>Delete</button>
+        </div>
+        <div class="review">
+            <h3>Review Title 2</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
+            <button>Update</button>
+            <button>Delete</button>
         </div>
     </div>
 </div>
@@ -119,67 +128,28 @@
             return;
         }
 
-        const decoded = jwt_decode(token);
-        document.getElementById('username').innerText = decoded.username;
-        document.getElementById('email').innerText = decoded.email;
-        document.getElementById('memberSince').innerText = new Date(decoded.createdAt).toLocaleDateString();
-
-        // Show/hide admin link based on user's admin status
-        if (decoded.is_admin) {
-            document.getElementById('admin-link').style.display = 'block';
-        }
-
-        loadUserReviews(decoded.id);
-    };
-
-    async function loadUserReviews(userId) {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/user/${userId}/posts`, {
+        const response = await fetch('/api/user/me', {
+            method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        const reviews = await response.json();
-        const reviewsContainer = document.getElementById('user-reviews');
-        reviewsContainer.innerHTML = '';
-
-        reviews.forEach(review => {
-            const reviewElement = document.createElement('div');
-            reviewElement.classList.add('review');
-            reviewElement.innerHTML = `
-                <h3>${review.title}</h3>
-                <p>${review.content}</p>
-                <p class="review">${'&#9733;'.repeat(review.stars)}</p>
-                <span>${review.likes} Likes</span>
-                <button onclick="updateReview(${review.id})">Update</button>
-                <button onclick="deleteReview(${review.id})">Delete</button>
-            `;
-            reviewsContainer.appendChild(reviewElement);
-        });
-    }
-
-    function updateReview(reviewId) {
-        // Implement the update review functionality here
-    }
-
-    async function deleteReview(reviewId) {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/posts/${reviewId}`, {
-            method: 'DELETE',
-            headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         });
 
         if (response.ok) {
-            alert('Review deleted successfully');
-            const decoded = jwt_decode(token);
-            loadUserReviews(decoded.id);
+            const userData = await response.json();
+            document.getElementById('username').innerText = userData.username;
+            document.getElementById('email').innerText = userData.email;
+            document.getElementById('memberSince').innerText = new Date(userData.createdAt).toLocaleDateString();
+
+            // Show/hide admin link based on user's admin status
+            if (userData.is_admin) {
+                document.getElementById('admin-link').style.display = 'block';
+            }
         } else {
-            alert('Failed to delete review');
+            alert('Failed to fetch user data');
         }
-    }
+    };
 
     // Logout functionality
     document.getElementById('logout').addEventListener('click', () => {
