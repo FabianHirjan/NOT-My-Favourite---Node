@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Account</title>
     <link rel="stylesheet" href="../public/css/style.css">
-    <script src = "../public/javascript/header.js"></script>
+    <script src="../public/javascript/header.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 </head>
 <body>
@@ -16,7 +16,7 @@
     <a href="post.html">Post my Issue</a>
     <div class="header-right">
         <div id="user-nav" style="display: none;">
-            <a href="myaccount.html" class = "active">My account</a>
+            <a href="myaccount.html" class="active">My account</a>
             <a href="#" id="logout">Logout</a>
             <a href="admin.html" id="admin-link" style="display:none;">Admin</a>
         </div>
@@ -27,47 +27,123 @@
     </div>
 </div>
 
-    <div class="account-container">
-        <div class="account-info">
-            <h2>My Account</h2>
-            <img src="misc/photos/maimu.jpeg" alt="Profile Picture" class="profile-picture">
-            <h3>Change email</h3>
-            <form id="accountForm">
-                <label for="email">New email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your new email">
+<div class="account-container">
+    <div class="account-info">
+        <h2>My Account</h2>
+        <h3>Account details</h3>
+        <p>Email: <span id="email"></span></p>
+        <p>Username: <span id="username"></span></p>
+        <p>Member since: <span id="memberSince"></span></p>
 
-                <label for="email">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password">
+        <h3>Change email</h3>
+        <form id="emailForm">
+            <label for="new-email">New email</label>
+            <input type="email" id="new-email" name="email" placeholder="Enter your new email" required>
 
-                <button type="submit">Update email</button>
-            </form>
-            <h3>Change password</h3>
-            <form id="accountForm">
-                <label for="password">New Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter new password">
+            <label for="email-password">Password</label>
+            <input type="password" id="email-password" name="password" placeholder="Enter your password" required>
 
-                <label for="email">Current email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email">
+            <button type="submit">Update email</button>
+        </form>
 
-                <button type="submit">Update password</button>
-            </form>
+        <h3>Change password</h3>
+        <form id="passwordForm">
+            <label for="new-password">New Password</label>
+            <input type="password" id="new-password" name="password" placeholder="Enter new password" required>
+
+            <label for="old-password">Old Password</label>
+            <input type="password" id="old-password" name="password" placeholder="Enter old password" required>
+
+            <button type="submit">Update password</button>
+        </form>
+    </div>
+
+    <div class="reviews-container">
+        <h2>My Reviews</h2>
+        <div class="review">
+            <h3>Review Title 1</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
+            <button>Update</button>
+            <button>Delete</button>
         </div>
-
-        <div class="reviews-container">
-            <h2>My Reviews</h2>
-            <div class="review">
-                <h3>Review Title 1</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
-                <button>Update</button>
-                <button>Delete</button>
-            </div>
-            <div class="review">
-                <h3>Review Title 2</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
-                <button>Update</button>
-                <button>Delete</button>
-            </div>
+        <div class="review">
+            <h3>Review Title 2</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
+            <button>Update</button>
+            <button>Delete</button>
         </div>
     </div>
+</div>
+
+<script>
+    document.getElementById('emailForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const email = document.getElementById('new-email').value;
+        const password = document.getElementById('email-password').value;
+        const token = localStorage.getItem('token'); // Assume token is stored in localStorage
+
+        const response = await fetch('/api/user/updateEmail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (response.ok) {
+            alert('Email updated successfully');
+        } else {
+            alert('Failed to update email');
+        }
+    });
+
+    document.getElementById('passwordForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const newPassword = document.getElementById('new-password').value;
+        const oldPassword = document.getElementById('old-password').value;
+        const token = localStorage.getItem('token'); // Assume token is stored in localStorage
+
+        const response = await fetch('/api/user/updatePassword', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ newPassword, oldPassword })
+        });
+
+        if (response.ok) {
+            alert('Password updated successfully');
+        } else {
+            alert('Failed to update password');
+        }
+    });
+
+    // Fetch user data and display it
+    window.onload = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const decoded = jwt_decode(token);
+        document.getElementById('username').innerText = decoded.username;
+        document.getElementById('email').innerText = decoded.email;
+        document.getElementById('memberSince').innerText = new Date(decoded.createdAt).toLocaleDateString();
+
+        // Show/hide admin link based on user's admin status
+        if (decoded.is_admin) {
+            document.getElementById('admin-link').style.display = 'block';
+        }
+    };
+
+    // Logout functionality
+    document.getElementById('logout').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = 'login.html';
+    });
+</script>
 </body>
 </html>

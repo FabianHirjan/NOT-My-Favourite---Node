@@ -536,3 +536,62 @@ textarea.addcomm {
     background-color: #76ABAE;
     color: #222831;
 }
+
+.form-container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #76ABAE;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border: 5px solid #222831;
+    color: #222831; /* Font color set to the border's color */
+    font-size: large; /* Make font heavier */
+    font-weight: 900;
+    text-decoration: none;
+}
+
+/* Input styling */
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #edeab7; /* Input background color set to the border's color */
+    color: #222831; /* Text color set to the form's background color */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-weight: bold; /* Make input text font heavier */
+}
+
+/* Button styling */
+.form-container button {
+    background-color: #edeab7;
+    color: #222831;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius: 8px;
+    font-weight: bold; /* Make button text font heavier */
+}
+
+.form-container button:hover {
+    background-color: #222831;
+    color: #76ABAE;
+}
+
+.form-container a {
+    color: #edeab7; /* Set the color to match the border */
+    text-decoration: none; /* Remove underline */
+}
+
+.form-container a:hover {
+    text-decoration: underline; /* Optional: Add underline on hover */
+}
