@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .endpoint {
+            margin-bottom: 30px;
+        }
+        .endpoint h2 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .endpoint p {
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .endpoint code {
+            display: block;
+            background: #eaeaea;
+            padding: 10px;
+            border-left: 4px solid #ccc;
+            margin-bottom: 10px;
+        }
+        .endpoint button {
+            padding: 10px 15px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .endpoint button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>API Documentation</h1>
+
+    <div class="endpoint">
+        <h2>GET /api/posts/export/csv</h2>
+        <p>Export all posts as a CSV file.</p>
+        <code>
+            Response: CSV file containing post data.
+        </code>
+        <button onclick="fetchEndpoint('/api/posts/export/csv')">Execute</button>
+    </div>
+
+    <div class="endpoint">
+        <h2>GET /api/posts/export/minimal-json</h2>
+        <p>Export a minimal JSON representation of all posts.</p>
+        <code>
+            Response: JSON array with minimal post data (id, title, likes).
+        </code>
+        <button onclick="fetchEndpoint('/api/posts/export/minimal-json')">Execute</button>
+    </div>
+
+    <div class="endpoint">
+        <h2>GET /api/posts/export/docbook</h2>
+        <p>Export all posts as a DocBook XML file.</p>
+        <code>
+            Response: DocBook XML file containing post data.
+        </code>
+        <button onclick="fetchEndpoint('/api/posts/export/docbook')">Execute</button>
+    </div>
+
+    <div class="endpoint">
+        <h2>GET /api/posts/export/pdf</h2>
+        <p>Export all posts as a PDF file.</p>
+        <code>
+            Response: PDF file containing post data.
+        </code>
+        <button onclick="fetchEndpoint('/api/posts/export/pdf')">Execute</button>
+    </div>
+
+    <div class="endpoint">
+        <h2>GET /api/posts/most-liked</h2>
+        <p>Get the top 10 most liked posts.</p>
+        <code>
+            Response: JSON array with the top 10 most liked posts.
+        </code>
+        <button onclick="fetchEndpoint('/api/posts/most-liked')">Execute</button>
+    </div>
+
+    <div class="endpoint">
+        <h2>GET /api/posts/export/rss</h2>
+        <p>Export the top 10 most liked posts as an RSS feed.</p>
+        <code>
+            Response: RSS feed containing the top 10 most liked posts.
+        </code>
+        <button onclick="fetchEndpoint('/api/posts/export/rss')">Execute</button>
+    </div>
+
+    <div class="endpoint">
+        <h2>GET /api/posts/export/html</h2>
+        <p>Export the top 10 most liked posts as an HTML page.</p>
+        <code>
+            Response: HTML page containing the top 10 most liked posts.
+        </code>
+        <button onclick="fetchEndpoint('/api/posts/export/html')">Execute</button>
+    </div>
+
+</div>
+<script>
+    function fetchEndpoint(endpoint) {
+        fetch(endpoint)
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                const filename = endpoint.split('/').pop() + (endpoint.includes('csv') ? '.csv' : endpoint.includes('pdf') ? '.pdf' : endpoint.includes('rss') ? '.rss' : endpoint.includes('html') ? '.html' : '.json');
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Fetch error:', error));
+    }
+</script>
+</body>
+</html>

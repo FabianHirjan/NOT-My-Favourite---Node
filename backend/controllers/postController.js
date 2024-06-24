@@ -2,6 +2,9 @@ const { Op } = require("sequelize");
 const { Post, Category, User, UserLike } = require("../models");
 const jwt = require('jsonwebtoken');
 const { Parser } = require('json2csv');
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const RSS = require('rss');
 
 const secretKey = "abc1234";
 
@@ -268,7 +271,15 @@ const postController = {
       const fields = ['id', 'title', 'content', 'stars', 'likes', 'Username', 'Category Name'];
       const opts = { fields };
       const parser = new Parser(opts);
-      const csv = parser.parse(posts.map(post => post.toJSON())); // Transformă instanțele Sequelize în obiecte simple
+      const csv = parser.parse(posts.map(post => ({
+        id: post.id,
+        title: post.title,
+        content: post.content,
+        stars: post.stars,
+        likes: post.likes,
+        Username: post.User ? post.User.username : 'Unknown',
+        'Category Name': post.Category ? post.Category.name : 'Uncategorized'
+      })));
 
       res.writeHead(200, {
         'Content-Type': 'text/csv',
@@ -280,7 +291,229 @@ const postController = {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Something went wrong' }));
     }
-  }
+  },
+
+  exportPostsMinimalJson: async (req, res) => {
+    try {
+      const posts = await Post.findAll({
+        include: [
+          { model: User, attributes: ['username'] },
+          { model: Category, attributes: ['name'] }
+        ],
+        order: [['likes', 'DESC']]
+      });
+
+      const minimalPosts = posts.map(post => ({
+        id: post.id,
+        title: post.title,
+        likes: post.likes
+      }));
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(minimalPosts));
+    } catch (error) {
+      console.error('Error exporting posts to minimal JSON:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Something went wrong' }));
+    }
+  },
+
+  exportPostsDocBook: async (req, res) => {
+    try {
+      const posts = await Post.findAll({
+        include: [
+          { model: User, attributes: ['username'] },
+          { model: Category, attributes: ['name'] }
+        ],
+        order: [['likes', 'DESC']]
+      });
+
+      let docBookContent = `<?xml version="1.0" encoding="UTF-8"?>\n<book>\n`;
+      posts.forEach(post => {
+        const postObj = post.toJSON();
+        const username = postObj.User ? postObj.User.username : 'Unknown';
+        const categoryName = postObj.Category ? postObj.Category.name : 'Uncategorized';
+
+        docBookContent += `
+        <chapter>
+          <title>${postObj.title}</title>
+          <para>${postObj.content}</para>
+          <para>Stars: ${postObj.stars}</para>
+          <para>Likes: ${postObj.likes}</para>
+          <para>User: ${username}</para>
+          <para>Category: ${categoryName}</para>
+        </chapter>\n`;
+      });
+      docBookContent += `</book>`;
+
+      res.writeHead(200, {
+        'Content-Type': 'application/xml',
+        'Content-Disposition': 'attachment; filename="posts.xml"'
+      });
+      res.end(docBookContent);
+    } catch (error) {
+      console.error('Error exporting posts to DocBook:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Something went wrong' }));
+    }
+  },
+
+  exportPostsPdf: async (req, res) => {
+    try {
+      const posts = await Post.findAll({
+        include: [
+          { model: User, attributes: ['username'] },
+          { model: Category, attributes: ['name'] }
+        ],
+        order: [['likes', 'DESC']]
+      });
+
+      const doc = new PDFDocument();
+      const filePath = '/tmp/posts.pdf'; // Temp file path
+
+      doc.pipe(fs.createWriteStream(filePath));
+
+      posts.forEach(post => {
+        const postObj = post.toJSON();
+        const username = postObj.User ? postObj.User.username : 'Unknown';
+        const categoryName = postObj.Category ? postObj.Category.name : 'Uncategorized';
+
+        doc.fontSize(25).text(postObj.title, { underline: true });
+        doc.fontSize(12).text(postObj.content);
+        doc.fontSize(12).text(`Stars: ${postObj.stars}`);
+        doc.fontSize(12).text(`Likes: ${postObj.likes}`);
+        doc.fontSize(12).text(`User: ${username}`);
+        doc.fontSize(12).text(`Category: ${categoryName}`);
+        doc.moveDown();
+      });
+
+      doc.end();
+
+      doc.on('finish', () => {
+        res.writeHead(200, {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': 'attachment; filename="posts.pdf"'
+        });
+        fs.createReadStream(filePath).pipe(res);
+      });
+    } catch (error) {
+      console.error('Error exporting posts to PDF:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Something went wrong' }));
+    }
+  },
+
+  getMostLikedPosts: async (req, res) => {
+    try {
+      const posts = await Post.findAll({
+        include: [
+          { model: User, attributes: ['username'] },
+          { model: Category, attributes: ['name'] }
+        ],
+        order: [['likes', 'DESC']],
+        limit: 10 // Adjust the limit as needed
+      });
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(posts));
+    } catch (error) {
+      console.error('Error fetching most liked posts:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Something went wrong' }));
+    }
+  },
+
+  exportMostLikedPostsRSS: async (req, res) => {
+    try {
+      const posts = await Post.findAll({
+        include: [
+          { model: User, attributes: ['username'] },
+          { model: Category, attributes: ['name'] }
+        ],
+        order: [['likes', 'DESC']],
+        limit: 10
+      });
+
+      const feed = new RSS({
+        title: 'Most Liked Posts',
+        description: 'Top 10 most liked posts',
+        feed_url: 'http://example.com/rss',
+        site_url: 'http://example.com',
+        language: 'en',
+        pubDate: new Date(),
+        ttl: '60'
+      });
+
+      posts.forEach(post => {
+        feed.item({
+          title: post.title,
+          description: post.content,
+          url: `http://example.com/posts/${post.id}`,
+          author: post.User.username,
+          date: post.created_at,
+          categories: [post.Category.name]
+        });
+      });
+
+      res.writeHead(200, { 'Content-Type': 'application/rss+xml' });
+      res.end(feed.xml({ indent: true }));
+    } catch (error) {
+      console.error('Error exporting most liked posts to RSS:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Something went wrong' }));
+    }
+  },
+
+  exportMostLikedPostsHTML: async (req, res) => {
+    try {
+      const posts = await Post.findAll({
+        include: [
+          { model: User, attributes: ['username'] },
+          { model: Category, attributes: ['name'] }
+        ],
+        order: [['likes', 'DESC']],
+        limit: 10
+      });
+
+      let htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Most Liked Posts</title>
+        <style>
+          body { font-family: Arial, sans-serif; }
+          .post { margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; }
+          .title { font-size: 20px; font-weight: bold; }
+          .meta { font-size: 14px; color: #555; }
+          .content { margin-top: 10px; }
+        </style>
+      </head>
+      <body>
+        <h1>Top 10 Most Liked Posts</h1>`;
+
+      posts.forEach(post => {
+        const username = post.User ? post.User.username : 'Unknown';
+        const categoryName = post.Category ? post.Category.name : 'Uncategorized';
+        htmlContent += `
+        <div class="post">
+          <div class="title">${post.title}</div>
+          <div class="meta">By ${username} in ${categoryName} - ${post.likes} likes</div>
+          <div class="content">${post.content}</div>
+        </div>`;
+      });
+
+      htmlContent += `
+      </body>
+      </html>`;
+
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end(htmlContent);
+    } catch (error) {
+      console.error('Error exporting most liked posts to HTML:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Something went wrong' }));
+    }
+  },
 };
 
 module.exports = postController;

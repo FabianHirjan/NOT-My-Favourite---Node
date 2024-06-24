@@ -6,7 +6,13 @@ const {
     deletePost,
     filterPosts,
     likePost,
-    exportPostsCsv // adaugă exportPostsCsv aici
+    exportPostsCsv,
+    exportPostsMinimalJson,
+    exportPostsDocBook,
+    exportPostsPdf,
+    getMostLikedPosts,
+    exportMostLikedPostsRSS,
+    exportMostLikedPostsHTML
 } = require("../controllers/postController");
 
 const postRoutes = (req, res) => {
@@ -27,8 +33,20 @@ const postRoutes = (req, res) => {
         deletePost(req, res, id);
     } else if (req.method === "POST" && urlParts[2] === "posts" && urlParts[3] === id && urlParts[4] === 'like') {
         likePost(req, res, id);
-    } else if (req.method === "GET" && req.url === "/api/posts/export/csv") { // adaugă acest caz
+    } else if (req.method === "GET" && req.url === "/api/posts/export/csv") {
         exportPostsCsv(req, res);
+    } else if (req.method === "GET" && req.url === "/api/posts/export/minimal-json") {
+        exportPostsMinimalJson(req, res);
+    } else if (req.method === "GET" && req.url === "/api/posts/export/docbook") {
+        exportPostsDocBook(req, res);
+    } else if (req.method === "GET" && req.url === "/api/posts/export/pdf") {
+        exportPostsPdf(req, res);
+    } else if (req.method === "GET" && req.url === "/api/posts/most-liked") {
+        getMostLikedPosts(req, res);
+    } else if (req.method === "GET" && req.url === "/api/posts/export/rss") {
+        exportMostLikedPostsRSS(req, res);
+    } else if (req.method === "GET" && req.url === "/api/posts/export/html") {
+        exportMostLikedPostsHTML(req, res);
     } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ error: 'Not found' }));
