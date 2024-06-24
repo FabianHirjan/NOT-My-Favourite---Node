@@ -7,6 +7,56 @@
     <link rel="stylesheet" href="../public/css/style.css">
     <script src="../public/javascript/header.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <style>
+    #comments-section div.comment, #comments-section textarea{
+        background-color: #edeab7;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 2px solid black;
+        color: #222831;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-weight: bold;
+    }
+    #comments-section{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background-color: #76ABAE;
+        border: 0.1rem solid #222831;
+        color: #222831;
+        font-size: large;
+        font-weight: 900;
+        text-align: left;
+        padding-left: 3rem;
+        padding-right: 3rem;
+        margin: auto;
+        margin-top: 2rem;
+    }
+    button{
+        border-radius: 8px;
+    }
+    textarea{
+        resize: none;
+    }
+    .like-container{
+        text-align: center;
+        margin-top: 20px;
+    }
+    .article-container{
+        background: #edeab7;
+        padding: 20px;
+        flex-basis: auto;
+        min-width: 500px;
+        width: 50%;
+        margin: 20px auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        border: 2px solid #222831;
+        box-sizing: border-box;
+    }
+    </style>
 </head>
 <body>
 <div class="header">
@@ -31,7 +81,7 @@
     <!-- Detaliile articolului vor fi adăugate aici din JavaScript -->
 </div>
 
-<div>
+<div class="like-container">
     <button id="like-button">Like</button>
     <span id="like-count"></span>
 </div>
