@@ -1,121 +1,211 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalii Articol</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+    <script src="../public/javascript/header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <a href="index.html" class="logo">NoF</a>
+    <a href="index.html">Home</a>
+    <a href="filter.html">Reviews</a>
+    <a href="post.html">Post my Issue</a>
+    <div class="header-right">
+        <div id="user-nav" style="display: none;">
+            <a href="myaccount.html">My account</a>
+            <a href="#" id="logout">Logout</a>
+            <a href="admin.html" id="admin-link" style="display:none;">Admin</a>
+        </div>
+        <div id="auth-buttons">
+            <a href="login.html">Log in</a>
+            <a href="register.html">Register</a>
+        </div>
+    </div>
+</div>
+
+<div class="article-container" id="article-container">
+    <!-- Detaliile articolului vor fi adăugate aici din JavaScript -->
+</div>
+
+<div>
+    <button id="like-button">Like</button>
+    <span id="like-count"></span>
+</div>
+
+<div class="comments-section" id="comments-section">
+    <h3>Comments</h3>
+    <div id="comments-list">
+        <!-- Comentariile vor fi adăugate aici din JavaScript -->
+    </div>
+    <form id="comment-form">
+        <textarea id="comment-content" rows="4" placeholder="Add a comment"></textarea>
+        <button type="submit">Post Comment</button>
+    </form>
+</div>
+
 <script>
-    document.getElementById('emailForm').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const email = document.getElementById('new-email').value;
-        const password = document.getElementById('email-password').value;
-        const token = localStorage.getItem('token'); // Assume token is stored in localStorage
+    document.addEventListener("DOMContentLoaded", function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get('id');
+        loadArticle(articleId);
+        loadComments(articleId);
 
-        const response = await fetch('/api/user/updateEmail', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ email, password })
+        document.getElementById('comment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            submitComment();
         });
 
-        if (response.ok) {
-            alert('Email updated successfully');
-        } else {
-            alert('Failed to update email');
-        }
-    });
-
-    document.getElementById('passwordForm').addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const newPassword = document.getElementById('new-password').value;
-        const oldPassword = document.getElementById('old-password').value;
-        const token = localStorage.getItem('token'); // Assume token is stored in localStorage
-
-        const response = await fetch('/api/user/updatePassword', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ newPassword, oldPassword })
+        document.getElementById('like-button').addEventListener('click', function() {
+            likePost(articleId);
         });
 
-        if (response.ok) {
-            alert('Password updated successfully');
-        } else {
-            alert('Failed to update password');
-        }
+        checkUserStatus();
     });
 
-    // Fetch user data and display it
-    window.onload = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = 'login.html';
-            return;
-        }
-
-        const decoded = jwt_decode(token);
-        document.getElementById('username').innerText = decoded.username;
-        document.getElementById('email').innerText = decoded.email;
-        document.getElementById('memberSince').innerText = new Date(decoded.createdAt).toLocaleDateString();
-
-        // Show/hide admin link based on user's admin status
-        if (decoded.is_admin) {
-            document.getElementById('admin-link').style.display = 'block';
-        }
-
-        loadUserReviews(decoded.id);
-    };
-
-    async function loadUserReviews(userId) {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/user/${userId}/posts`, {
+    function loadArticle(id) {
+        fetch(`http://localhost:3000/api/posts/${id}`, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
-        });
-
-        const reviews = await response.json();
-        const reviewsContainer = document.getElementById('user-reviews');
-        reviewsContainer.innerHTML = '';
-
-        reviews.forEach(review => {
-            const reviewElement = document.createElement('div');
-            reviewElement.classList.add('review');
-            reviewElement.innerHTML = `
-                <h3>${review.title}</h3>
-                <p>${review.content}</p>
-                <p class="review">${'&#9733;'.repeat(review.stars)}</p>
-                <span>${review.likes} Likes</span>
-                <button onclick="updateReview(${review.id})">Update</button>
-                <button onclick="deleteReview(${review.id})">Delete</button>
+        })
+            .then(response => response.json())
+            .then(article => {
+                const articleContainer = document.getElementById('article-container');
+                articleContainer.innerHTML = `
+                <h2>Nickname: ${article.User.username}</h2>
+                <h3>${article.title}</h3>
+                <p>${article.content}</p>
+                <p class="review">${'&#9733;'.repeat(article.stars)}</p>
+                <span id="like-count">${article.likes}</span>
             `;
-            reviewsContainer.appendChild(reviewElement);
-        });
+
+                // Setează textul butonului de like în funcție de statusul like-ului
+                const likeButton = document.getElementById('like-button');
+                likeButton.innerText = article.likedByUser ? 'Unlike' : 'Like';
+            })
+            .catch(error => console.error('Error loading article:', error));
     }
 
-    function updateReview(reviewId) {
-        // Implement the update review functionality here
+    function loadComments(postId) {
+        fetch(`http://localhost:3000/api/comments?post_id=${postId}`)
+            .then(response => response.json())
+            .then(comments => {
+                const userId = getUserIdFromToken();
+                const isAdmin = isAdminUser();
+                const commentsList = document.getElementById('comments-list');
+                commentsList.innerHTML = '';
+                comments.forEach(comment => {
+                    const canDelete = comment.user_id === userId || isAdmin;
+                    commentsList.innerHTML += `
+                        <div class="comment" data-comment-id="${comment.id}">
+                            <p>${comment.content}</p>
+                            <small>Posted by ${comment.User.username} on ${new Date(comment.created_at).toLocaleString()}</small>
+                            ${canDelete ? `<button onclick="deleteComment(${comment.id})">Delete</button>` : ''}
+                        </div>
+                    `;
+                });
+            })
+            .catch(error => console.error('Error:', error));
     }
 
-    async function deleteReview(reviewId) {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/posts/${reviewId}`, {
+    function submitComment() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+        const content = document.getElementById('comment-content').value;
+        const userId = getUserIdFromToken();
+
+        fetch('http://localhost:3000/api/comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content, post_id: postId, user_id: userId })
+        })
+            .then(response => response.json())
+            .then(comment => {
+                loadComments(postId);
+                document.getElementById('comment-content').value = '';
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function deleteComment(commentId) {
+        fetch(`http://localhost:3000/api/comments/${commentId}`, {
             method: 'DELETE',
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
-        });
-
-        if (response.ok) {
-            alert('Review deleted successfully');
-            const decoded = jwt_decode(token);
-            loadUserReviews(decoded.id);
-        } else {
-            alert('Failed to delete review');
-        }
+        })
+            .then(response => {
+                if (response.ok) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const postId = urlParams.get('id');
+                    loadComments(postId);
+                } else {
+                    console.error('Failed to delete comment');
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 
-    // Logout functionality
-    document.getElementById('logout').addEventListener('click', () => {
-        localStorage.removeItem('token');
-        window.location.href = 'login.html';
-    });
+    function likePost(id) {
+        fetch(`http://localhost:3000/api/posts/${id}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(error => { throw new Error(error.error); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('like-count').innerText = data.likes;
+                const likeButton = document.getElementById('like-button');
+                likeButton.innerText = data.liked ? 'Unlike' : 'Like';
+            })
+            .catch(error => alert(error.message));
+    }
+
+    function getUserIdFromToken() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decoded = jwt_decode(token);
+            return decoded.id;
+        }
+        return null;
+    }
+
+    function isAdminUser() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decoded = jwt_decode(token);
+            return decoded.is_admin;
+        }
+        return false;
+    }
+
+    function checkUserStatus() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            document.getElementById('auth-buttons').style.display = 'none';
+            document.getElementById('user-nav').style.display = 'block';
+            if (isAdminUser()) {
+                document.getElementById('admin-link').style.display = 'block';
+            }
+        } else {
+            document.getElementById('auth-buttons').style.display = 'block';
+            document.getElementById('user-nav').style.display = 'none';
+        }
+    }
 </script>
+
+</body>
+</html>
