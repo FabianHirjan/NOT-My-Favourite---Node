@@ -95,8 +95,6 @@
         <h2>My Account</h2>
         <p>Email: <span id="email"></span></p>
         <p>Username: <span id="username"></span></p>
-        <p>Member since: <span id="memberSince"></span></p>
-
         <h3>Change email</h3>
         <form id="emailForm">
             <label for="new-email">New email</label>
@@ -184,7 +182,6 @@
         const decoded = jwt_decode(token);
         document.getElementById('username').innerText = decoded.username;
         document.getElementById('email').innerText = decoded.email;
-        document.getElementById('memberSince').innerText = new Date(decoded.createdAt).toLocaleDateString();
 
         // Show/hide admin link based on user's admin status
         if (decoded.is_admin) {
