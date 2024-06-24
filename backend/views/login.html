@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <title>Login</title>
     <link rel="stylesheet" href="../public/css/style.css">
-    <script src = "../public/javascript/header.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+    <script src="../public/javascript/header.js" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document
@@ -17,22 +16,26 @@
                     const password = document.getElementById("password").value;
                     const errorMessageDiv = document.getElementById("errorMessage");
 
-                    const response = await fetch("/api/login", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({ username, password }),
-                    });
+                    try {
+                        const response = await fetch("/api/login", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ username, password }),
+                        });
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        localStorage.setItem("token", data.token);
-                        alert("Login successful");
-                        window.location.href = "index.html";
-                    } else {
-                        const errorData = await response.json();
-                        errorMessageDiv.textContent = errorData.error || "Login failed";
+                        if (response.ok) {
+                            const data = await response.json();
+                            localStorage.setItem("token", data.token);
+                            alert("Login successful");
+                            window.location.href = "index.html";
+                        } else {
+                            const errorData = await response.json();
+                            errorMessageDiv.textContent = errorData.error || "Login failed";
+                        }
+                    } catch (error) {
+                        errorMessageDiv.textContent = "An error occurred. Please try again.";
                     }
                 });
         });
@@ -42,14 +45,14 @@
 <body>
 <div class="header">
     <a href="index.html" class="logo">NoF</a>
-    <a href="index.html" class="active">Home</a>
+    <a href="index.html">Home</a>
     <a href="filter.html">Reviews</a>
     <a href="post.html">Post my Issue</a>
     <div class="header-right">
-        <div id="user-nav">
+        <div id="user-nav" style="display: none;">
             <a href="myaccount.html">My account</a>
             <a href="#" id="logout">Logout</a>
-            <a href="admin.html" id="admin-link" style="display:none;">Admin</a> <!-- Link-ul admin -->
+            <a href="admin.html" id="admin-link" style="display:none;">Admin</a>
         </div>
         <div id="auth-buttons">
             <a href="login.html" class="active">Log in</a>
@@ -62,10 +65,10 @@
 <section>
     <form id="loginForm" name="loginForm">
         <label for="username">Username: </label>
-        <input type="text" id="username" name="username">
+        <input type="text" id="username" name="username" required>
         <br>
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password">
+        <input type="password" id="password" name="password" required>
         <br>
         <div id="errorMessage" style="color: red;"></div>
         <p><em>Don't have an account? You can <a href="register.html">register here.</a></em></p>
@@ -73,5 +76,4 @@
     </form>
 </section>
 </body>
-
 </html>

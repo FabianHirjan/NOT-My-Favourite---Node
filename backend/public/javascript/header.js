@@ -1,5 +1,3 @@
-const jwt = require('jsonwebtoken');
-
 document.addEventListener("DOMContentLoaded", function () {
     const token = localStorage.getItem("token");
     const userNav = document.getElementById("user-nav");
@@ -12,7 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
         authButtons.style.display = "none";
 
         // Decode token
-        const decodedToken = jwt.verify(token, 'your-secret-key');
+        const decodedToken = jwt_decode(token);
+        console.log("Decoded Token:", decodedToken); // Log decoded token for debugging
 
         // Check if user is admin
         if (decodedToken.is_admin) {
