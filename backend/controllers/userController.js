@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const { User } = require("../models");
+const { User, Post } = require("../models");
 const jwt = require("jsonwebtoken");
 const secretKey = "abc1234";
 
@@ -35,6 +35,17 @@ const userController = {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "User not found" }));
       }
+    } catch (error) {
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: error.message }));
+    }
+  },
+
+  getUserReviews: async (req, res, id) => {
+    try {
+      const reviews = await Post.findAll({ where: { user_id: id } });
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify(reviews));
     } catch (error) {
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: error.message }));

@@ -168,23 +168,27 @@ const postController = {
     req.on("data", (chunk) => {
       body += chunk.toString();
     });
+
     req.on("end", async () => {
       try {
         const post = await Post.findByPk(id);
         if (post) {
           const { title, content, stars, type, category, user_id } = JSON.parse(body);
-          post.title = title;
-          post.content = content;
-          post.stars = stars;
-          post.type = type;
-          post.category = category;
-          post.user_id = user_id;
+
+          // Validarea și actualizarea post-ului
+          post.title = title !== undefined ? title : post.title;
+          post.content = content !== undefined ? content : post.content;
+          post.stars = stars !== undefined ? stars : post.stars;
+          post.type = type !== undefined ? type : post.type;
+          post.category = category !== undefined ? category : post.category;
+          post.user_id = user_id !== undefined ? user_id : post.user_id;
+
           await post.save();
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify(post));
         } else {
           res.writeHead(404, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ error: 'Not found' }));
+          res.end(JSON.stringify({ error: 'Post not found' }));
         }
       } catch (error) {
         console.error('Error updating post:', error);

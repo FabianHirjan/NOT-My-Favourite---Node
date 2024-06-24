@@ -60,17 +60,8 @@
 
     <div class="reviews-container">
         <h2>My Reviews</h2>
-        <div class="review">
-            <h3>Review Title 1</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
-            <button>Update</button>
-            <button>Delete</button>
-        </div>
-        <div class="review">
-            <h3>Review Title 2</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
-            <button>Update</button>
-            <button>Delete</button>
+        <div id="user-reviews">
+            <!-- User reviews will be dynamically loaded here -->
         </div>
     </div>
 </div>
@@ -128,28 +119,134 @@
             return;
         }
 
-        const response = await fetch('/api/user/me', {
-            method: 'GET',
+        const decoded = jwt_decode(token);
+        document.getElementById('username').innerText = decoded.username;
+        document.getElementById('email').innerText = decoded.email;
+        document.getElementById('memberSince').innerText = new Date(decoded.createdAt).toLocaleDateString();
+
+        // Show/hide admin link based on user's admin status
+        if (decoded.is_admin) {
+            document.getElementById('admin-link').style.display = 'block';
+        }
+
+        loadUserReviews(decoded.id);
+    };
+
+    async function loadUserReviews(userId) {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`/api/user/${userId}/reviews`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch reviews');
+            }
+
+            const reviews = await response.json();
+            const reviewsContainer = document.getElementById('user-reviews');
+            reviewsContainer.innerHTML = '';
+
+            reviews.forEach(review => {
+                reviewsContainer.innerHTML += `
+                    <div class="review" data-id="${review.id}">
+                        <h3 class="review-title">${review.title}</h3>
+                        <p class="review-content">${review.content}</p>
+                        <p class="review-stars">${'&#9733;'.repeat(review.stars)}</p>
+                        <span>${review.likes} Likes</span>
+                        <button onclick="editReview(this, ${review.id})">Update</button>
+                        <button onclick="deleteReview(${review.id})">Delete</button>
+                    </div>
+                `;
+            });
+        } catch (error) {
+            console.error('Error loading user reviews:', error);
+        }
+    }
+
+    function editReview(button, id) {
+        const reviewDiv = button.closest('.review');
+        const title = reviewDiv.querySelector('.review-title').textContent;
+        const content = reviewDiv.querySelector('.review-content').textContent;
+        const stars = reviewDiv.querySelector('.review-stars').textContent.length;
+        // Add input fields for type and category if needed
+        // const type = ...;
+        // const category = ...;
+
+        reviewDiv.querySelector('.review-title').innerHTML = `<input type="text" value="${title}" class="editable-input">`;
+        reviewDiv.querySelector('.review-content').innerHTML = `<textarea class="editable-input">${content}</textarea>`;
+        reviewDiv.querySelector('.review-stars').innerHTML = `<input type="number" value="${stars}" class="editable-input" min="1" max="5">`;
+        // Add input fields for type and category if needed
+        // reviewDiv.querySelector('.review-type').innerHTML = `<input type="text" value="${type}" class="editable-input">`;
+        // reviewDiv.querySelector('.review-category').innerHTML = `<input type="text" value="${category}" class="editable-input">`;
+
+        button.textContent = 'Save';
+        button.onclick = function() {
+            saveReview(this, id);
+        };
+    }
+
+    async function saveReview(button, id) {
+        const reviewDiv = button.closest('.review');
+        const title = reviewDiv.querySelector('.review-title input').value;
+        const content = reviewDiv.querySelector('.review-content textarea').value;
+        const stars = reviewDiv.querySelector('.review-stars input').value;
+        // Add fields for type and category if needed
+        // const type = reviewDiv.querySelector('.review-type input').value;
+        // const category = reviewDiv.querySelector('.review-category input').value;
+        const token = localStorage.getItem('token');
+
+        const updatedData = {
+            title,
+            content,
+            stars: parseInt(stars),
+            // Add fields for type and category if needed
+            // type,
+            // category,
+            user_id: jwt_decode(token).id // Ensure user_id is included
+        };
+
+        try {
+            const response = await fetch(`/api/posts/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(updatedData)
+            });
+
+            if (response.ok) {
+                const updatedReview = await response.json();
+                alert('Review updated successfully');
+                loadUserReviews(updatedReview.user_id); // Reload reviews to reflect changes
+            } else {
+                alert('Failed to update review');
+            }
+        } catch (error) {
+            console.error('Error updating review:', error);
+        }
+    }
+
+    async function deleteReview(id) {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/posts/${id}`, {
+            method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         });
 
         if (response.ok) {
-            const userData = await response.json();
-            document.getElementById('username').innerText = userData.username;
-            document.getElementById('email').innerText = userData.email;
-            document.getElementById('memberSince').innerText = new Date(userData.createdAt).toLocaleDateString();
-
-            // Show/hide admin link based on user's admin status
-            if (userData.is_admin) {
-                document.getElementById('admin-link').style.display = 'block';
-            }
+            alert('Review deleted successfully');
+            const decoded = jwt_decode(token);
+            loadUserReviews(decoded.id);
         } else {
-            alert('Failed to fetch user data');
+            alert('Failed to delete review');
         }
-    };
+    }
 
     // Logout functionality
     document.getElementById('logout').addEventListener('click', () => {
