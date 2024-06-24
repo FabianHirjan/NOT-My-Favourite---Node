@@ -60,17 +60,8 @@
 
     <div class="reviews-container">
         <h2>My Reviews</h2>
-        <div class="review">
-            <h3>Review Title 1</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
-            <button>Update</button>
-            <button>Delete</button>
-        </div>
-        <div class="review">
-            <h3>Review Title 2</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed blandit libero at ultrices malesuada.</p>
-            <button>Update</button>
-            <button>Delete</button>
+        <div id="user-reviews">
+            <!-- User reviews will be dynamically loaded here -->
         </div>
     </div>
 </div>
@@ -137,7 +128,58 @@
         if (decoded.is_admin) {
             document.getElementById('admin-link').style.display = 'block';
         }
+
+        loadUserReviews(decoded.id);
     };
+
+    async function loadUserReviews(userId) {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3000/api/user/${userId}/posts`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        const reviews = await response.json();
+        const reviewsContainer = document.getElementById('user-reviews');
+        reviewsContainer.innerHTML = '';
+
+        reviews.forEach(review => {
+            const reviewElement = document.createElement('div');
+            reviewElement.classList.add('review');
+            reviewElement.innerHTML = `
+                <h3>${review.title}</h3>
+                <p>${review.content}</p>
+                <p class="review">${'&#9733;'.repeat(review.stars)}</p>
+                <span>${review.likes} Likes</span>
+                <button onclick="updateReview(${review.id})">Update</button>
+                <button onclick="deleteReview(${review.id})">Delete</button>
+            `;
+            reviewsContainer.appendChild(reviewElement);
+        });
+    }
+
+    function updateReview(reviewId) {
+        // Implement the update review functionality here
+    }
+
+    async function deleteReview(reviewId) {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3000/api/posts/${reviewId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            alert('Review deleted successfully');
+            const decoded = jwt_decode(token);
+            loadUserReviews(decoded.id);
+        } else {
+            alert('Failed to delete review');
+        }
+    }
 
     // Logout functionality
     document.getElementById('logout').addEventListener('click', () => {

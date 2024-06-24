@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const { User } = require("../models");
+const { User, Post} = require("../models");
 const jwt = require("jsonwebtoken");
 const secretKey = "abc1234";
 
@@ -202,7 +202,18 @@ const userController = {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Password update failed" }));
       }
-    });
+    }
+    );
+  },
+  getUserPosts: async (req, res, userId) => {
+    try {
+      const posts = await Post.findAll({ where: { user_id: userId } });
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(posts));
+    } catch (error) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: error.message }));
+    }
   }
 };
 
