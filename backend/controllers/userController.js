@@ -1,5 +1,17 @@
-const { User, Post } = require("../models");
-const { hashPassword, handleRequestBody, validateEmail, verifyToken } = require("../utils");
+const crypto = require("crypto");
+const { User, Post} = require("../models");
+const jwt = require("jsonwebtoken");
+const secretKey = "abc1234";
+
+/**
+ * Hashes a password using the SHA256 algorithm.
+ *
+ * @param {string} password - The password to be hashed.
+ * @returns {string} The hashed password.
+ */
+const hashPassword = (password) => {
+  return crypto.createHash("sha256").update(password).digest("hex");
+};
 
 const userController = {
   getAllUsers: async (req, res) => {
@@ -30,53 +42,82 @@ const userController = {
   },
 
   createUser: async (req, res) => {
-    try {
-      const { username, email, password, is_admin = false } = await handleRequestBody(req);
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
+
+    req.on("end", async () => {
+      const { username, email, password, is_admin = false } = JSON.parse(body);
       if (!username || !email || !password) {
         res.writeHead(400, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Missing fields" }));
         return;
       }
 
-      const conditions = { where: { [Op.or]: [{ username }, { email }] } };
-      const existingUser = await User.findOne(conditions);
+      try {
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(
+              JSON.stringify({
+                error: "Account with the same username already exists",
+              })
+          );
+          return;
+        }
 
-      if (existingUser) {
-        res.writeHead(409, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Username or email already exists" }));
-        return;
+        const existingEmail = await User.findOne({ where: { email } });
+        if (existingEmail) {
+          res.writeHead(409, { "Content-Type": "application/json" });
+          res.end(
+              JSON.stringify({
+                error: "Account with the same email already exists",
+              })
+          );
+          return;
+        }
+
+        const hashedPassword = hashPassword(password);
+        await User.create({ username, email, password: hashedPassword, is_admin });
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "User created successfully" }));
+      } catch (err) {
+        console.error("Error during user creation:", err); // Log the error
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "User creation failed" }));
       }
-
-      const hashedPassword = hashPassword(password);
-      await User.create({ username, email, password: hashedPassword, is_admin });
-
-      res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ message: "User created successfully" }));
-    } catch (error) {
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "User creation failed" }));
-    }
+    });
   },
 
   updateUser: async (req, res, id) => {
-    try {
-      const { username, email, password, is_admin } = await handleRequestBody(req);
-      const user = await User.findByPk(id);
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
 
-      if (user) {
-        const updateData = { username, email, is_admin };
-        if (password) updateData.password = hashPassword(password);
-        await user.update(updateData);
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify(user));
-      } else {
-        res.writeHead(404, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "User not found" }));
+    req.on("end", async () => {
+      const { username, email, password, is_admin } = JSON.parse(body);
+
+      try {
+        const user = await User.findByPk(id);
+        if (user) {
+          const updateData = { username, email, is_admin };
+          if (password) {
+            updateData.password = hashPassword(password);
+          }
+          await user.update(updateData);
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify(user));
+        } else {
+          res.writeHead(404, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "User not found" }));
+        }
+      } catch (error) {
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: error.message }));
       }
-    } catch (error) {
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: error.message }));
-    }
+    });
   },
 
   deleteUser: async (req, res, id) => {
@@ -97,45 +138,73 @@ const userController = {
   },
 
   updateUserEmail: async (req, res) => {
-    try {
-      const { email, password } = await handleRequestBody(req);
-      const { id: userId } = verifyToken(req);
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
 
-      const user = await User.findByPk(userId);
-      if (user && user.password === hashPassword(password)) {
-        await user.update({ email });
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "Email updated successfully" }));
-      } else {
-        res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Invalid credentials" }));
+    req.on("end", async () => {
+      const { email, password } = JSON.parse(body);
+      if (!email || !password) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Missing fields" }));
+        return;
       }
-    } catch (error) {
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Email update failed" }));
-    }
+
+      try {
+        const token = req.headers.authorization.split(" ")[1];
+        const decoded = jwt.verify(token, secretKey);
+        const user = await User.findByPk(decoded.id);
+        if (user && user.password === hashPassword(password)) {
+          await user.update({ email });
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Email updated successfully" }));
+        } else {
+          res.writeHead(401, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid credentials" }));
+        }
+      } catch (error) {
+        console.error("Error during email update:", error);
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Email update failed" }));
+      }
+    });
   },
 
   updateUserPassword: async (req, res) => {
-    try {
-      const { newPassword, oldPassword } = await handleRequestBody(req);
-      const { id: userId } = verifyToken(req);
+    let body = "";
+    req.on("data", (chunk) => {
+      body += chunk.toString();
+    });
 
-      const user = await User.findByPk(userId);
-      if (user && user.password === hashPassword(oldPassword)) {
-        await user.update({ password: hashPassword(newPassword) });
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "Password updated successfully" }));
-      } else {
-        res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Invalid credentials" }));
+    req.on("end", async () => {
+      const { newPassword, oldPassword } = JSON.parse(body);
+      if (!newPassword || !oldPassword) {
+        res.writeHead(400, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Missing fields" }));
+        return;
       }
-    } catch (error) {
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ error: "Password update failed" }));
-    }
-  },
 
+      try {
+        const token = req.headers.authorization.split(" ")[1];
+        const decoded = jwt.verify(token, secretKey);
+        const user = await User.findByPk(decoded.id);
+        if (user && user.password === hashPassword(oldPassword)) {
+          await user.update({ password: hashPassword(newPassword) });
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Password updated successfully" }));
+        } else {
+          res.writeHead(401, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ error: "Invalid credentials" }));
+        }
+      } catch (error) {
+        console.error("Error during password update:", error);
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "Password update failed" }));
+      }
+    }
+    );
+  },
   getUserPosts: async (req, res, userId) => {
     try {
       const posts = await Post.findAll({ where: { user_id: userId } });
