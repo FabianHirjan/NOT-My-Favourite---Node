@@ -1,9 +1,10 @@
 const { User, Post } = require('../models');
+const { Op } = require('sequelize');
 
 const adminController = {
     getAllUsers: async (req, res) => {
         try {
-            const users = await User.findAll();
+            const users = await User.findAll({ order: [['id', 'ASC']] });
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(users));
         } catch (error) {
@@ -29,6 +30,27 @@ const adminController = {
             });
             req.on('end', async () => {
                 const { username, email, is_admin } = JSON.parse(body);
+
+                if (!validateEmail(email)) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Invalid email format' }));
+                    return;
+                }
+
+                const existingUser = await User.findOne({ where: { username, id: { [Op.ne]: id } } });
+                if (existingUser) {
+                    res.writeHead(409, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Username already exists' }));
+                    return;
+                }
+
+                const existingEmail = await User.findOne({ where: { email, id: { [Op.ne]: id } } });
+                if (existingEmail) {
+                    res.writeHead(409, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Email already exists' }));
+                    return;
+                }
+
                 await User.update({ username, email, is_admin }, { where: { id } });
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ message: 'User updated successfully' }));
@@ -85,6 +107,11 @@ const adminController = {
             res.end(JSON.stringify({ error: error.message }));
         }
     }
+};
+
+const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
 };
 
 module.exports = adminController;
