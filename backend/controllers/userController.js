@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const { User, Post} = require("../models");
+const { User } = require("../models");
 const jwt = require("jsonwebtoken");
 const secretKey = "abc1234";
 
@@ -202,17 +202,24 @@ const userController = {
         res.writeHead(500, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Password update failed" }));
       }
-    }
-    );
+    });
   },
-  getUserPosts: async (req, res, userId) => {
+
+  getCurrentUser: async (req, res) => {
     try {
-      const posts = await Post.findAll({ where: { user_id: userId } });
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(posts));
+      const token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, secretKey);
+      const user = await User.findByPk(decoded.id);
+      if (user) {
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(user));
+      } else {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ error: "User not found" }));
+      }
     } catch (error) {
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: error.message }));
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: "Failed to fetch user data" }));
     }
   }
 };

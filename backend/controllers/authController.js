@@ -109,6 +109,7 @@ const loginUser = async (req, res) => {
                 id: user.id,
                 username: user.username,
                 is_admin: user.is_admin,
+                email : user.email,
               },
               secretKey,
               { expiresIn: "1h" }
