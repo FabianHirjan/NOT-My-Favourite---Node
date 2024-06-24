@@ -7,6 +7,52 @@
     <link rel="stylesheet" href="../public/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script src = "../public/javascript/header.js"></script>
+    <style>
+        div#search.article{
+            max-width: 400px;
+            background-color: #76ABAE;
+            width: fit-content;
+            border: 0.1rem solid #222831;
+            color: #222831;
+            font-size:large;
+            font-weight: 900;
+            text-align: left;
+            padding-left: 3rem;
+            padding-right: 3rem;
+            margin: 1rem;}
+        .inline-input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .inline-input label{
+            margin-right: 0.4rem;
+            padding-bottom: 1rem;
+        }
+        .inline-input label, .inline-input input {
+            display: inline-block;
+        }
+        div#search.article input, div#search.article select{
+            background-color: #edeab7;
+        }
+        div#search.article button{
+            background-color: #edeab7;
+            color: #222831;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        div#search.article button:hover{
+            background-color: #222831;
+            color: #76ABAE;
+        }
+    </style>
 </head>
 <body>
 <div class="header">
@@ -29,8 +75,8 @@
 
 <center>
     <div class="article" id="search">
-        <div>
-            <label for="cheie"><span style="font-size: larger;">Search keywords: </span></label>
+        <div class="inline-input">
+            <label for="cheie"><span style="font-size: larger;">Search: </span></label>
             <input type="text" id="cheie" name="cheie">
         </div>
         <br>
