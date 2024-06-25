@@ -21,4 +21,3 @@ module.exports = (sequelize) => {
         }
     );
 };
-// deci imi place

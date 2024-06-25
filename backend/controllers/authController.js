@@ -76,6 +76,7 @@ const registerUser = async (req, res) => {
 
 /**
  * Handles the login functionality for the user.
+ *
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  * @returns {Promise<void>} - A promise that resolves when the login process is complete.
@@ -109,7 +110,7 @@ const loginUser = async (req, res) => {
                 id: user.id,
                 username: user.username,
                 is_admin: user.is_admin,
-                email : user.email,
+                email: user.email,
               },
               secretKey,
               { expiresIn: "1h" }

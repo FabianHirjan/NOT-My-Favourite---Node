@@ -9,6 +9,13 @@ const RSS = require('rss');
 const secretKey = "abc1234";
 
 const postController = {
+  /**
+   * Fetches all posts with optional sorting, ordering, category filtering, and search.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the posts are fetched.
+   */
   getAllPosts: async (req, res) => {
     const query = req.query || {};
     const { sort, order, category, search } = query;
@@ -36,7 +43,7 @@ const postController = {
     }
 
     if (search) {
-      options.where.title = { [Op.like]: `%${search}%` };
+      options.where.title = { [Op.like]: `%{search}%` };
     }
 
     try {
@@ -50,6 +57,13 @@ const postController = {
     }
   },
 
+  /**
+   * Filters posts based on specified criteria in the request body.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the posts are filtered.
+   */
   filterPosts: async (req, res) => {
     let body = '';
     req.on('data', chunk => {
@@ -106,6 +120,14 @@ const postController = {
     });
   },
 
+  /**
+   * Fetches a post by its ID and includes information on whether the post is liked by the user.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the post to fetch.
+   * @returns {Promise<void>} - A promise that resolves when the post is fetched.
+   */
   getPostById: async (req, res, id) => {
     try {
       const token = req.headers['authorization'] ? req.headers['authorization'].split(' ')[1] : null;
@@ -147,6 +169,13 @@ const postController = {
     }
   },
 
+  /**
+   * Creates a new post.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the post is created.
+   */
   createPost: async (req, res) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -166,6 +195,14 @@ const postController = {
     });
   },
 
+  /**
+   * Updates a post by its ID.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the post to update.
+   * @returns {Promise<void>} - A promise that resolves when the post is updated.
+   */
   updatePost: async (req, res, id) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -178,7 +215,6 @@ const postController = {
         if (post) {
           const { title, content, stars, type, category, user_id } = JSON.parse(body);
 
-          // Validarea și actualizarea post-ului
           post.title = title !== undefined ? title : post.title;
           post.content = content !== undefined ? content : post.content;
           post.stars = stars !== undefined ? stars : post.stars;
@@ -201,6 +237,14 @@ const postController = {
     });
   },
 
+  /**
+   * Deletes a post by its ID.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the post to delete.
+   * @returns {Promise<void>} - A promise that resolves when the post is deleted.
+   */
   deletePost: async (req, res, id) => {
     try {
       const post = await Post.findByPk(id);
@@ -219,10 +263,18 @@ const postController = {
     }
   },
 
+  /**
+   * Likes or unlikes a post by its ID based on the user's like status.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the post to like or unlike.
+   * @returns {Promise<void>} - A promise that resolves when the like status is updated.
+   */
   likePost: async (req, res, id) => {
     try {
       const token = req.headers['authorization'].split(' ')[1];
-      const decoded = jwt.verify(token, secretKey); // Folosește aceeași cheie secretă
+      const decoded = jwt.verify(token, secretKey);
       const userId = decoded.id;
 
       const post = await Post.findByPk(id);
@@ -235,7 +287,6 @@ const postController = {
       const existingLike = await UserLike.findOne({ where: { user_id: userId, post_id: id } });
 
       if (existingLike) {
-        // Dacă utilizatorul a dat deja like, elimină like-ul
         await existingLike.destroy();
         post.likes -= 1;
         await post.save();
@@ -243,7 +294,6 @@ const postController = {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ likes: post.likes, liked: false }));
       } else {
-        // Dacă utilizatorul nu a dat like, adaugă like-ul
         await UserLike.create({ user_id: userId, post_id: id });
         post.likes += 1;
         await post.save();
@@ -258,6 +308,13 @@ const postController = {
     }
   },
 
+  /**
+   * Exports all posts to a CSV file.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the posts are exported.
+   */
   exportPostsCsv: async (req, res) => {
     try {
       const posts = await Post.findAll({
@@ -293,6 +350,13 @@ const postController = {
     }
   },
 
+  /**
+   * Exports minimal information of all posts to a JSON file.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the posts are exported.
+   */
   exportPostsMinimalJson: async (req, res) => {
     try {
       const posts = await Post.findAll({
@@ -318,6 +382,13 @@ const postController = {
     }
   },
 
+  /**
+   * Exports all posts to a DocBook XML file.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the posts are exported.
+   */
   exportPostsDocBook: async (req, res) => {
     try {
       const posts = await Post.findAll({
@@ -358,6 +429,13 @@ const postController = {
     }
   },
 
+  /**
+   * Exports all posts to a PDF file.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the posts are exported.
+   */
   exportPostsPdf: async (req, res) => {
     try {
       const posts = await Post.findAll({
@@ -369,7 +447,7 @@ const postController = {
       });
 
       const doc = new PDFDocument();
-      const filePath = '/tmp/posts.pdf'; // Temp file path
+      const filePath = '/tmp/posts.pdf';
 
       doc.pipe(fs.createWriteStream(filePath));
 
@@ -403,6 +481,13 @@ const postController = {
     }
   },
 
+  /**
+   * Fetches the top 10 most liked posts.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the posts are fetched.
+   */
   getMostLikedPosts: async (req, res) => {
     try {
       const posts = await Post.findAll({
@@ -411,7 +496,7 @@ const postController = {
           { model: Category, attributes: ['name'] }
         ],
         order: [['likes', 'DESC']],
-        limit: 10 // Adjust the limit as needed
+        limit: 10
       });
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -423,6 +508,13 @@ const postController = {
     }
   },
 
+  /**
+   * Exports the top 10 most liked posts to an RSS feed.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the posts are exported.
+   */
   exportMostLikedPostsRSS: async (req, res) => {
     try {
       const posts = await Post.findAll({
@@ -464,6 +556,13 @@ const postController = {
     }
   },
 
+  /**
+   * Exports the top 10 most liked posts to an HTML file.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the posts are exported.
+   */
   exportMostLikedPostsHTML: async (req, res) => {
     try {
       const posts = await Post.findAll({

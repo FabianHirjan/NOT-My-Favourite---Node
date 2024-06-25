@@ -4,8 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Documentation</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+    <style>
+
+        .container {
+            background-color: rgb(255 255 255 / 90%);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
+            max-width: 800px;
+            margin: 60px auto;
+            text-align: left;
+        }
+
+        h1, h2, p {
+            margin-bottom: 20px;
+            color: #222831;
+        }
+
+        h1 {
+            font-size: 36px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 28px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Stiluri pentru cod */
+        code {
+            display: block;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Stiluri pentru endpoint */
+        .endpoint {
+            background-color: rgb(255 255 255 / 90%);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
+            margin-bottom: 20px;
+        }
+
+        /* Stiluri pentru butoane */
+        button {
+            background-color: #76ABAE;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #222831;
+            color: #76ABAE;
+        }
+    </style>
 </head>
 <body>
+<div class="header">
+    <a href="index.html" class="logo">NoF</a>
+    <a href="index.html">Home</a>
+    <a href="filter.html">Reviews</a>
+    <a href="post.html">Post my Issue</a>
+    <a href="exports.html">API Documentation</a>
+    <div class="header-right">
+        <div id="user-nav" style="display: none;">
+            <a href="myaccount.html">My account</a>
+            <a href="#" id="logout">Logout</a>
+            <a href="admin.html" id="admin-link" style="display:none;">Admin</a>
+        </div>
+        <div id="auth-buttons">
+            <a href="login.html">Log in</a>
+            <a href="register.html">Register</a>
+        </div>
+    </div>
+</div>
 <div class="container">
     <h1>API Documentation</h1>
 

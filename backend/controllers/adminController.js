@@ -1,7 +1,19 @@
+/**
+ * Admin Controller
+ *
+ * @description Controller for managing users and posts in the application.
+ */
+
 const { User, Post } = require('../models');
 const { Op } = require('sequelize');
 
 const adminController = {
+    /**
+     * Get all users.
+     *
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     getAllUsers: async (req, res) => {
         try {
             const users = await User.findAll({ order: [['id', 'ASC']] });
@@ -12,6 +24,14 @@ const adminController = {
             res.end(JSON.stringify({ error: error.message }));
         }
     },
+
+    /**
+     * Delete a user by ID.
+     *
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @param {number} id - The ID of the user to delete.
+     */
     deleteUser: async (req, res, id) => {
         try {
             await User.destroy({ where: { id } });
@@ -22,6 +42,14 @@ const adminController = {
             res.end(JSON.stringify({ error: error.message }));
         }
     },
+
+    /**
+     * Update a user by ID.
+     *
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @param {number} id - The ID of the user to update.
+     */
     updateUser: async (req, res, id) => {
         try {
             let body = '';
@@ -60,6 +88,13 @@ const adminController = {
             res.end(JSON.stringify({ error: error.message }));
         }
     },
+
+    /**
+     * Get all posts.
+     *
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     */
     getAllPosts: async (req, res) => {
         try {
             const posts = await Post.findAll();
@@ -70,16 +105,14 @@ const adminController = {
             res.end(JSON.stringify({ error: error.message }));
         }
     },
-    approvePost: async (req, res, id) => {
-        try {
-            await Post.update({ approved: true }, { where: { id } });
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Post approved successfully' }));
-        } catch (error) {
-            res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: error.message }));
-        }
-    },
+
+    /**
+     * Delete a post by ID.
+     *
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @param {number} id - The ID of the post to delete.
+     */
     deletePost: async (req, res, id) => {
         try {
             await Post.destroy({ where: { id } });
@@ -90,6 +123,14 @@ const adminController = {
             res.end(JSON.stringify({ error: error.message }));
         }
     },
+
+    /**
+     * Update a post by ID.
+     *
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @param {number} id - The ID of the post to update.
+     */
     updatePost: async (req, res, id) => {
         try {
             let body = '';
@@ -109,6 +150,12 @@ const adminController = {
     }
 };
 
+/**
+ * Validate email format.
+ *
+ * @param {string} email - The email to validate.
+ * @returns {boolean} - Returns true if the email format is valid, otherwise false.
+ */
 const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());

@@ -46,4 +46,3 @@ module.exports = (sequelize) => {
 
     return Comment;
 };
-// deci imi place

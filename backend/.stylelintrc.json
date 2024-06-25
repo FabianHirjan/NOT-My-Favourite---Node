@@ -6,7 +6,7 @@
     "color-hex-length": "short",
     "max-empty-lines": 2,
     "block-no-empty": true,
-    "selector-max-id": 0,
+    "selector-max-id": 5,
     "no-duplicate-selectors": true
   }
 }

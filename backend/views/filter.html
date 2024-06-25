@@ -12,8 +12,9 @@
 <div class="header">
     <a href="index.html" class="logo">NoF</a>
     <a href="index.html">Home</a>
-    <a href="filter.html" class = "active">Reviews</a>
+    <a href="filter.html">Reviews</a>
     <a href="post.html">Post my Issue</a>
+    <a href="exports.html">API Documentation</a>
     <div class="header-right">
         <div id="user-nav" style="display: none;">
             <a href="myaccount.html">My account</a>
@@ -38,7 +39,6 @@
             <label for="cat"><span style="font-size: larger;">Select category: </span></label>
             <select name="cat" id="cat">
                 <option value="">All</option>
-                <!-- Categoriile vor fi încărcate aici dinamic -->
             </select>
         </div>
         <br>
@@ -54,7 +54,6 @@
 </center>
 
 <div class="article-container" id="post-container">
-    <!-- Postările vor fi adăugate aici din JavaScript -->
 </div>
 
 <script>
@@ -96,6 +95,7 @@
                             <h2>Nickname: ${post.User.username}</h2>
                             <h3>${post.title}</h3>
                             <p>${post.content}</p>
+                            <p>${post.likes} Likes</p>
                             <p class="review">${'&#9733;'.repeat(post.stars)}</p>
                             <button onclick="viewArticle(${post.id})">View More</button>
                         `;
@@ -116,7 +116,6 @@
             ordine: ordine
         };
 
-        // Trimite cererea de filtrare la server
         fetch('http://localhost:3000/api/posts/filter', {
             method: 'POST',
             headers: {
@@ -135,6 +134,7 @@
                         <h2>Nickname: ${post.User.username}</h2>
                         <h3>${post.title}</h3>
                         <p>${post.content}</p>
+                        <p>${post.likes} Likes</p>
                         <p class="review">${'&#9733;'.repeat(post.stars)}</p>
                         <button onclick="viewArticle(${post.id})">View More</button>
                     `;

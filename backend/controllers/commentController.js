@@ -2,6 +2,13 @@ const { Op } = require("sequelize");
 const { Comment, User } = require("../models");
 
 const commentController = {
+  /**
+   * Fetches all comments with their associated user information.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the comments are fetched.
+   */
   getAllComments: async (req, res) => {
     try {
       const comments = await Comment.findAll({
@@ -20,6 +27,14 @@ const commentController = {
     }
   },
 
+  /**
+   * Fetches comments by post ID with their associated user information.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} postId - The ID of the post for which to fetch comments.
+   * @returns {Promise<void>} - A promise that resolves when the comments are fetched.
+   */
   getCommentsByPostId: async (req, res, postId) => {
     try {
       const comments = await Comment.findAll({
@@ -39,6 +54,14 @@ const commentController = {
     }
   },
 
+  /**
+   * Fetches a comment by ID with its associated user information.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the comment to fetch.
+   * @returns {Promise<void>} - A promise that resolves when the comment is fetched.
+   */
   getCommentById: async (req, res, id) => {
     try {
       const comment = await Comment.findByPk(id, {
@@ -63,6 +86,13 @@ const commentController = {
     }
   },
 
+  /**
+   * Creates a new comment.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the comment is created.
+   */
   createComment: async (req, res) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -83,6 +113,14 @@ const commentController = {
     });
   },
 
+  /**
+   * Updates a comment by ID.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the comment to update.
+   * @returns {Promise<void>} - A promise that resolves when the comment is updated.
+   */
   updateComment: async (req, res, id) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -113,6 +151,14 @@ const commentController = {
     });
   },
 
+  /**
+   * Deletes a comment by ID.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the comment to delete.
+   * @returns {Promise<void>} - A promise that resolves when the comment is deleted.
+   */
   deleteComment: async (req, res, id) => {
     try {
       const comment = await Comment.findByPk(id);

@@ -14,6 +14,13 @@ const hashPassword = (password) => {
 };
 
 const userController = {
+  /**
+   * Fetches all users.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the users are fetched.
+   */
   getAllUsers: async (req, res) => {
     try {
       const users = await User.findAll();
@@ -25,6 +32,14 @@ const userController = {
     }
   },
 
+  /**
+   * Fetches a user by ID.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the user to fetch.
+   * @returns {Promise<void>} - A promise that resolves when the user is fetched.
+   */
   getUserById: async (req, res, id) => {
     try {
       const user = await User.findByPk(id);
@@ -41,6 +56,14 @@ const userController = {
     }
   },
 
+  /**
+   * Fetches all reviews/posts made by a user.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the user whose reviews are to be fetched.
+   * @returns {Promise<void>} - A promise that resolves when the reviews are fetched.
+   */
   getUserReviews: async (req, res, id) => {
     try {
       const reviews = await Post.findAll({ where: { user_id: id } });
@@ -52,6 +75,13 @@ const userController = {
     }
   },
 
+  /**
+   * Creates a new user.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the user is created.
+   */
   createUser: async (req, res) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -101,6 +131,14 @@ const userController = {
     });
   },
 
+  /**
+   * Updates a user by ID.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the user to update.
+   * @returns {Promise<void>} - A promise that resolves when the user is updated.
+   */
   updateUser: async (req, res, id) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -131,6 +169,14 @@ const userController = {
     });
   },
 
+  /**
+   * Deletes a user by ID.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @param {number} id - The ID of the user to delete.
+   * @returns {Promise<void>} - A promise that resolves when the user is deleted.
+   */
   deleteUser: async (req, res, id) => {
     try {
       const user = await User.findByPk(id);
@@ -148,6 +194,13 @@ const userController = {
     }
   },
 
+  /**
+   * Updates the email of the current user.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the email is updated.
+   */
   updateUserEmail: async (req, res) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -182,6 +235,13 @@ const userController = {
     });
   },
 
+  /**
+   * Updates the password of the current user.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the password is updated.
+   */
   updateUserPassword: async (req, res) => {
     let body = "";
     req.on("data", (chunk) => {
@@ -216,6 +276,13 @@ const userController = {
     });
   },
 
+  /**
+   * Fetches the current user's data based on the provided JWT.
+   *
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Promise<void>} - A promise that resolves when the user data is fetched.
+   */
   getCurrentUser: async (req, res) => {
     try {
       const token = req.headers.authorization.split(" ")[1];

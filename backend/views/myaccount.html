@@ -15,14 +15,15 @@
     <a href="index.html">Home</a>
     <a href="filter.html">Reviews</a>
     <a href="post.html">Post my Issue</a>
+    <a href="exports.html">API Documentation</a>
     <div class="header-right">
         <div id="user-nav" style="display: none;">
-            <a href="myaccount.html" class="active">My account</a>
+            <a href="myaccount.html">My account</a>
             <a href="#" id="logout">Logout</a>
             <a href="admin.html" id="admin-link" style="display:none;">Admin</a>
         </div>
         <div id="auth-buttons">
-            <a href="login.html" class="active">Log in</a>
+            <a href="login.html">Log in</a>
             <a href="register.html">Register</a>
         </div>
     </div>
@@ -59,7 +60,6 @@
     <div class="reviews-container">
         <h2>My Reviews</h2>
         <div id="user-reviews">
-            <!-- User reviews will be dynamically loaded here -->
         </div>
     </div>
 </div>
@@ -69,7 +69,7 @@
         event.preventDefault();
         const email = document.getElementById('new-email').value;
         const password = document.getElementById('email-password').value;
-        const token = localStorage.getItem('token'); // Assume token is stored in localStorage
+        const token = localStorage.getItem('token');
 
         const response = await fetch('/api/user/updateEmail', {
             method: 'POST',
@@ -82,6 +82,7 @@
 
         if (response.ok) {
             alert('Email updated successfully');
+            document.getElementById('email').innerText = email;
         } else {
             alert('Failed to update email');
         }
@@ -91,7 +92,7 @@
         event.preventDefault();
         const newPassword = document.getElementById('new-password').value;
         const oldPassword = document.getElementById('old-password').value;
-        const token = localStorage.getItem('token'); // Assume token is stored in localStorage
+        const token = localStorage.getItem('token');
 
         const response = await fetch('/api/user/updatePassword', {
             method: 'POST',
@@ -109,7 +110,6 @@
         }
     });
 
-    // Fetch user data and display it
     window.onload = async () => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -117,16 +117,26 @@
             return;
         }
 
-        const decoded = jwt_decode(token);
-        document.getElementById('username').innerText = decoded.username;
-        document.getElementById('email').innerText = decoded.email;
+        const response = await fetch('/api/user/me', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
-        // Show/hide admin link based on user's admin status
-        if (decoded.is_admin) {
-            document.getElementById('admin-link').style.display = 'block';
+        if (response.ok) {
+            const user = await response.json();
+            document.getElementById('username').innerText = user.username;
+            document.getElementById('email').innerText = user.email;
+
+            if (user.is_admin) {
+                document.getElementById('admin-link').style.display = 'block';
+            }
+
+            loadUserReviews(user.id);
+        } else {
+            console.error('Failed to fetch user data');
+            window.location.href = 'login.html';
         }
-
-        loadUserReviews(decoded.id);
     };
 
     async function loadUserReviews(userId) {
@@ -168,16 +178,10 @@
         const title = reviewDiv.querySelector('.review-title').textContent;
         const content = reviewDiv.querySelector('.review-content').textContent;
         const stars = reviewDiv.querySelector('.review-stars').textContent.length;
-        // Add input fields for type and category if needed
-        // const type = ...;
-        // const category = ...;
 
         reviewDiv.querySelector('.review-title').innerHTML = `<input type="text" value="${title}" class="editable-input">`;
         reviewDiv.querySelector('.review-content').innerHTML = `<textarea class="editable-input">${content}</textarea>`;
         reviewDiv.querySelector('.review-stars').innerHTML = `<input type="number" value="${stars}" class="editable-input" min="1" max="5">`;
-        // Add input fields for type and category if needed
-        // reviewDiv.querySelector('.review-type').innerHTML = `<input type="text" value="${type}" class="editable-input">`;
-        // reviewDiv.querySelector('.review-category').innerHTML = `<input type="text" value="${category}" class="editable-input">`;
 
         button.textContent = 'Save';
         button.onclick = function() {
@@ -190,19 +194,13 @@
         const title = reviewDiv.querySelector('.review-title input').value;
         const content = reviewDiv.querySelector('.review-content textarea').value;
         const stars = reviewDiv.querySelector('.review-stars input').value;
-        // Add fields for type and category if needed
-        // const type = reviewDiv.querySelector('.review-type input').value;
-        // const category = reviewDiv.querySelector('.review-category input').value;
         const token = localStorage.getItem('token');
 
         const updatedData = {
             title,
             content,
             stars: parseInt(stars),
-            // Add fields for type and category if needed
-            // type,
-            // category,
-            user_id: jwt_decode(token).id // Ensure user_id is included
+            user_id: jwt_decode(token).id
         };
 
         try {
