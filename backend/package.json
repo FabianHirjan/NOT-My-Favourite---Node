@@ -6,12 +6,12 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
@@ -23,7 +23,11 @@
     "pg": "^8.12.0",
     "pg-hstore": "^2.3.4",
     "rss": "^1.2.2",
-    "sequelize": "^6.37.3",
-    "stylelint": "^16.6.1"
-  }
+    "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "stylelint": "^16.6.1",
+    "stylelint-config-standard": "^36.0.1"
+  },
+  "description": ""
 }

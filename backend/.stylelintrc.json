@@ -1,0 +1,12 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "indentation": 2,
+    "string-quotes": "double",
+    "color-hex-length": "short",
+    "max-empty-lines": 2,
+    "block-no-empty": true,
+    "selector-max-id": 0,
+    "no-duplicate-selectors": true
+  }
+}
