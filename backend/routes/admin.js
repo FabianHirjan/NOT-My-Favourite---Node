@@ -1,27 +1,32 @@
-const { getAllUsers, deleteUser, updateUser, getAllPosts, approvePost, deletePost, updatePost } = require("../controllers/adminController");
+const { getAllUsers, deleteUser, updateUser, getAllPosts, deletePost, updatePost } = require("../controllers/adminController");
 
-const adminRoutes = async (req, res) => {
-    if (req.url === "/api/admin/users" && req.method === "GET") {
-        await getAllUsers(req, res);
-    } else if (req.url.match(/\/api\/admin\/users\/([0-9]+)/) && req.method === "DELETE") {
-        const id = req.url.split("/")[4];
-        await deleteUser(req, res, id);
-    } else if (req.url.match(/\/api\/admin\/users\/([0-9]+)/) && req.method === "PUT") {
-        const id = req.url.split("/")[4];
-        await updateUser(req, res, id);
-    } else if (req.url === "/api/admin/posts" && req.method === "GET") {
-        await getAllPosts(req, res);
-    } else if (req.url.match(/\/api\/admin\/posts\/([0-9]+)\/approve/) && req.method === "PUT") {
-        const id = req.url.split("/")[4];
-        await approvePost(req, res, id);
-    } else if (req.url.match(/\/api\/admin\/posts\/([0-9]+)/) && req.method === "DELETE") {
-        const id = req.url.split("/")[4];
-        await deletePost(req, res, id);
-    } else if (req.url.match(/\/api\/admin\/posts\/([0-9]+)/) && req.method === "PUT") {
-        const id = req.url.split("/")[4];
-        await updatePost(req, res, id);
+/**
+ * Handles admin routes.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
+const adminRoutes = (req, res) => {
+    const { method, url } = req;
+
+    if (method === "GET" && url === "/api/admin/users") {
+        getAllUsers(req, res);
+    } else if (method === "DELETE" && url.startsWith("/api/admin/users/")) {
+        const id = url.split("/")[4];
+        deleteUser(req, res, id);
+    } else if (method === "PUT" && url.startsWith("/api/admin/users/")) {
+        const id = url.split("/")[4];
+        updateUser(req, res, id);
+    } else if (method === "GET" && url === "/api/admin/posts") {
+        getAllPosts(req, res);
+    } else if (method === "DELETE" && url.startsWith("/api/admin/posts/")) {
+        const id = url.split("/")[4];
+        deletePost(req, res, id);
+    } else if (method === "PUT" && url.startsWith("/api/admin/posts/")) {
+        const id = url.split("/")[4];
+        updatePost(req, res, id);
     } else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.statusCode = 404;
         res.end(JSON.stringify({ message: "Route not found" }));
     }
 };

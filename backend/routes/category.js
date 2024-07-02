@@ -1,10 +1,6 @@
 const {
-    getAdminCategories,
     getCategories,
     getCategory,
-    createCategory,
-    updateCategory,
-    deleteCategory
 } = require('../controllers/categoryController');
 
 const categoryRoutes = (req, res) => {

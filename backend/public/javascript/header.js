@@ -9,11 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
         userNav.style.display = "block";
         authButtons.style.display = "none";
 
-        // Decode token
         const decodedToken = jwt_decode(token);
-        console.log("Decoded Token:", decodedToken); // Log decoded token for debugging
+        console.log("Decoded Token:", decodedToken);
 
-        // Check if user is admin
         if (decodedToken.is_admin) {
             adminLink.style.display = "inline";
         }

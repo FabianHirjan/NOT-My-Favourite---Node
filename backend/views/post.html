@@ -77,14 +77,12 @@
             const decodedToken = jwt_decode(token);
             const user_id = decodedToken.id;
 
-            // Collect form data
             const title = document.getElementById("title").value;
             const content = document.getElementById("content").value;
             const stars = document.querySelector('input[name="stars"]:checked').value;
             const type = document.getElementById("type").value;
             const category = document.getElementById("category").value;
 
-            // Submit data to API
             try {
                 const response = await fetch("/api/posts/create", {
                     method: "POST",
