@@ -56,19 +56,33 @@ const userController = {
     }
   },
 
-  /**
-   * Fetches all reviews/posts made by a user.
+   /**
+   * Fetches all reviews/posts made by a user with pagination.
    *
    * @param {Object} req - The request object.
    * @param {Object} res - The response object.
    * @param {number} id - The ID of the user whose reviews are to be fetched.
+   * @param {number} page - The page number for pagination.
    * @returns {Promise<void>} - A promise that resolves when the reviews are fetched.
    */
-  getUserReviews: async (req, res, id) => {
+   getUserReviews: async (req, res, id, page = 1) => {
+    const reviewsPerPage = 5; // Number of reviews per page
+    const offset = (page - 1) * reviewsPerPage;
+
     try {
-      const reviews = await Post.findAll({ where: { user_id: id } });
+      const { count, rows: reviews } = await Post.findAndCountAll({
+        where: { user_id: id },
+        limit: reviewsPerPage,
+        offset: offset
+      });
+
+      const totalPages = Math.ceil(count / reviewsPerPage);
+
       res.writeHead(200, { "Content-Type": "application/json" });
-      res.end(JSON.stringify(reviews));
+      res.end(JSON.stringify({
+        reviews,
+        totalPages
+      }));
     } catch (error) {
       res.writeHead(500, { "Content-Type": "application/json" });
       res.end(JSON.stringify({ error: error.message }));

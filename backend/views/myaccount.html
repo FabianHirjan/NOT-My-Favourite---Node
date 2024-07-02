@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../public/css/style.css">
     <script src="../public/javascript/header.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
-
 </head>
 <body>
 <div class="header">
@@ -61,10 +60,17 @@
         <h2>My Reviews</h2>
         <div id="user-reviews">
         </div>
+        <div class="pagination">
+            <button id="prev-page" onclick="changePage(-1)">Previous</button>
+            <span id="page-number">1</span>
+            <button id="next-page" onclick="changePage(1)">Next</button>
+        </div>
     </div>
 </div>
 
 <script>
+    let currentPage = 1;
+
     document.getElementById('emailForm').addEventListener('submit', async (event) => {
         event.preventDefault();
         const email = document.getElementById('new-email').value;
@@ -132,17 +138,17 @@
                 document.getElementById('admin-link').style.display = 'block';
             }
 
-            loadUserReviews(user.id);
+            loadUserReviews(user.id, currentPage);
         } else {
             console.error('Failed to fetch user data');
             window.location.href = 'login.html';
         }
     };
 
-    async function loadUserReviews(userId) {
+    async function loadUserReviews(userId, page) {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`/api/user/${userId}/reviews`, {
+            const response = await fetch(`/api/user/${userId}/reviews?page=${page}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -152,7 +158,9 @@
                 throw new Error('Failed to fetch reviews');
             }
 
-            const reviews = await response.json();
+            const data = await response.json();
+            const reviews = data.reviews;
+            const totalPages = data.totalPages;
             const reviewsContainer = document.getElementById('user-reviews');
             reviewsContainer.innerHTML = '';
 
@@ -168,9 +176,21 @@
                     </div>
                 `;
             });
+
+            document.getElementById('page-number').innerText = page;
+            document.getElementById('prev-page').disabled = page === 1;
+            document.getElementById('next-page').disabled = page === totalPages;
+
         } catch (error) {
             console.error('Error loading user reviews:', error);
         }
+    }
+
+    function changePage(direction) {
+        currentPage += direction;
+        const token = localStorage.getItem('token');
+        const decoded = jwt_decode(token);
+        loadUserReviews(decoded.id, currentPage);
     }
 
     function editReview(button, id) {
@@ -216,7 +236,7 @@
             if (response.ok) {
                 const updatedReview = await response.json();
                 alert('Review updated successfully');
-                loadUserReviews(updatedReview.user_id); // Reload reviews to reflect changes
+                loadUserReviews(updatedReview.user_id, currentPage); // Reload reviews to reflect changes
             } else {
                 alert('Failed to update review');
             }
@@ -237,7 +257,7 @@
         if (response.ok) {
             alert('Review deleted successfully');
             const decoded = jwt_decode(token);
-            loadUserReviews(decoded.id);
+            loadUserReviews(decoded.id, currentPage);
         } else {
             alert('Failed to delete review');
         }

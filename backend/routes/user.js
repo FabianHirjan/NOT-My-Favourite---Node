@@ -7,19 +7,26 @@ const {
     updateUserEmail,
     updateUserPassword,
     getCurrentUser,
-    getUserReviews // Add this function
+    getUserReviews
 } = require('../controllers/userController');
+const url = require('url');
 
 const userRoutes = (req, res) => {
-    const urlParts = req.url.split('/');
+    const parsedUrl = url.parse(req.url, true); // Parse URL with query parameters
+    const urlParts = parsedUrl.pathname.split('/');
     const id = urlParts.length > 3 ? urlParts[3] : null;
+    const page = parsedUrl.query.page ? parseInt(parsedUrl.query.page, 10) : 1;
+
+    console.log("URL Parts: ", urlParts);
+    console.log("Page: ", page, "ID: ", id, "URL: ", req.url);
 
     if (req.method === "GET" && req.url === "/api/user") {
         getAllUsers(req, res);
     } else if (req.method === "GET" && req.url === "/api/user/me") {
         getCurrentUser(req, res);
     } else if (req.method === "GET" && urlParts[2] === "user" && id && urlParts[4] === "reviews") {
-        getUserReviews(req, res, id);
+        console.log('user reviews');
+        getUserReviews(req, res, id, page);
     } else if (req.method === "GET" && urlParts[2] === "user" && id) {
         getUserById(req, res, id);
     } else if (req.method === "POST" && req.url === "/api/user") {

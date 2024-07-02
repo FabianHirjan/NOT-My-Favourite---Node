@@ -4,7 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const { sequelize } = require("./models");
 
-
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
@@ -60,6 +59,7 @@ const server = http.createServer(async (req, res) => {
     console.log("Serving static file:", pathname);
     serveStaticFile(res, pathname);
   } else {
+    req.query = parsedUrl.query || {};  // Ensure req.query is always an object
     if (parsedUrl.pathname.startsWith("/api/user")) {
       userRoutes(req, res);
     } else if (parsedUrl.pathname.startsWith("/api/posts")) {
@@ -68,7 +68,7 @@ const server = http.createServer(async (req, res) => {
       categoryRoutes(req, res);
     } else if (parsedUrl.pathname.startsWith("/api/admin")) {
       adminRoutes(req, res);
-    } else if (parsedUrl.pathname.startsWith("/api/comments")) {  // Adăugat comentarii
+    } else if (parsedUrl.pathname.startsWith("/api/comments")) {
       commentRoutes(req, res);
     } else {
       authRoutes(req, res);
