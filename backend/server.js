@@ -10,6 +10,7 @@ const postRoutes = require("./routes/post");
 const categoryRoutes = require("./routes/category");
 const adminRoutes = require("./routes/admin");
 const commentRoutes = require("./routes/comment");
+const friendRoutes = require("./routes/friend"); // Import friendRoutes
 
 const hostname = "localhost";
 const port = 3000;
@@ -59,6 +60,7 @@ const server = http.createServer(async (req, res) => {
     console.log("Serving static file:", pathname);
     serveStaticFile(res, pathname);
   } else {
+    console.log("API request:", parsedUrl.pathname);
     req.query = parsedUrl.query || {};  // Ensure req.query is always an object
     if (parsedUrl.pathname.startsWith("/api/user")) {
       userRoutes(req, res);
@@ -70,6 +72,8 @@ const server = http.createServer(async (req, res) => {
       adminRoutes(req, res);
     } else if (parsedUrl.pathname.startsWith("/api/comments")) {
       commentRoutes(req, res);
+    } else if (parsedUrl.pathname.startsWith("/api/friends")) { // Handle friend routes
+      friendRoutes(req, res);
     } else {
       authRoutes(req, res);
     }

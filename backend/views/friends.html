@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends</title>
+    <link rel="stylesheet" href="../public/css/style.css">
+    <script src="../public/javascript/header.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+</head>
+<body>
+<div class="header">
+    <a href="index.html" class="logo">NoF</a>
+    <a href="index.html">Home</a>
+    <a href="filter.html">Reviews</a>
+    <a href="post.html">Post my Issue</a>
+    <a href="exports.html">API Documentation</a>
+    <div class="header-right">
+        <div id="user-nav" style="display: none;">
+            <a href="myaccount.html">My account</a>
+            
+            <!-- <a href="friends.html">Friends</a> -->
+        
+            <a href="#" id="logout">Logout</a>
+            <a href="admin.html" id="admin-link" style="display:none;">Admin</a>
+        </div>
+        <div id="auth-buttons">
+            <a href="login.html">Log in</a>
+            <a href="register.html">Register</a>
+        </div>
+    </div>
+</div>
+
+<div class="friends-container">
+    <h2>Friends</h2>
+    <div>
+        <input type="text" id="friend-username" placeholder="Enter friend's username">
+        <button onclick="sendFriendRequest()">Send Friend Request</button>
+    </div>
+    <h3>Pending Friend Requests</h3>
+    <div id="pending-requests"></div>
+    <h3>Friends</h3>
+    <div id="friends-list"></div>
+    <h3>Friend's Reviews</h3>
+    <div id="friend-reviews"></div>
+    <div class="pagination">
+        <button id="prev-page" onclick="changeFriendReviewPage(-1)">Previous</button>
+        <span id="page-number">1</span>
+        <button id="next-page" onclick="changeFriendReviewPage(1)">Next</button>
+    </div>
+</div>
+
+<script>
+    let userId;
+    let currentFriendId;
+    let currentReviewPage = 1;
+
+    window.onload = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const response = await fetch('/api/user/me', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const user = await response.json();
+            console.log("User data:", user);
+
+            if (user.is_admin) {
+                document.getElementById('admin-link').style.display = 'block';
+            }
+
+            userId = user.id;
+            loadPendingRequests();
+            loadFriends();
+            setInterval(loadPendingRequests, 300000); // Refresh every 5 minutes
+        } else {
+            console.error('Failed to fetch user data');
+            window.location.href = 'login.html';
+        }
+    };
+
+    async function sendFriendRequest() {
+        const friendUsername = document.getElementById('friend-username').value;
+        const token = localStorage.getItem('token');
+        const decoded = jwt_decode(token);
+
+        const response = await fetch('/api/friends/request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ requester_id: decoded.id, receiver_username: friendUsername })
+        });
+
+        if (response.ok) {
+            alert('Friend request sent');
+            loadPendingRequests();
+        } else {
+            alert('Failed to send friend request');
+        }
+    }
+
+    async function loadPendingRequests() {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/friends/${userId}/requests`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const requests = await response.json();
+            console.log("Pending requests:", requests);
+            const pendingRequestsDiv = document.getElementById('pending-requests');
+            pendingRequestsDiv.innerHTML = '';
+
+            requests.forEach(request => {
+                pendingRequestsDiv.innerHTML += `
+                    <div>
+                        ${request.requester.username} 
+                        <button onclick="respondToRequest(${request.id}, 'accepted')">Accept</button>
+                        <button onclick="respondToRequest(${request.id}, 'rejected')">Reject</button>
+                    </div>
+                `;
+            });
+        } else {
+            console.error('Failed to load pending requests');
+        }
+    }
+
+    async function respondToRequest(requestId, status) {
+        const token = localStorage.getItem('token');
+        const response = await fetch('/api/friends/respond', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ requestId, status })
+        });
+
+        if (response.ok) {
+            alert('Request responded successfully');
+            loadPendingRequests();
+            loadFriends(); // Refresh the friends list after responding to a request
+        } else {
+            alert('Failed to respond to request');
+        }
+    }
+
+    async function loadFriends() {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/friends/${userId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const friends = await response.json();
+            console.log("Friends:", friends);
+            const friendsList = document.getElementById('friends-list');
+            friendsList.innerHTML = '';
+
+            friends.forEach(friend => {
+                const friendUser = friend.id === userId ? friend.receiver : friend;
+                friendsList.innerHTML += `<div>${friendUser.username} <button onclick="viewFriendReviews(${friendUser.id})">View Reviews</button></div>`;
+            });
+        } else {
+            console.error('Failed to fetch friends');
+        }
+    }
+
+    async function viewFriendReviews(friendId) {
+        currentFriendId = friendId;
+        currentReviewPage = 1; // Reset to the first page when viewing a new friend's reviews
+        loadFriendReviews(currentFriendId, currentReviewPage);
+    }
+
+    async function loadFriendReviews(friendId, page) {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`/api/friends/${friendId}/reviews?page=${page}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            const reviews = data.reviews;
+            const totalPages = data.totalPages;
+            const friendReviewsDiv = document.getElementById('friend-reviews');
+            friendReviewsDiv.innerHTML = '';
+
+            reviews.forEach(review => {
+                friendReviewsDiv.innerHTML += `
+                    <div class="review" data-id="${review.id}">
+                        <h3 class="review-title">${review.title}</h3>
+                        <p class="review-content">${review.content}</p>
+                        <p class="review-stars">${'&#9733;'.repeat(review.stars)}</p>
+                    </div>
+                `;
+            });
+
+            document.getElementById('page-number').innerText = page;
+            document.getElementById('prev-page').disabled = page === 1;
+            document.getElementById('next-page').disabled = page === totalPages;
+        } else {
+            console.error('Failed to fetch friend reviews');
+        }
+    }
+
+    function changeFriendReviewPage(direction) {
+        currentReviewPage += direction;
+        loadFriendReviews(currentFriendId, currentReviewPage);
+    }
+
+    document.getElementById('logout').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = 'login.html';
+    });
+</script>
+</body>
+</html>

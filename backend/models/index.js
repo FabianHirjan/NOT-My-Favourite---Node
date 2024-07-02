@@ -6,12 +6,14 @@ const PostModel = require("./post");
 const CommentModel = require("./comment");
 const CategoryModel = require("./category");
 const UserLikeModel = require("./userLike");
+const FriendRequestModel = require("./friendRequest"); // Import FriendRequest model
 
 const User = UserModel(sequelize, Sequelize.DataTypes);
 const Post = PostModel(sequelize, Sequelize.DataTypes);
 const Comment = CommentModel(sequelize, Sequelize.DataTypes);
 const Category = CategoryModel(sequelize, Sequelize.DataTypes);
 const UserLike = UserLikeModel(sequelize, Sequelize.DataTypes);
+const FriendRequest = FriendRequestModel(sequelize, Sequelize.DataTypes); // Define FriendRequest model
 
 User.hasMany(Post, { foreignKey: 'user_id' });
 Post.belongsTo(User, { foreignKey: 'user_id' });
@@ -28,6 +30,13 @@ Post.belongsTo(Category, { foreignKey: 'category', targetKey: 'name' });
 User.belongsToMany(Post, { through: UserLike, foreignKey: 'user_id' });
 Post.belongsToMany(User, { through: UserLike, foreignKey: 'post_id' });
 
+// Associations for FriendRequest model
+User.hasMany(FriendRequest, { foreignKey: 'requester_id', as: 'requester' });
+User.hasMany(FriendRequest, { foreignKey: 'receiver_id', as: 'receiver' });
+
+FriendRequest.belongsTo(User, { foreignKey: 'requester_id', as: 'requester' });
+FriendRequest.belongsTo(User, { foreignKey: 'receiver_id', as: 'receiver' });
+
 sequelize.sync({ force: false }).then(() => {
   console.log("Database & tables created!");
 });
@@ -38,5 +47,6 @@ module.exports = {
   Post,
   Comment,
   Category,
-  UserLike
+  UserLike,
+  FriendRequest // Export FriendRequest model
 };
