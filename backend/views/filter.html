@@ -80,7 +80,6 @@
     function loadPosts(filters = {}) {
         let url = new URL('http://localhost:3000/api/posts');
 
-        // Adaugă parametrii de filtrare la URL
         Object.keys(filters).forEach(key => url.searchParams.append(key, filters[key]));
 
         fetch(url)
