@@ -55,7 +55,6 @@
 
     <label for="category">Category:</label>
     <select id="category" name="category" required>
-        <!-- Categories will be loaded dynamically here -->
     </select><br>
 
     <button type="submit">Add Article</button>
@@ -67,7 +66,6 @@
         document.getElementById("addForm").addEventListener("submit", async function(e) {
             e.preventDefault();
 
-            // Extract user_id from token
             const token = localStorage.getItem("token");
             if (!token) {
                 alert("You must be logged in to submit a post.");
