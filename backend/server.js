@@ -10,7 +10,7 @@ const postRoutes = require("./routes/post");
 const categoryRoutes = require("./routes/category");
 const adminRoutes = require("./routes/admin");
 const commentRoutes = require("./routes/comment");
-const friendRoutes = require("./routes/friend"); // Import friendRoutes
+const friendRoutes = require("./routes/friend");
 
 const hostname = "localhost";
 const port = 3000;
@@ -72,7 +72,7 @@ const server = http.createServer(async (req, res) => {
       adminRoutes(req, res);
     } else if (parsedUrl.pathname.startsWith("/api/comments")) {
       commentRoutes(req, res);
-    } else if (parsedUrl.pathname.startsWith("/api/friends")) { // Handle friend routes
+    } else if (parsedUrl.pathname.startsWith("/api/friends")) {
       friendRoutes(req, res);
     } else {
       authRoutes(req, res);

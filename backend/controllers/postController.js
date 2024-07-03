@@ -447,7 +447,7 @@ const postController = {
       });
 
       const doc = new PDFDocument();
-      const filePath = '/tmp/posts.pdf';
+      const filePath = 'posts.pdf';
 
       doc.pipe(fs.createWriteStream(filePath));
 
