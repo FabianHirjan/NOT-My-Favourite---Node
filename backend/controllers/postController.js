@@ -18,32 +18,19 @@ const postController = {
    */
   getAllPosts: async (req, res) => {
     const query = req.query || {};
-    const { sort, order, category, search } = query;
+    const { sort, order, search } = query;
 
     console.log('Query parameters:', query);
 
     let options = {
       where: {},
-      order: [],
       include: [
-        { model: User, attributes: ['username'] },
-        { model: Category, attributes: ['name'] }
+        { model: User, attributes: ['username'] }
       ]
     };
 
-    if (sort && order) {
-      options.order.push([sort, order.toUpperCase()]);
-    }
-
-    if (category) {
-      options.include.push({
-        model: Category,
-        where: { name: category }
-      });
-    }
-
     if (search) {
-      options.where.title = { [Op.like]: `%{search}%` };
+      options.where.title = { [Op.like]: `%${search}%` };
     }
 
     try {
@@ -56,7 +43,6 @@ const postController = {
       res.end(JSON.stringify({ error: 'Something went wrong' }));
     }
   },
-
   /**
    * Filters posts based on specified criteria in the request body.
    *
@@ -139,8 +125,7 @@ const postController = {
 
       const post = await Post.findByPk(id, {
         include: [
-          { model: User, attributes: ['username'] },
-          { model: Category, attributes: ['name'] }
+          { model: User, attributes: ['username'] }
         ]
       });
 
@@ -183,8 +168,21 @@ const postController = {
     });
     req.on("end", async () => {
       try {
-        const { title, content, stars, type, category, user_id } = JSON.parse(body);
-        const post = await Post.create({ title, content, stars, type, category, user_id });
+        // Extrage datele din corpul cererii
+        const { title, tipul_activitatii, obiective_generale, obiective_specifice, activitati, stars, user_id } = JSON.parse(body);
+
+        // Creează un nou post folosind datele primite
+        const post = await Post.create({
+          title,
+          tipul_activitatii,
+          obiective_generale,
+          obiective_specifice,
+          activitati,
+          stars,
+          user_id
+        });
+
+        // Răspunde cu codul de succes și obiectul postului creat
         res.writeHead(201, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify(post));
       } catch (error) {

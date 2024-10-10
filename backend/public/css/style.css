@@ -1,6 +1,7 @@
 /* Stiluri generale */
-body, html {
-    background: url('https://d3ui957tjb5bqd.cloudfront.net/images/screenshots/products/0/8/8905/red-rocks-park-o.jpg');
+body,
+html {
+    background: url('https://images4.alphacoders.com/213/213094.jpg');
     background-size: cover;
     margin: 0;
     padding: 0;
@@ -26,7 +27,8 @@ body, html {
     transition: background-color 0.3s, color 0.3s;
 }
 
-.header a:hover, .header a.active {
+.header a:hover,
+.header a.active {
     background-color: #76ABAE;
     color: #222831;
 }
@@ -42,21 +44,25 @@ body, html {
     align-items: center;
 }
 
-.header-right #user-nav, .header-right #auth-buttons {
+.header-right #user-nav,
+.header-right #auth-buttons {
     display: flex;
     align-items: center;
 }
 
-.header-right #user-nav a, .header-right #auth-buttons a {
+.header-right #user-nav a,
+.header-right #auth-buttons a {
     color: #76ABAE;
     text-decoration: none;
     padding: 12px 15px;
     border-radius: 4px;
-    margin-left: 10px; /* spațiu între butoane */
+    margin-left: 10px;
+    /* spațiu între butoane */
     transition: background-color 0.3s, color 0.3s;
 }
 
-.header-right #user-nav a:hover, .header-right #auth-buttons a:hover {
+.header-right #user-nav a:hover,
+.header-right #auth-buttons a:hover {
     background-color: #76ABAE;
     color: #222831;
 }
@@ -104,6 +110,16 @@ form button {
     transition: background-color 0.3s, color 0.3s;
 }
 
+button {
+    background-color: #76ABAE;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
 form button:hover {
     background-color: #222831;
     color: #76ABAE;
@@ -130,26 +146,26 @@ form button:hover {
 
 
 .star-rating label:hover,
-.star-rating label:hover ~ label {
+.star-rating label:hover~label {
     color: #f5b301;
 }
 
 
 
-.star-rating input[type="radio"]:checked ~ label {
+.star-rating input[type="radio"]:checked~label {
     color: #f5b301;
 }
 
 
 
-.star-rating input[type="radio"]:checked ~ label:hover,
-.star-rating input[type="radio"]:checked ~ label:hover ~ label {
+.star-rating input[type="radio"]:checked~label:hover,
+.star-rating input[type="radio"]:checked~label:hover~label {
     color: #f5b301;
 }
 
-.star-rating input[type="radio"]:checked ~ label:hover,
-.star-rating input[type="radio"]:checked ~ label:hover ~ label,
-.star-rating label:hover ~ input[type="radio"]:checked ~ label {
+.star-rating input[type="radio"]:checked~label:hover,
+.star-rating input[type="radio"]:checked~label:hover~label,
+.star-rating label:hover~input[type="radio"]:checked~label {
     color: #f5b301;
 }
 
@@ -163,7 +179,9 @@ form button:hover {
     padding: 20px;
 }
 
-.comments-section, .form-container, .like-container {
+.comments-section,
+.form-container,
+.like-container {
     background-color: rgb(255 255 255 / 90%);
     padding: 20px;
     border-radius: 8px;
@@ -279,7 +297,9 @@ form button:hover {
     color: #76ABAE;
 }
 
-.article-details, .comments, .add-comment {
+.article-details,
+.comments,
+.add-comment {
     width: 100%;
     background-color: #fff;
     border-radius: 8px;
@@ -289,13 +309,16 @@ form button:hover {
     text-align: center;
 }
 
-.article-details h1, .comments h3, .add-comment h3 {
+.article-details h1,
+.comments h3,
+.add-comment h3 {
     margin: 0 0 10px;
     font-size: 24px;
     color: #333;
 }
 
-.comments .comment, .add-comment form {
+.comments .comment,
+.add-comment form {
     margin: 10px 0;
 }
 
@@ -407,7 +430,8 @@ form button:hover {
     text-align: center;
 }
 
-.account-info h2, .account-info h3 {
+.account-info h2,
+.account-info h3 {
     margin-bottom: 20px;
     color: #222831;
 }
@@ -614,12 +638,12 @@ form button:hover {
 
 .friends-container {
     display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: rgb(255 255 255 / 90%);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: rgb(255 255 255 / 90%);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 10%);
 }

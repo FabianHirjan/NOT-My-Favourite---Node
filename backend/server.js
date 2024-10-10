@@ -43,8 +43,8 @@ const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
   console.log("Request:", parsedUrl.pathname);
   const sanitizePath = path
-      .normalize(parsedUrl.pathname)
-      .replace(/^(\.\.[\/\\])+/, "");
+    .normalize(parsedUrl.pathname)
+    .replace(/^(\.\.[\/\\])+/, "");
 
   console.log("Sanitized path:", sanitizePath);
   let pathname = path.join(__dirname, "views", sanitizePath);

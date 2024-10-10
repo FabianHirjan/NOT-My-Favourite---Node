@@ -9,7 +9,15 @@ module.exports = (sequelize) => {
                 primaryKey: true,
                 autoIncrement: true,
             },
-            content: {
+            tipul_activitatii: {
+                type: DataTypes.TEXT,
+                allowNull: false,
+            },
+            obiective_generale: {
+                type: DataTypes.TEXT,
+                allowNull: false,
+            },
+            obiective_specifice: {
                 type: DataTypes.TEXT,
                 allowNull: false,
             },

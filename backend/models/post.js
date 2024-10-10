@@ -13,7 +13,20 @@ module.exports = (sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            content: {
+            tipul_activitatii:
+            {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            obiective_generale: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            obiective_specifice: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            activitati: {
                 type: DataTypes.TEXT,
                 allowNull: false,
             },
@@ -23,18 +36,6 @@ module.exports = (sequelize) => {
                 validate: {
                     min: 1,
                     max: 5,
-                },
-            },
-            type: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            category: {
-                type: DataTypes.STRING,
-                allowNull: true,
-                references: {
-                    model: 'categories',
-                    key: 'name',
                 },
             },
             user_id: {

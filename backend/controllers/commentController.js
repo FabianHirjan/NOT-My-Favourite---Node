@@ -94,24 +94,42 @@ const commentController = {
    * @returns {Promise<void>} - A promise that resolves when the comment is created.
    */
   createComment: async (req, res) => {
-    let body = "";
-    req.on("data", (chunk) => {
-      body += chunk.toString();
-    });
-    req.on("end", async () => {
-      try {
-        const { content, post_id, user_id } = JSON.parse(body);
-        const comment = await Comment.create({ content, post_id, user_id });
+    try {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk.toString();
+      });
+      req.on('end', async () => {
+        const { tipul_activitatii, obiective_generale, obiective_specifice, post_id, user_id } = JSON.parse(body);
+
+        console.log('Date primite:', { tipul_activitatii, obiective_generale, obiective_specifice, post_id, user_id });
+
+        if (!tipul_activitatii || !obiective_generale || !obiective_specifice || !post_id || !user_id) {
+          res.statusCode = 400;
+          res.setHeader('Content-Type', 'application/json');
+          return res.end(JSON.stringify({ error: 'Toate câmpurile sunt obligatorii.' }));
+        }
+
+        const comment = await Comment.create({
+          tipul_activitatii,
+          obiective_generale,
+          obiective_specifice,
+          post_id,
+          user_id
+        });
+
         res.statusCode = 201;
-        res.setHeader("Content-Type", "application/json");
+        res.setHeader('Content-Type', 'application/json');
         res.end(JSON.stringify(comment));
-      } catch (error) {
-        res.statusCode = 500;
-        res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify({ error: error.message }));
-      }
-    });
+      });
+
+    } catch (error) {
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ error: error.message }));
+    }
   },
+
 
   /**
    * Updates a comment by ID.
@@ -130,8 +148,10 @@ const commentController = {
       try {
         const comment = await Comment.findByPk(id);
         if (comment) {
-          const { content, post_id, user_id } = JSON.parse(body);
-          comment.content = content;
+          const { tipul_activitatii, obiective_generale, obiective_specifice, post_id, user_id } = JSON.parse(body);
+          comment.tipul_activitatii = tipul_activitatii;
+          comment.obiective_generale = obiective_generale;
+          comment.obiective_specifice = obiective_specifice;
           comment.post_id = post_id;
           comment.user_id = user_id;
           await comment.save();
